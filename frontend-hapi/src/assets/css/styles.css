@@ -17,7 +17,7 @@
   /*Green gradient*/
   --body-color: linear-gradient(90deg, hsl(330, 100%, 90%) 0%, hsl(30, 100%, 90%) 100%);
   --container-color: linear-gradient(90deg, hsl(329, 47%, 73%) 0%, hsl(30, 100%, 90%) 100%);
-  
+
   /*Red gradient*/
   /* --body-color: linear-gradient(90deg, hsl(360, 28%, 40%) 0%, hsl(18, 28%, 40%) 100%);
   --container-color: linear-gradient(136deg, hsl(360, 28%, 35%) 0%, hsl(18, 28%, 35%) 100%); */
@@ -146,7 +146,7 @@ button{
 /*=============== HEADER ===============*/
 .header{
   width: 100%;
-  background: var(--body-color); 
+  background: var(--body-color);
   position: fixed;
   top: 0;
   left: 0;
@@ -159,6 +159,8 @@ button{
   display: flex;
   justify-content: space-between;
   align-items: center;
+  /* Tambahkan padding horizontal agar ada lebih banyak ruang di sisi kiri dan kanan */
+  padding: 0 var(--mb-1-5);
 }
 
 .nav__logo{
@@ -166,10 +168,15 @@ button{
   align-items: center;
   column-gap: .5rem;
   font-weight: var(--font-medium);
+  /* Atur lebar minimum untuk logo agar tidak terpotong */
+  min-width: 150px; /* Sesuaikan nilai ini sesuai kebutuhan, misalnya 150px atau lebih */
+  z-index: var(--z-fixed); /* Pastikan logo selalu di atas */
 }
 
 .nav__logo-img{
+  /* Mengembalikan ukuran ke default */
   width: 1.25rem;
+  height: 1.25rem;
 }
 
 .nav__link,
@@ -195,6 +202,9 @@ button{
     transition: .4s;
     z-index: var(--z-fixed);
     border-radius: 0 0 1.5rem 1.5rem;
+    /* Tambahkan padding horizontal agar menu tidak terlalu mepet ke samping */
+    padding-left: var(--mb-1-5);
+    padding-right: var(--mb-1-5);
   }
 }
 
@@ -218,6 +228,7 @@ button{
   }
 }
 
+/* Mengembalikan ukuran dan posisi nav__img (gambar detail jerawat di menu mobile) */
 .nav__img{
   width: 100px;
   position: absolute;
@@ -361,7 +372,7 @@ button{
 
 .swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{
   margin: 0 .5rem;
-} 
+}
 
 .swiper-pagination-bullet-active{
   width: 1.5rem;
@@ -776,7 +787,7 @@ button{
   background: linear-gradient(120deg, #f8bbd0 0%, #f7b5d6 100%);
 }
 
-/*===============  BREAKPOINTS ===============*/
+/*===============  BREAKPOINTS ===============*/
 /* For small devices */
 @media screen and (max-width: 320px){
   .container{
@@ -828,19 +839,28 @@ button{
 
   .nav{
     height: calc(var(--header-height) + 1.5rem);
+    padding: 0 var(--mb-2); /* Sesuaikan padding untuk desktop */
   }
-  .nav__img,
+  .nav__img, /* Pastikan gambar detail jerawat ini tersembunyi di desktop */
   .nav__close,
   .nav__toggle{
     display: none;
   }
   .nav__list{
     flex-direction: row;
-    column-gap: 3rem;
+    column-gap: 2rem; /* Kurangi sedikit jarak antar menu di desktop */
+    flex-grow: 1; /* Biarkan nav__list mengambil ruang yang tersedia */
+    justify-content: flex-end; /* Dorong menu ke kanan */
   }
   .nav__link{
     text-transform: initial;
     font-weight: initial;
+    white-space: nowrap; /* Pastikan teks link tidak pecah baris */
+  }
+  .nav__menu {
+    display: flex; /* Aktifkan flexbox untuk nav__menu di desktop */
+    flex-grow: 1; /* Biarkan nav__menu mengambil ruang yang tersedia */
+    justify-content: flex-end; /* Dorong menu ke kanan */
   }
 
   .home__content{
@@ -940,7 +960,9 @@ button{
     left: 45%;
   }
   .home__indicator::after{
-    top: 0;
+    content: '';
+    position: absolute;
+    width: 1px;
     height: 75px;
   }
   .home__details-img{
@@ -1008,6 +1030,13 @@ button{
   .footer__copy{
     margin-top: 6rem;
   }
+
+  .nav__logo {
+    min-width: 180px; /* Berikan lebih banyak ruang untuk logo di layar besar */
+  }
+  .nav__list {
+    column-gap: 2.5rem; /* Tambah sedikit jarak lagi jika ada ruang */
+  }
 }
 
 @media screen and (min-width: 1200px){
@@ -1031,7 +1060,7 @@ button{
 @keyframes floating {
   0% { transform: translate(0,  0px); }
   50%  { transform: translate(0, 15px); }
-  100%   { transform: translate(0, -0px); }   
+  100%   { transform: translate(0, -0px); }
 }
 
 /* Tambahkan ini ke stylesheet kamu */
@@ -1186,7 +1215,7 @@ button{
 }
 
 .login__group input {
-  width: 100%;               /* pastikan full-width */
+  width: 100%;                      /* pastikan full-width */
   padding: .75rem 1rem;
   font-size: var(--normal-font-size);
   border-radius: .5rem;
@@ -1640,6 +1669,6 @@ html {
 
 /* Warna ikon (jika ingin mengubahnya, ini lebih kompleks) */
 /* Untuk ikon success, error, dll., SweetAlert2 menggunakan SVG atau pseudo-elemen.
-   Mengubah warnanya biasanya memerlukan CSS lebih spesifik atau override SVG.
-   Untuk kasus ini, ikon defaultnya sudah cukup baik.
+  Mengubah warnanya biasanya memerlukan CSS lebih spesifik atau override SVG.
+  Untuk kasus ini, ikon defaultnya sudah cukup baik.
 */

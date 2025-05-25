@@ -138,138 +138,177 @@ module.exports = {
 
   update: async (req, h) => {
     const { payload } = req;
-    const userIdFromParams = parseInt(req.params.id); // Ambil ID dari URL params
+    console.log('\n--- [UPDATE USER] Permintaan diterima ---');
+    console.log('Payload yang diterima: ', JSON.stringify(Object.keys(payload))); // Hanya keys untuk menghindari log file besar
+    console.log('Apakah payload.avatar ada? ', !!payload.avatar);
+    if (payload.avatar) {
+        console.log('Tipe payload.avatar: ', typeof payload.avatar);
+        if (typeof payload.avatar === 'object' && payload.avatar.hapi) {
+            console.log('Nama file avatar (payload.avatar.hapi.filename): ', payload.avatar.hapi.filename);
+            console.log('Tipe content avatar (payload.avatar.hapi.headers[\'content-type\']): ', payload.avatar.hapi.headers ? payload.avatar.hapi.headers['content-type'] : 'N/A');
+        } else {
+            console.log('payload.avatar bukan objek Hapi file stream yang diharapkan.');
+        }
+    }
+
+    const userIdFromParams = parseInt(req.params.id);
     const authenticatedUserId = req.auth.isAuthenticated ? req.auth.credentials.id : null;
+
+    console.log('ID dari URL params: ', userIdFromParams);
+    console.log('ID user terautentikasi: ', authenticatedUserId);
 
     // --- PENTING: Penambahan validasi otorisasi ---
     if (!req.auth.isAuthenticated || authenticatedUserId !== userIdFromParams) {
-      return h
-        .response({
-          status: "Failed",
-          message: { error: "Unauthorized: Anda tidak diizinkan mengubah profil ini." },
-        })
-        .code(403);
+      console.error('ERROR: Otorisasi gagal. User tidak diizinkan mengubah profil ini.');
+      return h.response({ status: "Failed", message: { error: "Unauthorized: Anda tidak diizinkan mengubah profil ini." }}).code(403);
     }
     // --- Akhir penambahan validasi otorisasi ---
 
-    // Skema Joi untuk validasi data yang diupdate
     const schema = Joi.object({
-      name: Joi.string().min(3).optional(), // name sekarang opsional untuk update avatar
-      email: Joi.string().email().optional(), // email sekarang opsional
+      name: Joi.string().min(3).optional(),
+      email: Joi.string().email().optional(),
       password: Joi.string().min(6).optional(),
-      slug: Joi.string().optional(), // slug juga opsional jika tidak selalu diupdate
+      slug: Joi.string().optional(),
     });
 
-    // Validasi payload (selain file avatar)
     const { error, value } = schema.validate(payload, {
       abortEarly: false,
-      allowUnknown: true, // Izinkan properti yang tidak ada di skema (seperti 'avatar' file)
+      allowUnknown: true,
     });
 
     if (error) {
-      const messages = error.details.map((err) =>
-        err.message.replace(/\"/g, "")
-      );
-      return h
-        .response({ status: "Failed", message: { errors: messages } })
-        .code(422);
+      console.error('ERROR: Validasi Joi gagal:', error.details.map((err) => err.message));
+      const messages = error.details.map((err) => err.message.replace(/\"/g, ""));
+      return h.response({ status: "Failed", message: { errors: messages }}).code(422);
     }
+    console.log('Validasi Joi berhasil.');
 
     try {
-      const user = await User.findByPk(userIdFromParams); // Cari user berdasarkan ID dari params
-
+      const user = await User.findByPk(userIdFromParams);
       if (!user) {
-        return h
-          .response({ status: "Failed", message: { errors: "User not found" } })
-          .code(404);
+        console.error('ERROR: User tidak ditemukan untuk ID:', userIdFromParams);
+        return h.response({ status: "Failed", message: { errors: "User not found" }}).code(404);
       }
+      console.log('User ditemukan:', user.email);
 
       // Periksa apakah email diubah dan sudah digunakan
       if (value.email && value.email !== user.email) {
+        console.log('Email diubah. Memeriksa ketersediaan email baru...');
         const existing = await User.findOne({ where: { email: value.email } });
         if (existing) {
-          return h
-            .response({
-              status: "Failed",
-              message: { error: "Email already used by another account" },
-            })
-            .code(409);
+          console.error('ERROR: Email sudah digunakan oleh akun lain.');
+          return h.response({ status: "Failed", message: { error: "Email already used by another account" }}).code(409);
         }
+        console.log('Email baru tersedia.');
       }
 
       // Hash password baru jika ada
       if (value.password) {
+        console.log('Hashing password baru...');
         value.password = await bcrypt.hash(value.password, 10);
+        console.log('Password baru berhasil di-hash.');
       }
 
       // --- Logika penanganan avatar ---
       if (payload.avatar && typeof payload.avatar.hapi === 'object' && payload.avatar.hapi.filename) {
+        console.log('Memulai penanganan unggahan avatar...');
+
         // Hapus avatar lama jika ada
         if (user.avatar) {
-          const oldPath = path.join(
-            __dirname,
-            "..",
-            path.normalize(user.avatar) // Gunakan path.normalize karena user.avatar mungkin `/uploads/foo.jpg`
-          );
+          const oldPath = path.join(__dirname, "..", path.normalize(user.avatar));
+          console.log('Path avatar lama: ', oldPath);
           if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath);
+            try {
+              fs.unlinkSync(oldPath);
+              console.log('Avatar lama berhasil dihapus.');
+            } catch (unlinkErr) {
+              console.warn('PERINGATAN: Gagal menghapus avatar lama:', unlinkErr.message);
+            }
+          } else {
+            console.log('Avatar lama tidak ditemukan di path yang ditentukan.');
           }
         }
 
         const originalName = payload.avatar.hapi.filename;
         const extension = path.extname(originalName);
-        const filename = `${Date.now()}${extension}`;
-        const filepath = path.join(__dirname, "..", "uploads", filename); // Pastikan folder 'uploads' ada di root backend
+        const filename = `<span class="math-inline">\{Date\.now\(\)\}</span>{extension}`;
+        const filepath = path.join(__dirname, "..", "uploads", filename);
+        console.log('Akan menyimpan avatar baru ke: ', filepath);
+
+        // Pastikan direktori 'uploads' ada
+        const uploadDir = path.join(__dirname, "..", "uploads");
+        if (!fs.existsSync(uploadDir)) {
+            console.log('Direktori "uploads" tidak ada. Membuat...');
+            fs.mkdirSync(uploadDir, { recursive: true });
+            console.log('Direktori "uploads" berhasil dibuat.');
+        }
 
         const fileStream = fs.createWriteStream(filepath);
-        // Pastikan streaming file selesai sebelum melanjutkan
-        await new Promise((resolve, reject) => {
-          payload.avatar.on('end', (err) => {
-            if (err) return reject(err);
-            resolve();
-          });
-          payload.avatar.pipe(fileStream);
+        fileStream.on('error', (err) => {
+            console.error('ERROR: Stream tulis file (fs.createWriteStream) mengalami masalah:', err);
+            // Penting: Anda mungkin perlu menangani error ini dengan reject promise jika ini terjadi sebelum stream.pipe selesai.
+            // Untuk sekarang, kita hanya log.
         });
 
-        // Simpan path relatif ke database
-        value.avatar = `/uploads/${filename}`;
+        await new Promise((resolve, reject) => {
+          payload.avatar.on('end', (err) => {
+            if (err) {
+                console.error('ERROR: Stream payload.avatar "end" event dengan error:', err);
+                return reject(err);
+            }
+            console.log('Stream payload.avatar berhasil selesai (event "end").');
+            resolve();
+          });
+          payload.avatar.on('error', (err) => {
+              console.error('ERROR: Stream payload.avatar "error" event:', err);
+              reject(err);
+          });
+          payload.avatar.pipe(fileStream);
+          console.log('Stream payload.avatar sedang di-pipe ke fileStream.');
+        });
+        console.log('File avatar baru berhasil ditulis ke disk.');
+
+        value.avatar = `/uploads/${filename}`; // Simpan path relatif ke database
+        console.log('Path avatar baru untuk database: ', value.avatar);
       } else if (payload.avatar === null) {
-        // Jika frontend mengirim avatar: null untuk menghapus avatar
+        console.log('Permintaan menghapus avatar (payload.avatar = null).');
         if (user.avatar) {
-          const oldPath = path.join(
-            __dirname,
-            "..",
-            path.normalize(user.avatar)
-          );
+          const oldPath = path.join(__dirname, "..", path.normalize(user.avatar));
+          console.log('Mencoba menghapus avatar lama karena payload.avatar = null di:', oldPath);
           if (fs.existsSync(oldPath)) {
-            fs.unlinkSync(oldPath);
+            try {
+              fs.unlinkSync(oldPath);
+              console.log('Avatar lama berhasil dihapus karena payload.avatar = null.');
+            } catch (unlinkErr) {
+              console.warn('PERINGATAN: Gagal menghapus avatar lama saat payload.avatar = null:', unlinkErr.message);
+            }
+          } else {
+              console.log('Avatar lama tidak ditemukan di path yang ditentukan saat payload.avatar = null.');
           }
         }
         value.avatar = null;
+        console.log('Path avatar di database akan diset ke null.');
+      } else {
+        console.log('Tidak ada file avatar di payload, atau payload.avatar tidak valid.');
+        // Jika payload tidak berisi avatar (misal hanya update nama/email),
+        // pastikan `value.avatar` tidak di-set agar tidak menimpa avatar yang sudah ada.
+        delete value.avatar; // Hapus properti avatar dari value agar tidak mengubah avatar di DB
       }
       // --- Akhir logika penanganan avatar ---
 
-      // Update user di database dengan value yang sudah divalidasi dan diubah
+      console.log('Melanjutkan update user di database dengan data: ', JSON.stringify(value));
       await user.update(value);
+      console.log('User berhasil diupdate di database.');
 
-      // Kembalikan data user yang diperbarui (tanpa password)
       const { password, ...userData } = user.toJSON();
+      console.log('Respons berhasil dikirim.');
+      return h.response({ status: "Success", message: "User Has Been Updated", data: userData }).code(200);
 
-      return h
-        .response({
-          status: "Success",
-          message: "User Has Been Updated",
-          data: userData, // Mengandung path avatar terbaru
-        })
-        .code(200);
     } catch (err) {
-      console.error("Error updating user:", err); // Log error lebih detail
-      return h
-        .response({
-          status: "Failed",
-          message: { error: "Internal server error" },
-        })
-        .code(500);
+      console.error("\n!!! KRITIS: Error saat mengupdate user atau menyimpan avatar: !!!", err);
+      // Tambahkan ini untuk melihat stack trace lengkap
+      console.error(err.stack); 
+      return h.response({ status: "Failed", message: { error: "Internal server error. Silakan cek log server." } }).code(500);
     }
   },
 

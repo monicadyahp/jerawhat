@@ -45,7 +45,6 @@ const Header = () => {
     <header className="header" id="header">
       <nav className="nav container">
         <div className="nav__logo">
-          <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105259/favicon_qvqyzv.png" alt="" className="nav__img" />
           JeraWHAT?!
         </div>
         <div className="nav__toggle" id="nav-toggle" onClick={toggleMenu}>
