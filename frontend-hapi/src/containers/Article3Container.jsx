@@ -6,7 +6,7 @@ import Article3View from "../views/Article3View";
 import useArticle3Presenter from "../mvp/presenters/useArticle3Presenter";
 
 export default function Article3Container() {
-  const { title, intros, foods, outros, scrollToTop } = useArticle3Presenter();
+  const { title, intros, foods, outros, scrollToTop, handleMulaiClick } = useArticle3Presenter(); // Add handleMulaiClick
 
   return (
     <>
@@ -17,6 +17,7 @@ export default function Article3Container() {
         foods={foods}
         outros={outros}
         scrollToTop={scrollToTop}
+        handleMulaiClick={handleMulaiClick} // Pass handleMulaiClick
       />
       <div className="reveal-from-bottom">
         <Footer />

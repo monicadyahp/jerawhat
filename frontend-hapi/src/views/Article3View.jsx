@@ -1,8 +1,10 @@
 // src/views/Article3View.jsx
 import React from "react";
+// Remove Link from here if the "Mulai" button will only use onClick
+// If there are other Links in this view, keep Link imported
 import { Link } from "react-router-dom";
 
-export default function Article3View({ title, intros, foods, outros, scrollToTop }) {
+export default function Article3View({ title, intros, foods, outros, scrollToTop, handleMulaiClick }) { // Receive handleMulaiClick
   return (
     <section className="section article-detail" id="article-detail">
       <div className="container">
@@ -37,14 +39,15 @@ export default function Article3View({ title, intros, foods, outros, scrollToTop
         </div>
       </div>
 
-      {/* CTA SCAN */}
+      {/* CTA SCAN - Modification here */}
       <section className="section scan">
         <div className="scan__container container grid">
           <div className="scan reveal-from-bottom">
             <h2 className="scan__title">Scan Kulit Wajahmu</h2>
-            <Link to="/scanlanding" className="button">
+            {/* Replace Link with button and use onClick handler */}
+            <button type="button" className="button" onClick={handleMulaiClick}>
               Mulai
-            </Link>
+            </button>
           </div>
           <img
             src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105265/scan-img_ju8xb5.png"

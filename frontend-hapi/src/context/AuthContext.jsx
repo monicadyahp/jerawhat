@@ -1,3 +1,4 @@
+// frontend-hapi > src > context > AuthContext.jsx
 import React, { createContext, useState, useContext, useEffect } from 'react';
 
 const AuthContext = createContext(null);
@@ -7,22 +8,31 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in on initial load
-    const loggedInUser = localStorage.getItem('loggedInUser');
-    if (loggedInUser) {
-      setUser(JSON.parse(loggedInUser));
+    const storedUser = localStorage.getItem('user'); // Gunakan kunci 'user' yang konsisten
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        // Pastikan token bersih dari whitespace jika disimpan di localStorage
+        if (parsedUser.token) {
+          parsedUser.token = parsedUser.token.trim();
+        }
+        setUser(parsedUser);
+      } catch (e) {
+        console.error("Error parsing user data from localStorage in AuthContext:", e);
+        localStorage.removeItem('user'); // Hapus data yang rusak
+      }
     }
     setLoading(false);
   }, []);
 
   const login = (userData) => {
     setUser(userData);
-    localStorage.setItem('loggedInUser', JSON.stringify(userData));
+    localStorage.setItem('user', JSON.stringify(userData)); // Gunakan kunci 'user' yang konsisten
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('loggedInUser');
+    localStorage.removeItem('user'); // Gunakan kunci 'user' yang konsisten
   };
 
   return (
@@ -34,4 +44,4 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
   return useContext(AuthContext);
-}; 
+};

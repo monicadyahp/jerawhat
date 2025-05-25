@@ -1,40 +1,60 @@
 // src/mvp/presenters/useArticle2Presenter.js
 import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Article2Model from "../models/Article2Model";
+import { useAuth } from '../../context/AuthContext'; // Import useAuth
 
 export default function useArticle2Presenter() {
-  const [title, setTitle] = useState("");
-  const [intro, setIntro] = useState([]);
-  const [benefits, setBenefits] = useState([]);
-  const [outro, setOutro] = useState("");
+  const [title, setTitle] = useState("");
+  const [intro, setIntro] = useState([]);
+  const [benefits, setBenefits] = useState([]);
+  const [outro, setOutro] = useState("");
+  const navigate = useNavigate(); // Initialize useNavigate
+  const { user, loading } = useAuth(); // Get user and loading from AuthContext
 
-  useEffect(() => {
-    const model = new Article2Model();
-    setTitle(model.getTitle());
-    setIntro(model.getIntro());
-    setBenefits(model.getBenefits());
-    setOutro(model.getOutro());
+  useEffect(() => {
+    const model = new Article2Model();
+    setTitle(model.getTitle());
+    setIntro(model.getIntro());
+    setBenefits(model.getBenefits());
+    setOutro(model.getOutro());
 
-    // Scroll ke atas saat halaman dimuat
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Scroll ke atas saat halaman dimuat
+    window.scrollTo({ top: 0, behavior: "smooth" });
 
-    // Show/hide scroll-up button
-    const handleScrollUp = () => {
-      const scrollUpEl = document.getElementById("scroll-up");
-      if (window.scrollY >= 460) {
-        scrollUpEl?.classList.add("show-scroll");
-      } else {
-        scrollUpEl?.classList.remove("show-scroll");
+    // Show/hide scroll-up button
+    const handleScrollUp = () => {
+      const scrollUpEl = document.getElementById("scroll-up");
+      if (scrollUpEl) { // Check if element exists before adding/removing class
+        if (window.scrollY >= 460) {
+          scrollUpEl.classList.add("show-scroll");
+        } else {
+          scrollUpEl.classList.remove("show-scroll");
+        }
       }
-    };
-    window.addEventListener("scroll", handleScrollUp);
-    return () => window.removeEventListener("scroll", handleScrollUp);
-  }, []);
+    };
+    window.addEventListener("scroll", handleScrollUp);
+    return () => window.removeEventListener("scroll", handleScrollUp);
+  }, []);
 
-  const scrollToTop = (e) => {
-    e.preventDefault();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+  const scrollToTop = (e) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  // New function to handle the "Mulai" button click in CTA Scan
+  const handleMulaiClick = () => {
+    if (loading) {
+      // If authentication status is still loading, do nothing
+      return;
+    }
+
+    if (user) { // If user is logged in (user is not null)
+      navigate('/scan'); // Redirect to ScanView.jsx
+    } else { // If user is not logged in
+      navigate('/scanlanding'); // Redirect to ScanLandingView.jsx
+    }
   };
 
-  return { title, intro, benefits, outro, scrollToTop };
+  return { title, intro, benefits, outro, scrollToTop, handleMulaiClick }; // Add handleMulaiClick to return
 }

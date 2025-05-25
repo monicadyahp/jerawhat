@@ -1,7 +1,9 @@
-// src/routes/Routes.jsx
+// frontend-hapi > src > routes > Routes.jsx
+import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { AuthProvider, useAuth } from '../context/AuthContext';
 
-// halaman utama
+// Import semua komponen Container Anda
 import Home from '../containers/HomeContainer';
 import AboutScan from '../containers/AboutScanContainer';
 import Article from '../containers/ArticleContainer';
@@ -19,20 +21,54 @@ import AIChat from '../containers/AIChatContainer';
 import Quiz from '../containers/QuizContainer';
 
 // halaman baru: Rekomendasi
-import Recommendation from '../containers/RecommendationContainer'; // <-- Import RecommendationContainer
+import Recommendation from '../containers/RecommendationContainer';
 
 // halaman profil
-import Profile from '../containers/ProfileContainer';
+import Profile from '../containers/ProfileContainer'; // Pastikan ini ada!
 
 // halaman footer/top-level
 import AboutTeam from '../containers/AboutTeamContainer';
 import OurMission from '../containers/OurMissionContainer';
 import ContactUs from '../containers/ContactUsContainer';
 
-function AppRoutes() {
+// Komponen pembantu untuk membungkus Routes dengan AuthProvider
+function AppContentWithAuth() {
+  const { loading } = useAuth(); // Ambil status loading dari context
+
+  // Data slides yang akan diteruskan ke HomeContainer
+  const slides = [
+    {
+      groupImg: "https://res.cloudinary.com/dbofowabd/image/upload/v1748105252/home-img_l6e0a8.png",
+      detailsTitle: "Ghost",
+      detailsSubtitle: "Jerawat",
+      dataSubtitle: "Ghost",
+      dataTitle: "Temukan\nJerawat\nAsli",
+      dataDescription:
+        "Jelajahi berbagai fitur yang menarik untuk menemukan jerawat yang kamu alami saat ini.",
+      btnLink: "#about",
+      btnText: "Jelajahi",
+    },
+    // Tambahkan slide lainnya sesuai kebutuhan aplikasi Anda
+  ];
+
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        minHeight: '100vh',
+        fontSize: '1.5rem',
+        color: '#333'
+      }}>
+        Memuat autentikasi...
+      </div>
+    );
+  }
+
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Home slides={slides} />} />
       <Route path="/about-scan" element={<AboutScan />} />
       <Route path="/article" element={<Article />} />
       <Route path="/article-1" element={<Article1 />} />
@@ -49,10 +85,9 @@ function AppRoutes() {
       <Route path="/quiz/:quizId" element={<Quiz />} />
 
       {/* Rute untuk Rekomendasi Produk */}
-      {/* Anda bisa passing kondisi via query params: /rekomendasi?conditions=jerawat_parah,kulit_berminyak */}
       <Route path="/rekomendasi" element={<Recommendation />} />
 
-      {/* Rute untuk Profil */}
+      {/* Rute untuk Profil - PASTIKAN BARIS INI ADA! */}
       <Route path="/profile" element={<Profile />} />
 
       {/* footer links */}
@@ -65,4 +100,11 @@ function AppRoutes() {
   );
 }
 
-export default AppRoutes;
+// Komponen utama yang akan di-export
+export default function AppRoutes() {
+  return (
+    <AuthProvider>
+      <AppContentWithAuth />
+    </AuthProvider>
+  );
+}

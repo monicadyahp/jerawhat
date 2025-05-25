@@ -1,8 +1,25 @@
 // src/views/HomeView.jsx
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useAuth } from '../context/AuthContext'; // Import useAuth dari AuthContext Anda
 
-export default function HomeView({ slides }) {
+export default function HomeView({ slides }) { // Hapus prop isLoggedIn karena kita akan ambil dari context
+  const navigate = useNavigate(); // Inisialisasi useNavigate hook
+  const { user, loading } = useAuth(); // Dapatkan status user dan loading dari AuthContext
+
+  const handleMulaiClick = () => {
+    // Tunggu sampai status loading dari AuthContext selesai
+    if (loading) {
+      return; // Jangan lakukan apa-apa jika masih loading
+    }
+
+    if (user) { // Cek apakah 'user' ada (berarti sudah login)
+      navigate('/scan'); // Arahkan langsung ke ScanView.jsx
+    } else {
+      navigate('/scanlanding'); // Arahkan ke halaman landing scan jika belum login
+    }
+  };
+
   return (
     <main className="main">
       {/* HOME */}
@@ -244,22 +261,23 @@ export default function HomeView({ slides }) {
         </div>
       </section>
 
-        {/* CTA Scan */}
-        <section className="section scan">
-            <div className="scan__container container grid">
-                <div className="scan reveal-from-bottom">
-                  <h2 className="scan__title">Scan Kulit Wajahmu</h2>
-                  <Link to="/scanlanding" className="button">
-                    Mulai
-                  </Link>
-                </div>
-                <img
-              src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105265/new1_el7cff.png"
-              alt=""
-              className="scan__img reveal-from-bottom"
-            />
-            </div>
-        </section>
+      {/* CTA Scan */}
+      <section className="section scan">
+        <div className="scan__container container grid">
+          <div className="scan reveal-from-bottom">
+            <h2 className="scan__title">Scan Kulit Wajahmu</h2>
+            {/* Mengubah Link menjadi button dengan onClick handler */}
+            <button type="button" className="button" onClick={handleMulaiClick}>
+              Mulai
+            </button>
+          </div>
+          <img
+            src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105265/new1_el7cff.png"
+            alt=""
+            className="scan__img reveal-from-bottom"
+          />
+        </div>
+      </section>
 
       {/* NEWSLETTER */}
       <section className="section newsletter">

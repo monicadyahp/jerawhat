@@ -1,33 +1,36 @@
-// frontend-hapi > src > mvp > presenters > useProfilePresenter.js
+// useProfilePresenter.js
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import ProfileModel from '../models/ProfileModel';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { useAuth } from '../../context/AuthContext'; // Penting: Import useAuth
 
 export default function useProfilePresenter() {
   const model = useMemo(() => new ProfileModel(), []);
+  const { user, loading: authLoading, logout, login } = useAuth(); // Dapatkan user, loading, login, dan logout dari AuthContext
 
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // State lokal tidak lagi menyimpan user, karena akan diambil dari AuthContext
+  // const [user, setUser] = useState(null); // Hapus baris ini
+  const [loading, setLoading] = useState(true); // Gunakan loading terpisah untuk operasi presenter ini
   const [selectedAvatarFile, setSelectedAvatarFile] = useState(null);
   const [previewAvatarUrl, setPreviewAvatarUrl] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = model.getUserData();
-    if (userData) {
-      setUser(userData);
-    } else {
+    // Jika AuthContext masih loading, tunggu
+    if (authLoading) {
+      setLoading(true);
+      return;
+    }
+
+    // Jika user tidak ada setelah AuthContext selesai loading, arahkan ke login
+    if (!user) {
       if (window.location.pathname !== '/login') {
         navigate('/login');
-      } else {
-        setLoading(false);
       }
     }
-    if (userData || window.location.pathname === '/login') {
-        setLoading(false);
-    }
+    setLoading(false); // Setelah user status diketahui, set loading false
 
     const handleScroll = () => {
       const header = document.getElementById('header');
@@ -42,16 +45,18 @@ export default function useProfilePresenter() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [model, navigate]);
+  }, [user, authLoading, navigate]); // Tambahkan user dan authLoading sebagai dependensi
 
-  const refreshUserData = useCallback(() => {
-    const updatedUserData = model.getUserData();
-    if (updatedUserData) {
-        setUser(updatedUserData);
-        console.log('User data refreshed. New avatar path:', updatedUserData.avatar);
-        setPreviewAvatarUrl(null); // Reset preview URL setelah data user di-refresh
+  // Callback untuk memperbarui data user di AuthContext setelah upload avatar
+  const refreshUserData = useCallback((updatedAvatarPath) => {
+    if (user && updatedAvatarPath) {
+      const updatedUser = { ...user, avatar: updatedAvatarPath };
+      login(updatedUser); // Update user di AuthContext
+      console.log('User data refreshed in AuthContext. New avatar path:', updatedAvatarPath);
+      setPreviewAvatarUrl(null); // Reset preview URL setelah data user di-refresh
     }
-  }, [model]);
+  }, [user, login]);
+
 
   const handleLogout = () => {
     Swal.fire({
@@ -67,8 +72,8 @@ export default function useProfilePresenter() {
       color: 'hsl(323, 70%, 30%)',
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem('user');
-        window.dispatchEvent(new Event('loginStatusUpdated'));
+        logout(); // Panggil fungsi logout dari AuthContext
+        // window.dispatchEvent(new Event('loginStatusUpdated')); // Ini tidak lagi diperlukan
         Swal.fire({
           icon: 'success',
           title: 'Berhasil Keluar!',
@@ -141,11 +146,8 @@ export default function useProfilePresenter() {
     Swal.close();
 
     if (result.success) {
-      const currentUserData = JSON.parse(localStorage.getItem('user'));
-      if (currentUserData && result.avatarPath) {
-        currentUserData.avatar = result.avatarPath;
-        localStorage.setItem('user', JSON.stringify(currentUserData));
-      }
+      // Panggil refreshUserData untuk memperbarui AuthContext
+      refreshUserData(result.avatarPath); // Kirim path avatar yang baru
 
       Swal.fire({
         icon: 'success',
@@ -155,9 +157,7 @@ export default function useProfilePresenter() {
         confirmButtonColor: 'hsl(330, 91%, 85%)',
         color: 'hsl(323, 70%, 30%)',
       });
-      refreshUserData();
-      setSelectedAvatarFile(null); // <--- TAMBAHKAN INI: Reset file yang dipilih setelah sukses
-                                  // Ini akan menyembunyikan tombol "Unggah Avatar"
+      setSelectedAvatarFile(null);
     } else {
       Swal.fire({
         icon: 'error',
@@ -172,8 +172,8 @@ export default function useProfilePresenter() {
   };
 
   return {
-    user,
-    loading,
+    user, // Sekarang user datang dari AuthContext
+    loading: loading || authLoading, // Gabungkan status loading
     selectedAvatarFile,
     previewAvatarUrl,
     handleLogout,

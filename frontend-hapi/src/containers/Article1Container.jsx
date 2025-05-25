@@ -6,12 +6,12 @@ import Article1View from '../views/Article1View';
 import useArticle1Presenter from '../mvp/presenters/useArticle1Presenter';
 
 export default function Article1Container() {
-  const { tips, scrollToTop } = useArticle1Presenter();
+  const { tips, scrollToTop, handleMulaiClick } = useArticle1Presenter(); // Add handleMulaiClick
 
   return (
     <>
       <Header />
-      <Article1View tips={tips} />
+      <Article1View tips={tips} handleMulaiClick={handleMulaiClick} /> {/* Pass handleMulaiClick */}
       <div className="reveal-from-bottom">
         <Footer />
       </div>

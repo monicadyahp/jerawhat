@@ -5,12 +5,12 @@ import { Link } from "react-router-dom";
 export default function LoginView({
   email,
   password,
-  // status, // Hapus prop status
-  loading,
+  loading, // Pastikan ini diterima untuk status tombol
   onEmailChange,
   onPasswordChange,
   onSubmit,
-  scrollToTop,
+  scrollToTop, // Tetap sertakan jika ada kebutuhan UI untuk ini
+  error // Untuk menampilkan pesan error
 }) {
   return (
     <>
@@ -41,7 +41,7 @@ export default function LoginView({
                           id="email"
                           placeholder="Masukkan email"
                           value={email}
-                          onChange={onEmailChange}
+                          onChange={onEmailChange} // Menggunakan onEmailChange
                           required
                         />
                       </div>
@@ -52,10 +52,18 @@ export default function LoginView({
                           id="password"
                           placeholder="Masukkan password"
                           value={password}
-                          onChange={onPasswordChange}
+                          onChange={onPasswordChange} // Menggunakan onPasswordChange
                           required
                         />
                       </div>
+
+                      {/* Tampilkan pesan error di sini */}
+                      {error && (
+                        <p style={{ marginTop: 10, color: "crimson", textAlign: "center" }}>
+                          {error}
+                        </p>
+                      )}
+
                       <button type="submit" className="button login__button" disabled={loading}>
                         {loading ? "Loading..." : "Login"}
                       </button>
@@ -63,8 +71,6 @@ export default function LoginView({
                     <p className="login__footer">
                       Belum punya akun? <Link to="/register">Register</Link>
                     </p>
-                    {/* {status && <p style={{ marginTop: 10, color: "crimson" }}>{status}</p>} */}
-                    {/* Hapus baris di atas karena status akan ditangani SweetAlert */}
                   </div>
                 </div>
               </div>
@@ -73,6 +79,7 @@ export default function LoginView({
           <div className="swiper-pagination"></div>
         </div>
       </section>
+      {/* Scroll Up Button - pastikan scrollToTop di-handle oleh presenter jika diperlukan */}
       <a href="#" className="scrollup" id="scroll-up" onClick={scrollToTop}>
         <i className="bx bx-up-arrow-alt scrollup__icon"></i>
       </a>

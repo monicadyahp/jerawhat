@@ -1,8 +1,11 @@
 // src/views/AboutScanView.jsx
 import React from 'react';
+// Hapus Link dari sini jika tombol "Mulai" hanya akan menggunakan onClick
+// Jika ada Link lain di view ini, tetap biarkan Link diimpor
 import { Link } from 'react-router-dom';
 
-export default function AboutScanView({ blocks, scrollToTop }) {
+
+export default function AboutScanView({ blocks, scrollToTop, handleMulaiClick }) { // Terima handleMulaiClick
   return (
     <>
       {blocks.map((b, i) => (
@@ -22,14 +25,15 @@ export default function AboutScanView({ blocks, scrollToTop }) {
         </section>
       ))}
 
-      {/* CTA Scan */}
+      {/* CTA Scan - Modifikasi di sini */}
       <section className="section scan reveal-from-bottom">
         <div className="scan__container container grid">
           <div className="scan">
             <h2 className="scan__title">Scan Kulit Wajahmu</h2>
-            <Link to="/scanlanding" className="button">
+            {/* Ganti Link dengan button dan gunakan onClick handler */}
+            <button type="button" className="button" onClick={handleMulaiClick}>
               Mulai
-            </Link>
+            </button>
           </div>
           <img
             src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105265/scan-img_ju8xb5.png"
