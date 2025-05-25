@@ -53,12 +53,13 @@ export default function useProfilePresenter() {
   }, [model, navigate]); // model sekarang stabil, tidak akan memicu re-render tak terbatas
 
   // Fungsi untuk memuat ulang data user setelah upload avatar sukses
-  const refreshUserData = useCallback(() => {
+const refreshUserData = useCallback(() => {
     const updatedUserData = model.getUserData();
     if (updatedUserData) {
-      setUser(updatedUserData);
+        setUser(updatedUserData);
+        console.log('User data refreshed. New avatar path:', updatedUserData.avatar); // <-- TAMBAHKAN INI
     }
-  }, [model]); // model adalah dependency yang stabil
+}, [model]);
 
   const handleLogout = () => {
     Swal.fire({
@@ -140,6 +141,13 @@ export default function useProfilePresenter() {
     Swal.close();
 
     if (result.success) {
+      // Perbarui localStorage dengan path avatar yang baru
+      const currentUserData = JSON.parse(localStorage.getItem('user'));
+      if (currentUserData && result.avatarPath) { // result.avatarPath adalah path relatif dari backend
+        currentUserData.avatar = result.avatarPath; // Update path avatar di localStorage
+        localStorage.setItem('user', JSON.stringify(currentUserData)); // Simpan kembali ke localStorage
+      }
+
       Swal.fire({
         icon: 'success',
         title: 'Sukses!',
@@ -148,7 +156,7 @@ export default function useProfilePresenter() {
         confirmButtonColor: 'hsl(330, 91%, 85%)',
         color: 'hsl(323, 70%, 30%)',
       });
-      refreshUserData(); // Panggil fungsi refreshUserData
+      refreshUserData(); // Panggil fungsi refreshUserData untuk update state React (yang akan membaca dari localStorage baru)
       setSelectedAvatarFile(null); // Reset file yang dipilih
     } else {
       Swal.fire({

@@ -27,9 +27,8 @@ export default function ProfileView({
 
   // URL dasar untuk avatar (sesuaikan dengan lokasi penyimpanan di backend Anda)
   // Misalnya, jika backend menyimpan di 'uploads/avatars/', dan server berjalan di localhost:3000
-  const avatarBaseUrl = 'http://localhost:3000/'; // Sesuaikan dengan URL server backend Anda
-  const currentAvatarUrl = user.avatar ? `${avatarBaseUrl}${user.avatar}` : 'https://res.cloudinary.com/dbofowabd/image/upload/v1748144946/image-removebg-preview_5_p2y9ox.png'; // Path avatar default
-
+  const avatarBaseUrl = 'http://localhost:3000'; // Sesuaikan dengan URL server backend Anda
+const currentAvatarUrl = user.avatar ? `${avatarBaseUrl}${user.avatar}` : 'https://res.cloudinary.com/dbofowabd/image/upload/v1748144946/image-removebg-preview_5_p2y9ox.png';
   return (
     <section className="home container" id="profile">
       <div className="home__content grid" style={{ paddingTop: '5rem', paddingBottom: '3rem' }}>

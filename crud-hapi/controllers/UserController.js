@@ -20,6 +20,7 @@ module.exports = {
         })
         .code(200);
     } catch (err) {
+      console.error("Error in getAll users:", err); // Tambahkan log
       return h
         .response({
           status: "Failed",
@@ -49,6 +50,7 @@ module.exports = {
         })
         .code(200);
     } catch (err) {
+      console.error("Error in getById user:", err); // Tambahkan log
       return h
         .response({
           status: "Failed",
@@ -81,12 +83,12 @@ module.exports = {
         .code(422);
     }
 
-    let filename = null;
+    let filename = null; // Ini untuk create user, bukan update
 
     if (
       payload.avatar &&
       typeof payload.avatar === "object" &&
-      payload.avatar._data &&
+      payload.avatar._data && // Ini lebih untuk payload.output: 'data'
       payload.avatar.hapi &&
       payload.avatar.hapi.filename
     ) {
@@ -95,7 +97,7 @@ module.exports = {
       filename = `${Date.now()}${extension}`;
       const filepath = path.join(__dirname, "..", "uploads", filename);
       const fileStream = fs.createWriteStream(filepath);
-      payload.avatar.pipe(fileStream);
+      payload.avatar.pipe(fileStream); // Asumsi payload.avatar adalah stream
     }
 
     try {
@@ -127,6 +129,7 @@ module.exports = {
         })
         .code(200);
     } catch (err) {
+      console.error("Error in create user:", err); // Tambahkan log
       return h
         .response({
           status: "Failed",
@@ -139,7 +142,7 @@ module.exports = {
   update: async (req, h) => {
     const { payload } = req;
     console.log('\n--- [UPDATE USER] Permintaan diterima ---');
-    console.log('Payload yang diterima: ', JSON.stringify(Object.keys(payload))); // Hanya keys untuk menghindari log file besar
+    console.log('Payload yang diterima: ', JSON.stringify(Object.keys(payload)));
     console.log('Apakah payload.avatar ada? ', !!payload.avatar);
     if (payload.avatar) {
         console.log('Tipe payload.avatar: ', typeof payload.avatar);
@@ -157,12 +160,10 @@ module.exports = {
     console.log('ID dari URL params: ', userIdFromParams);
     console.log('ID user terautentikasi: ', authenticatedUserId);
 
-    // --- PENTING: Penambahan validasi otorisasi ---
     if (!req.auth.isAuthenticated || authenticatedUserId !== userIdFromParams) {
       console.error('ERROR: Otorisasi gagal. User tidak diizinkan mengubah profil ini.');
       return h.response({ status: "Failed", message: { error: "Unauthorized: Anda tidak diizinkan mengubah profil ini." }}).code(403);
     }
-    // --- Akhir penambahan validasi otorisasi ---
 
     const schema = Joi.object({
       name: Joi.string().min(3).optional(),
@@ -191,7 +192,6 @@ module.exports = {
       }
       console.log('User ditemukan:', user.email);
 
-      // Periksa apakah email diubah dan sudah digunakan
       if (value.email && value.email !== user.email) {
         console.log('Email diubah. Memeriksa ketersediaan email baru...');
         const existing = await User.findOne({ where: { email: value.email } });
@@ -202,7 +202,6 @@ module.exports = {
         console.log('Email baru tersedia.');
       }
 
-      // Hash password baru jika ada
       if (value.password) {
         console.log('Hashing password baru...');
         value.password = await bcrypt.hash(value.password, 10);
@@ -231,11 +230,11 @@ module.exports = {
 
         const originalName = payload.avatar.hapi.filename;
         const extension = path.extname(originalName);
-        const filename = `<span class="math-inline">\{Date\.now\(\)\}</span>{extension}`;
+        const filename = `${Date.now()}${extension}`; // <--- INI PERBAIKAN UTAMA UNTUK NAMA FILE
+        
         const filepath = path.join(__dirname, "..", "uploads", filename);
         console.log('Akan menyimpan avatar baru ke: ', filepath);
 
-        // Pastikan direktori 'uploads' ada
         const uploadDir = path.join(__dirname, "..", "uploads");
         if (!fs.existsSync(uploadDir)) {
             console.log('Direktori "uploads" tidak ada. Membuat...');
@@ -246,8 +245,6 @@ module.exports = {
         const fileStream = fs.createWriteStream(filepath);
         fileStream.on('error', (err) => {
             console.error('ERROR: Stream tulis file (fs.createWriteStream) mengalami masalah:', err);
-            // Penting: Anda mungkin perlu menangani error ini dengan reject promise jika ini terjadi sebelum stream.pipe selesai.
-            // Untuk sekarang, kita hanya log.
         });
 
         await new Promise((resolve, reject) => {
@@ -290,11 +287,8 @@ module.exports = {
         console.log('Path avatar di database akan diset ke null.');
       } else {
         console.log('Tidak ada file avatar di payload, atau payload.avatar tidak valid.');
-        // Jika payload tidak berisi avatar (misal hanya update nama/email),
-        // pastikan `value.avatar` tidak di-set agar tidak menimpa avatar yang sudah ada.
-        delete value.avatar; // Hapus properti avatar dari value agar tidak mengubah avatar di DB
+        delete value.avatar;
       }
-      // --- Akhir logika penanganan avatar ---
 
       console.log('Melanjutkan update user di database dengan data: ', JSON.stringify(value));
       await user.update(value);
@@ -306,7 +300,6 @@ module.exports = {
 
     } catch (err) {
       console.error("\n!!! KRITIS: Error saat mengupdate user atau menyimpan avatar: !!!", err);
-      // Tambahkan ini untuk melihat stack trace lengkap
       console.error(err.stack); 
       return h.response({ status: "Failed", message: { error: "Internal server error. Silakan cek log server." } }).code(500);
     }
@@ -333,6 +326,7 @@ module.exports = {
         .response({ status: "Success", message: "User deleted successfully" })
         .code(200);
     } catch (err) {
+      console.error("Error in delete user:", err); // Tambahkan log
       return h
         .response({
           status: "Failed",
@@ -396,7 +390,7 @@ module.exports = {
         })
         .code(200);
     } catch (err) {
-      console.error(err);
+      console.error("Error in register user:", err); // Tambahkan log
       return h
         .response({
           status: "Failed",

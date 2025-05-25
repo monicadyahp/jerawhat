@@ -2,8 +2,7 @@
 const Joi = require("joi");
 const { User } = require("../models"); // Pastikan path ini benar
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken"); // <--- KEMBALIKAN INI, KITA AKAN PAKAI jsonwebtoken UNTUK MEMBUAT TOKEN
-// HAPUS BARIS INI: const signJwt = require('@hapi/jwt'); // Ini yang menyebabkan masalah terakhir
+const jwt = require("jsonwebtoken"); // <--- INI PENTING! KEMBALIKAN BARIS INI
 
 module.exports = {
   login: async (req, h) => {
@@ -31,11 +30,11 @@ module.exports = {
         return h.response({ status: "Failed", message: "Email atau password salah!" }).code(401);
       }
 
-      // Buat token JWT menggunakan pustaka `jsonwebtoken` (yang lebih mudah digunakan untuk sign)
-      const token = jwt.sign( // <--- KEMBALIKAN KE `jwt.sign`
+      // Buat token JWT menggunakan pustaka `jsonwebtoken`
+      const token = jwt.sign( // <--- PASTIKAN MENGGUNAKAN `jwt.sign`
         { id: user.id, name: user.name, email: user.email }, // Payload
-        process.env.JWT_SECRET || 'wS!9xMvB3$ZrTq7Y#jD2@LfVgXeN6pA0', // <--- Secret key langsung
-        { expiresIn: '4h' } // <--- Opsi untuk `jsonwebtoken` (exp: '4h' untuk 4 jam)
+        process.env.JWT_SECRET || 'wS!9xMvB3$ZrTq7Y#jD2@LfVgXeN6pA0', // Secret key
+        { expiresIn: '4h' } // Opsi
       );
 
       console.log('--- JWT Token Dibuat ---');
