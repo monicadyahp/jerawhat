@@ -37,15 +37,14 @@ export default function useLoginPresenter() {
     setLoading(true);
 
     setTimeout(async () => {
-      const result = await model.login(email, password); // hasil dari LoginModel.js
+      const result = await model.login(email, password);
 
-      setLoading(false); // Pastikan loading dihentikan terlepas dari sukses/gagal
+      setLoading(false);
 
-      if (result.success) { // <-- Ini adalah kunci, periksa result.success dari model
-        // Jika model mengembalikan success: true
+      if (result.success) {
         const userDataToStore = {
-            ...result.user, // result.user karena model.login mengembalikan result.user
-            token: result.token // result.token karena model.login mengembalikan result.token
+            ...result.user,
+            token: result.token.trim() // <--- TAMBAHKAN .trim() DI SINI JUGA
         };
         localStorage.setItem("user", JSON.stringify(userDataToStore));
 

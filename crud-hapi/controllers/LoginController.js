@@ -2,7 +2,8 @@
 const Joi = require("joi");
 const { User } = require("../models"); // Pastikan path ini benar
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
+const jwt = require("jsonwebtoken"); // <--- KEMBALIKAN INI, KITA AKAN PAKAI jsonwebtoken UNTUK MEMBUAT TOKEN
+// HAPUS BARIS INI: const signJwt = require('@hapi/jwt'); // Ini yang menyebabkan masalah terakhir
 
 module.exports = {
   login: async (req, h) => {
@@ -30,27 +31,37 @@ module.exports = {
         return h.response({ status: "Failed", message: "Email atau password salah!" }).code(401);
       }
 
-      // Buat token JWT
-      const token = jwt.sign(
-        { id: user.id, name: user.name, email: user.email }, // <-- PASTIKAN PAYLOAD INI MENGANDUNG user.id
-        process.env.JWT_SECRET || 'your_super_secret_jwt_key',
-        { expiresIn: '4h' }
+      // Buat token JWT menggunakan pustaka `jsonwebtoken` (yang lebih mudah digunakan untuk sign)
+      const token = jwt.sign( // <--- KEMBALIKAN KE `jwt.sign`
+        { id: user.id, name: user.name, email: user.email }, // Payload
+        process.env.JWT_SECRET || 'wS!9xMvB3$ZrTq7Y#jD2@LfVgXeN6pA0', // <--- Secret key langsung
+        { expiresIn: '4h' } // <--- Opsi untuk `jsonwebtoken` (exp: '4h' untuk 4 jam)
       );
 
-      // Siapkan data user untuk dikirim ke frontend (tanpa password)
-      const { password, ...userData } = user.toJSON(); // userData ini harusnya punya user.id dan user.avatar
+      console.log('--- JWT Token Dibuat ---');
+      console.log('Token:', token);
+      try {
+          const [headerB64, payloadB64, signatureB64] = token.split('.');
+          const decodedPayload = Buffer.from(payloadB64, 'base64').toString('utf8');
+          console.log('Payload yang Dihasilkan:', decodedPayload);
+      } catch (decodeErr) {
+          console.error('Gagal mendekode token:', decodeErr);
+      }
+      console.log('--- End JWT Token ---');
+
+      const { password, ...userData } = user.toJSON();
 
       return h.response({
         status: "Success",
         message: "Login berhasil!",
         data: {
-          token, // <-- Pastikan ini dikirim
-          user: userData, // <-- Pastikan userData punya id dan avatar
+          token,
+          user: userData,
         },
       }).code(200);
 
     } catch (err) {
-      console.error(err);
+      console.error('Error saat login:', err);
       return h.response({ status: "Failed", message: "Terjadi kesalahan pada server." }).code(500);
     }
   },

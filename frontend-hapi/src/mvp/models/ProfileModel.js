@@ -8,7 +8,12 @@ export default class ProfileModel {
     const userData = localStorage.getItem('user');
     if (userData) {
       try {
-        return JSON.parse(userData);
+        const parsedData = JSON.parse(userData);
+        // Pastikan token bersih dari whitespace/karakter tak terlihat
+        if (parsedData.token) {
+            parsedData.token = parsedData.token.trim(); // <--- TAMBAHKAN .trim() DI SINI
+        }
+        return parsedData;
       } catch (e) {
         console.error("Error parsing user data from localStorage", e);
         return null;
@@ -22,11 +27,10 @@ export default class ProfileModel {
     formData.append('avatar', file);
 
     try {
-      // Ubah URL fetch
-      const response = await fetch(`${API_BASE_URL}/users/${userId}`, { // Sesuaikan URL API Anda, menggunakan PUT /users/{id}
-        method: 'PUT', // Pastikan methodnya PUT
+      const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
+        method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`, // Token yang masuk ke sini sudah bersih dari getUserData()
         },
         body: formData,
       });
@@ -34,19 +38,21 @@ export default class ProfileModel {
       const result = await response.json();
 
       if (!response.ok) {
+        // Log ini akan sangat membantu jika ada pesan error dari backend
+        console.error('Backend Error Response:', result);
         return {
           success: false,
           message: result.message?.errors || result.message || 'Gagal mengunggah avatar.',
         };
       }
 
-      // Pastikan backend mengembalikan `data.avatar` atau `avatarPath` yang benar
       return {
         success: true,
         message: 'Avatar berhasil diunggah!',
-        avatarPath: result.data.avatar, // Sesuaikan ini jika backend mengembalikan properti lain
+        avatarPath: result.data.avatar,
       };
     } catch (err) {
+      console.error('Network/Fetch Error:', err); // Log error jaringan lebih detail
       return {
         success: false,
         message: err.message || 'Terjadi kesalahan jaringan saat mengunggah avatar.',
