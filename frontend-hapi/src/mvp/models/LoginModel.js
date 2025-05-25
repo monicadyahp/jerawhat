@@ -11,14 +11,13 @@ export default class LoginModel {
       };
     }
     try {
-      // Ubah URL fetch dari hardcoded 'http://localhost:3000' menjadi API_BASE_URL
-      const response = await fetch(`${API_BASE_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+          const response = await fetch(`${API_BASE_URL}/login`, { // <--- Ubah di sini
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+          });
 
       const result = await response.json();
 
