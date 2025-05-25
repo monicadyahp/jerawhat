@@ -1,0 +1,29 @@
+# .gitignore
+
+# Node modules (general and nested)
+node_modules/
+frontend-hapi/node_modules/
+crud-hapi/node_modules/
+
+# Vercel and Netlify build artifacts
+.vercel/
+.netlify/
+
+# Build output (important!)
+dist/
+frontend-hapi/dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Local development files
+*.log
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Optional: If you copied img to Cloudinary, ignore local copies
+frontend-hapi/src/assets/img/

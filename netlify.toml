@@ -1,0 +1,16 @@
+[build]
+  command = "npm run build --prefix frontend-hapi" # Perintah build untuk frontend Anda
+  publish = "frontend-hapi/dist" # Direktori output build frontend Anda
+
+[functions]
+  directory = "netlify/functions" # Lokasi fungsi Anda
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat" # Mengarahkan /api/ ke fungsi api.js Anda
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html" # Fallback untuk SPA
+  status = 200

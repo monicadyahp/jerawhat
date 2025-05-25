@@ -1,0 +1,21 @@
+{
+  "name": "my-react-app",
+  "version": "1.0.0",
+  "description": "Capstone Project Monorepo (Frontend & Backend)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev --prefix ./frontend-hapi\" \"npm run dev --prefix ./crud-hapi\"",
+    "start-frontend-dev": "npm run dev --prefix ./frontend-hapi",
+    "start-backend-dev": "npm run dev --prefix ./crud-hapi",
+    "build": "npm install --prefix ./frontend-hapi && npm run build --prefix ./frontend-hapi"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "my-react-app": "file:"
+  }
+}
