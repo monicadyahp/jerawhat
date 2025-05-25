@@ -29,8 +29,6 @@ const Footer = () => (
           <li><Link to="/"            className="footer__link">Home</Link></li>
           <li><Link to="/about-scan"  className="footer__link">About Scan</Link></li>
           <li><Link to="/article"     className="footer__link">Article</Link></li>
-          <li><Link to="/maps"        className="footer__link">Maps</Link></li>
-          <li><Link to="/scanlanding" className="footer__link">Scan</Link></li>
         </ul>
       </div>
 
