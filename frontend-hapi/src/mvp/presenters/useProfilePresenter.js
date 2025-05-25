@@ -1,42 +1,34 @@
 // frontend-hapi > src > mvp > presenters > useProfilePresenter.js
-import { useState, useEffect, useCallback, useMemo } from 'react'; // Tambahkan useMemo
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import ProfileModel from '../models/ProfileModel';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 export default function useProfilePresenter() {
-  // Gunakan useMemo untuk memastikan instance model hanya dibuat sekali
-  // dan tidak berubah pada setiap render kecuali dependencies-nya berubah.
-  // Dalam kasus ini, model tidak punya dependencies, jadi dia akan stabil.
-  const model = useMemo(() => new ProfileModel(), []); // <-- PERUBAHAN KRUSIAL DI SINI
+  const model = useMemo(() => new ProfileModel(), []);
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedAvatarFile, setSelectedAvatarFile] = useState(null);
+  const [previewAvatarUrl, setPreviewAvatarUrl] = useState(null);
+
   const navigate = useNavigate();
 
-  // useEffect untuk memuat data profil dan event listener
   useEffect(() => {
-    const userData = model.getUserData(); // model sekarang stabil
+    const userData = model.getUserData();
     if (userData) {
       setUser(userData);
     } else {
-      // Periksa apakah sudah di halaman login, agar tidak terjadi redirect loop
-      // saat misalnya token kadaluwarsa saat berada di halaman login itu sendiri
       if (window.location.pathname !== '/login') {
         navigate('/login');
       } else {
-        // Jika sudah di halaman login dan tidak ada user, cukup set loading ke false
         setLoading(false);
       }
     }
-    // Hanya set loading ke false jika user ditemukan atau sudah di halaman login
     if (userData || window.location.pathname === '/login') {
         setLoading(false);
     }
 
-
-    // Bagian untuk scroll-header dan scroll-up
     const handleScroll = () => {
       const header = document.getElementById('header');
       if (header)
@@ -50,16 +42,16 @@ export default function useProfilePresenter() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [model, navigate]); // model sekarang stabil, tidak akan memicu re-render tak terbatas
+  }, [model, navigate]);
 
-  // Fungsi untuk memuat ulang data user setelah upload avatar sukses
-const refreshUserData = useCallback(() => {
+  const refreshUserData = useCallback(() => {
     const updatedUserData = model.getUserData();
     if (updatedUserData) {
         setUser(updatedUserData);
-        console.log('User data refreshed. New avatar path:', updatedUserData.avatar); // <-- TAMBAHKAN INI
+        console.log('User data refreshed. New avatar path:', updatedUserData.avatar);
+        setPreviewAvatarUrl(null); // Reset preview URL setelah data user di-refresh
     }
-}, [model]);
+  }, [model]);
 
   const handleLogout = () => {
     Swal.fire({
@@ -76,10 +68,7 @@ const refreshUserData = useCallback(() => {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem('user');
-
-        // PENTING: Memicu event kustom setelah localStorage dihapus
-        window.dispatchEvent(new Event('loginStatusUpdated')); // <-- Tambahkan baris ini
-
+        window.dispatchEvent(new Event('loginStatusUpdated'));
         Swal.fire({
           icon: 'success',
           title: 'Berhasil Keluar!',
@@ -97,7 +86,18 @@ const refreshUserData = useCallback(() => {
   };
 
   const onAvatarChange = (e) => {
-    setSelectedAvatarFile(e.target.files[0]);
+    const file = e.target.files[0];
+    setSelectedAvatarFile(file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPreviewAvatarUrl(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreviewAvatarUrl(null);
+    }
   };
 
   const handleAvatarUpload = async () => {
@@ -141,11 +141,10 @@ const refreshUserData = useCallback(() => {
     Swal.close();
 
     if (result.success) {
-      // Perbarui localStorage dengan path avatar yang baru
       const currentUserData = JSON.parse(localStorage.getItem('user'));
-      if (currentUserData && result.avatarPath) { // result.avatarPath adalah path relatif dari backend
-        currentUserData.avatar = result.avatarPath; // Update path avatar di localStorage
-        localStorage.setItem('user', JSON.stringify(currentUserData)); // Simpan kembali ke localStorage
+      if (currentUserData && result.avatarPath) {
+        currentUserData.avatar = result.avatarPath;
+        localStorage.setItem('user', JSON.stringify(currentUserData));
       }
 
       Swal.fire({
@@ -156,8 +155,9 @@ const refreshUserData = useCallback(() => {
         confirmButtonColor: 'hsl(330, 91%, 85%)',
         color: 'hsl(323, 70%, 30%)',
       });
-      refreshUserData(); // Panggil fungsi refreshUserData untuk update state React (yang akan membaca dari localStorage baru)
-      setSelectedAvatarFile(null); // Reset file yang dipilih
+      refreshUserData();
+      setSelectedAvatarFile(null); // <--- TAMBAHKAN INI: Reset file yang dipilih setelah sukses
+                                  // Ini akan menyembunyikan tombol "Unggah Avatar"
     } else {
       Swal.fire({
         icon: 'error',
@@ -167,6 +167,7 @@ const refreshUserData = useCallback(() => {
         confirmButtonColor: 'hsl(330, 91%, 85%)',
         color: 'hsl(323, 70%, 30%)',
       });
+      setPreviewAvatarUrl(null);
     }
   };
 
@@ -174,6 +175,7 @@ const refreshUserData = useCallback(() => {
     user,
     loading,
     selectedAvatarFile,
+    previewAvatarUrl,
     handleLogout,
     onAvatarChange,
     handleAvatarUpload,

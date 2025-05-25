@@ -4,10 +4,11 @@ import React from 'react';
 export default function ProfileView({
   user,
   loading,
-  selectedAvatarFile, // Ambil state file
+  selectedAvatarFile,
+  previewAvatarUrl,
   handleLogout,
-  onAvatarChange,     // Ambil handler change
-  handleAvatarUpload, // Ambil handler upload
+  onAvatarChange,
+  handleAvatarUpload,
 }) {
   if (loading) {
     return (
@@ -25,17 +26,20 @@ export default function ProfileView({
     );
   }
 
-  // URL dasar untuk avatar (sesuaikan dengan lokasi penyimpanan di backend Anda)
-  // Misalnya, jika backend menyimpan di 'uploads/avatars/', dan server berjalan di localhost:3000
-  const avatarBaseUrl = 'http://localhost:3000'; // Sesuaikan dengan URL server backend Anda
-const currentAvatarUrl = user.avatar ? `${avatarBaseUrl}${user.avatar}` : 'https://res.cloudinary.com/dbofowabd/image/upload/v1748144946/image-removebg-preview_5_p2y9ox.png';
+  const avatarBaseUrl = 'http://localhost:3000';
+  const currentAvatarUrl = user.avatar ? `${avatarBaseUrl}${user.avatar}` : 'https://res.cloudinary.com/dbofowabd/image/upload/v1748144946/image-removebg-preview_5_p2y9ox.png';
+  const displayAvatarUrl = previewAvatarUrl || currentAvatarUrl;
+
   return (
-    <section className="home container" id="profile">
-      <div className="home__content grid" style={{ paddingTop: '5rem', paddingBottom: '3rem' }}>
-        <div className="home__data reveal-from-bottom" style={{ textAlign: 'center', margin: 'auto' }}>
-          <h1 className="home__title" style={{ marginBottom: '1rem' }}>
+    // Mengikuti struktur section dari ContactUsView
+    <section className="section profile-section reveal-from-bottom" id="profile"> {/* Ganti kelas home container */}
+      <div className="container"> {/* Gunakan kelas container */}
+        {/* Konten utama profil, mirip contact__content */}
+        <div className="profile__content reveal-from-bottom" style={{ textAlign: 'center', margin: 'auto' }}>
+          {/* Judul: h2 dan kelas section__title */}
+          <h2 className="section__title" style={{ marginBottom: '1rem' }}> {/* Ganti h1 dan tambahkan kelas */}
             Profil Pengguna
-          </h1>
+          </h2>
           <div className="profile__details" style={{
             background: '#fbeaea',
             padding: '2rem',
@@ -46,42 +50,70 @@ const currentAvatarUrl = user.avatar ? `${avatarBaseUrl}${user.avatar}` : 'https
             color: 'hsl(323, 70%, 30%)'
           }}>
             {/* Avatar Section */}
-            <div style={{ marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '1.5rem', position: 'relative', width: '120px', height: '120px', margin: '0 auto' }}>
               <img
-                src={currentAvatarUrl}
+                src={displayAvatarUrl}
                 alt="Avatar"
                 style={{
-                  width: '120px',
-                  height: '120px',
+                  width: '100%',
+                  height: '100%',
                   borderRadius: '50%',
                   objectFit: 'cover',
-                  marginBottom: '1rem',
-                  border: '3px solid hsl(330, 91%, 85%)' // --first-color
+                  border: '3px solid hsl(330, 91%, 85%)'
                 }}
               />
+              
+              {/* Tombol Edit Avatar (Ikon Pensil) */}
+              <label
+                  htmlFor="avatar-upload-input"
+                  style={{
+                      position: 'absolute',
+                      bottom: '0',
+                      right: '0',
+                      backgroundColor: 'hsl(330, 91%, 85%)',
+                      color: 'hsl(323, 70%, 30%)',
+                      borderRadius: '50%',
+                      width: '32px',
+                      height: '32px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      boxShadow: '0 2px 5px rgba(0,0,0,0.2)',
+                      zIndex: 1,
+                      fontSize: '1rem'
+                  }}
+              >
+                  <i className='bx bx-pencil'></i>
+              </label>
               <input
-                type="file"
-                accept="image/*"
-                onChange={onAvatarChange}
-                style={{ display: 'block', margin: '0.5rem auto' }}
+                  id="avatar-upload-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={onAvatarChange}
+                  style={{ display: 'none' }}
               />
+            </div>
+
+            {/* Tombol Unggah Avatar (hanya muncul jika ada file yang dipilih) */}
+            {selectedAvatarFile && (
               <button
                 onClick={handleAvatarUpload}
                 className="button"
-                disabled={!selectedAvatarFile} // Nonaktifkan jika tidak ada file dipilih
                 style={{
+                  marginTop: '1rem',
                   padding: '.5rem 1rem',
                   fontSize: '.9rem',
-                  background: 'hsl(330, 91%, 85%)', // --first-color
-                  color: 'hsl(323, 70%, 30%)', // --title-color
+                  background: 'hsl(330, 91%, 85%)',
+                  color: 'hsl(323, 70%, 30%)',
                 }}
               >
-                {selectedAvatarFile ? 'Unggah Avatar' : 'Pilih & Unggah'}
+                Unggah Avatar
               </button>
-            </div>
+            )}
 
             {/* User Details */}
-            <p><strong>Nama:</strong> {user.name}</p>
+            <p style={{ marginTop: '1.5rem' }}><strong>Nama:</strong> {user.name}</p>
             <p><strong>Email:</strong> {user.email}</p>
             {user.role && <p><strong>Peran:</strong> {user.role}</p>}
             
