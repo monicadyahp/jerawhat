@@ -1,3 +1,4 @@
+# netlify.toml
 [build]
   command = "npm run build --prefix frontend-hapi" # Perintah build untuk frontend Anda
   publish = "frontend-hapi/dist" # Direktori output build frontend Anda
