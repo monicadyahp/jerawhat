@@ -26,7 +26,7 @@ export default function ProfileView({
     );
   }
 
-  const avatarBaseUrl = 'http://localhost:3000';
+  const avatarBaseUrl = 'https://api.afridika.my.id';
   const currentAvatarUrl = user.avatar ? `${avatarBaseUrl}${user.avatar}` : 'https://res.cloudinary.com/dbofowabd/image/upload/v1748144946/image-removebg-preview_5_p2y9ox.png';
   const displayAvatarUrl = previewAvatarUrl || currentAvatarUrl;
 

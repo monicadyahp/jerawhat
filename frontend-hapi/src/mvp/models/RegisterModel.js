@@ -34,12 +34,12 @@ export default class RegisterModel {
       });
 
       const result = await response.json();
-
+      
       if (!response.ok) {
         return {
           success: false,
           status: "gagal",
-          message: result.message,
+          message: result.message.error,
         };
       }
 
