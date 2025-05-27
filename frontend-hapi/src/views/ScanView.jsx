@@ -1,6 +1,5 @@
 // src/views/ScanView.jsx
 import React from "react";
-
 export default function ScanView({
   selectedImage,
   imagePreview,
@@ -33,7 +32,6 @@ export default function ScanView({
         return <p style={{ color: "gray" }}>ℹ️ Menunggu model dimuat...</p>;
     }
   };
-
   return (
     <>
       <section className="section scan-page" id="scan-page">
@@ -42,12 +40,9 @@ export default function ScanView({
           <p className="scan__subtitle reveal-from-bottom">
             Unggah foto wajahmu untuk mendapatkan analisis kulit secara otomatis.
           </p>
-
           <div className="model__status reveal-from-bottom" style={{ marginBottom: 10 }}>
             {renderModelStatus()}
           </div>
-
-          {/* Pilih device kamera */}
           <div className="scan__input-group reveal-from-bottom" style={{ marginBottom: 15 }}>
             <label htmlFor="cameraSelect" style={{ fontWeight: "bold", marginRight: 10 }}>
               📷 Pilih Kamera:
@@ -78,36 +73,20 @@ export default function ScanView({
               Mulai Kamera
             </button>
           </div>
-
-          {/* Video preview */}
-         {isCameraActive && (
-  <div className="scan__camera-preview reveal-from-bottom" style={{ textAlign: "center", marginBottom: 15 }}>
-    <video
-      ref={videoRef}
-      autoPlay
-      playsInline
-      muted
-      width="320"
-      height="240"
-      style={{ borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
-    />
-    {/* Tombol ambil foto dihapus karena scan realtime */}
-    {/* <br />
-    <button
-      type="button"
-      className="button"
-      onClick={onTakeSnapshot}
-      disabled={loading}
-      style={{ marginTop: "8px" }}
-    >
-      Ambil Foto dari Kamera
-    </button> */}
-  </div>
-)}
-
-
+          {isCameraActive && (
+            <div className="scan__camera-preview reveal-from-bottom" style={{ textAlign: "center", marginBottom: 15 }}>
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                width="320"
+                height="240"
+                style={{ borderRadius: "12px", boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}
+              />
+            </div>
+          )}
           <form className="scan__form" onSubmit={onSubmit}>
-            {/* Upload file tetap tersedia */}
             <div
               className="scan__input-group reveal-from-bottom"
               style={{ textAlign: "center", marginBottom: 20 }}
@@ -142,7 +121,6 @@ export default function ScanView({
                 <p style={{ marginTop: 8, color: "#555", fontStyle: "italic" }}>{selectedImage.name}</p>
               )}
             </div>
-
             {imagePreview && (
               <div className="scan__preview reveal-from-bottom">
                 <img
@@ -159,7 +137,6 @@ export default function ScanView({
                 />
               </div>
             )}
-
             <div
               className="scan__actions reveal-from-bottom"
               style={{ marginBottom: 18, display: "flex", justifyContent: "center", gap: "10px" }}
@@ -175,14 +152,12 @@ export default function ScanView({
                 Reset
               </button>
             </div>
-
             {statusMsg && (
               <p className="scan__status" style={{ color: statusMsg.includes("berhasil") ? "green" : "crimson" }}>
                 {statusMsg}
               </p>
             )}
           </form>
-
           {predictionResult && (
             <div className="scan__result reveal-from-bottom" style={{ marginTop: 30 }}>
               <h3>Hasil Analisis Wajah:</h3>
@@ -202,7 +177,6 @@ export default function ScanView({
           )}
         </div>
       </section>
-
       <a href="#" className="scrollup" id="scroll-up" onClick={scrollToTop}>
         <i className="bx bx-up-arrow-alt scrollup__icon"></i>
       </a>
