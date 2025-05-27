@@ -1,5 +1,5 @@
 // Definisikan URL API dasar menggunakan variabel lingkungan Vite
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.afridika.my.id';
 
 export default class RegisterModel {
   async register({ name, email, password, confirmPassword }) {
