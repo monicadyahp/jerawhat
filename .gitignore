@@ -27,3 +27,4 @@ yarn-error.log*
 
 # Optional: If you copied img to Cloudinary, ignore local copies
 frontend-hapi/src/assets/img/
+.vercel
