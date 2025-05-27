@@ -5337,5 +5337,315 @@
     "lat": 0.858137,
     "lng": 99.5627725,
     "name": "Ratu Beauty Studio"
+  },
+  {
+    "lat": -1.6067490360363172,
+    "lng": 103.61918980225538,
+    "name": "Nathalie Beauty Clinic"
+  },
+  {
+    "lat": -1.5997096360250072,
+    "lng": 103.59502710225527,
+    "name": "Jambi Skin Centre"
+  },
+  {
+    "lat": -1.6098325360413086,
+    "lng": 103.62126090225539,
+    "name": "Klinik Eunoia - by dr. Melisa Juni Siswanto, AAAM"
+  },
+  {
+    "lat": -1.6044856360326705,
+    "lng": 103.61413950225531,
+    "name": "AIRA SKIN CLINIC JAMBI"
+  },
+  {
+    "lat": -1.5944529360166186,
+    "lng": 103.62568370225519,
+    "name": "Klinik Kecantikan - Skinserv Clinic"
+  },
+  {
+    "lat": -1.6202086360581738,
+    "lng": 103.55289020225548,
+    "name": "Klinik Kecantikan Athena Jambi"
+  },
+  {
+    "lat": -1.6248046360657107,
+    "lng": 103.6292735022555,
+    "name": "Natasha Skin Clinic Center (Skin Care) Jambi"
+  },
+  {
+    "lat": -1.6192536360566114,
+    "lng": 103.56850350225541,
+    "name": "Bening's Clinic Jambi"
+  },
+  {
+    "lat": -1.620438436058553,
+    "lng": 103.58632530225552,
+    "name": "Naavagreen Jambi"
+  },
+  {
+    "lat": -1.6198187360575456,
+    "lng": 103.58686800225544,
+    "name": "Erha Skin Jambi"
+  },
+  {
+    "lat": -1.6179480360544793,
+    "lng": 103.62767240225546,
+    "name": "HiSkin Jambi"
+  },
+  {
+    "lat": -1.6396428360902549,
+    "lng": 103.59988400225566,
+    "name": "shintiabeautyclinic"
+  },
+  {
+    "lat": -1.5990365360239385,
+    "lng": 103.60671290225521,
+    "name": "Orange's Beauty Clinic Jambi"
+  },
+  {
+    "lat": -1.635105536082716,
+    "lng": 103.60929610225568,
+    "name": "Everose Aesthetic Clinic"
+  },
+  {
+    "lat": -1.6042639360323205,
+    "lng": 103.6177136022553,
+    "name": "AL TWO AESTHETIC CLINIC by dr. Anty"
+  },
+  {
+    "lat": -1.6307071360754364,
+    "lng": 103.63236360225561,
+    "name": "Wiyandra beauty skin"
+  },
+  {
+    "lat": -1.6180834,
+    "lng": 103.5593018,
+    "name": "VZ Skin Care - Cab. Jambi"
+  },
+  {
+    "lat": -1.6298511,
+    "lng": 103.6359278,
+    "name": "Elitha Aesthetic"
+  },
+  {
+    "lat": -1.6032152,
+    "lng": 103.6164596,
+    "name": "ZEE Clinic Skincare & Spa"
+  },
+  {
+    "lat": -1.6101376,
+    "lng": 103.6017917,
+    "name": "KLINIK PRATAMA LIYAN AESTHETIC CENTER"
+  },
+  {
+    "lat": -1.6242613,
+    "lng": 103.6292016,
+    "name": "Klinik Axella Aesthetic Jambi"
+  },
+  {
+    "lat": -1.6169583,
+    "lng": 103.5660608,
+    "name": "KLINIK PRATAMA PRIMA LESTARI"
+  },
+  {
+    "lat": -1.5956930,
+    "lng": 103.6053462,
+    "name": "BEAUTY BI clinic"
+  },
+  {
+    "lat": -1.6255423,
+    "lng": 103.5931430,
+    "name": "Rafika Beauty Center"
+  },
+  {
+    "lat": -1.6032206,
+    "lng": 103.6003640,
+    "name": "Skin Frame Clinic Jambi"
+  },
+  {
+    "lat": -1.6054359,
+    "lng": 103.5749157,
+    "name": "praktek dr fika"
+  },
+  {
+    "lat": -1.6074471,
+    "lng": 103.6271540,
+    "name": "Klinik Pratama Happy, Jambi"
+  },
+  {
+    "lat": -1.6319715,
+    "lng": 103.5765850,
+    "name": "Dr. Ria Aesthetic Clinic"
+  },
+  {
+    "lat": -1.5973577,
+    "lng": 103.6231710,
+    "name": "Inasa Clinic"
+  },
+  {
+    "lat": -1.6116610,
+    "lng": 103.5809302,
+    "name": "Klinik Pratama Alena By Dr. Olin"
+  },
+  {
+    "lat": -1.6140710,
+    "lng": 103.6243565,
+    "name": "DermaPerfect Skin & Beauty Center"
+  },
+  {
+    "lat": -1.6267528,
+    "lng": 103.5857345,
+    "name": "Kliniku Skin Care By. dr Dwi Astuti"
+  },
+  {
+    "lat": -1.6235980360637283,
+    "lng": 103.62358400225548,
+    "name": "Kimberly Beauty House"
+  },
+  {
+    "lat": -1.5932445360146879,
+    "lng": 103.61182140225525,
+    "name": "PBC Klinik Kecantikan"
+  },
+  {
+    "lat": -4.027254344731364,
+    "lng": 103.23700770229185,
+    "name": "Zahra Skincare & Spa"
+  },
+  {
+    "lat": -4.0345361447719785,
+    "lng": 103.26033180229201,
+    "name": "KLINIK DOKTER REISA (24 JAM)"
+  },
+  {
+    "lat": -4.022878844707008,
+    "lng": 103.24945920229182,
+    "name": "Klinik M.Fadhil Pagaralam"
+  },
+  {
+    "lat": -5.389023753834092,
+    "lng": 105.23732400232232,
+    "name": "Klinik Utama Pagar Alam"
+  },
+  {
+    "lat": -4.0289939447410505,
+    "lng": 103.23026180229195,
+    "name": "Klinik Marsarinta Surbakti"
+  },
+  {
+    "lat": -2.0645672369460866,
+    "lng": 101.39851730226054,
+    "name": "dr.vee skin & body clinic"
+  },
+  {
+    "lat": -2.0584148369315916,
+    "lng": 101.39835330226036,
+    "name": "Tayasha clinic"
+  },
+  {
+    "lat": -2.064466836945852,
+    "lng": 101.38686100226057,
+    "name": "BENING'S CLINIC KERINCI"
+  },
+  {
+    "lat": -2.055887936925656,
+    "lng": 101.39880830226033,
+    "name": "Klinik Kecantikan dr. Winda Beauty Center"
+  },
+  {
+    "lat": -2.072312536964427,
+    "lng": 101.3810651022606,
+    "name": "Drw Skincare Sungai Penuh (Kurnia Drw Skincare)"
+  },
+  {
+    "lat": -2.0656035369485353,
+    "lng": 101.39555740226055,
+    "name": "D'MARLEN Aesthetic Clinic"
+  },
+  {
+    "lat": -2.0436581368970774,
+    "lng": 101.40387010226026,
+    "name": "Klinik Bioenergi dan Estetika"
+  },
+  {
+    "lat": -6.871484467187107,
+    "lng": 109.03876460236359,
+    "name": "Hayfa Skin Clinic Brebes - Klinik Perawatan Kulit Murah dan Berkualitas Brebes"
+  },
+  {
+    "lat": -6.889100667367332,
+    "lng": 109.0578767023641,
+    "name": "Mitra Skin Care"
+  },
+  {
+    "lat": -6.8710693671828675,
+    "lng": 109.03814030236363,
+    "name": "Klinik Utama Budi Asih"
+  },
+  {
+    "lat": -6.874318267216068,
+    "lng": 109.04080920236368,
+    "name": "Klinik Mediska Brebes"
+  },
+  {
+    "lat": -6.876525567238635,
+    "lng": 109.04411160236376,
+    "name": "KLINIK SEHAT SETIA (dokter Umum&Gigi)"
+  },
+  {
+    "lat": -6.878630467260155,
+    "lng": 109.05188020236383,
+    "name": "Facial Treatment (Dnd Beauty)"
+  },
+  {
+    "lat": -6.863923167109903,
+    "lng": 109.04192910236337,
+    "name": "Klinik dan Apotek Amanda Brebes"
+  },
+  {
+    "lat": -6.941636867907855,
+    "lng": 108.8980040023658,
+    "name": "BREBES DR W SKINCARE"
+  },
+  {
+    "lat": -6.839390466860042,
+    "lng": 108.81625320236259,
+    "name": "Annasya Beauty Care"
+  },
+  {
+    "lat": -6.968920368190341,
+    "lng": 109.06856460236665,
+    "name": "AH-Clinic Skin Care"
+  },
+  {
+    "lat": -6.865021867121116,
+    "lng": 109.0114405023634,
+    "name": "MARTHA TILAAR Spa Express Brebes"
+  },
+  {
+    "lat": -6.8315786667807,
+    "lng": 109.03667480236243,
+    "name": "Sity Skincare Brebes"
+  },
+  {
+    "lat": -6.932491567813453,
+    "lng": 108.88304650236549,
+    "name": "Asderma Aesthetic Ketanggungan"
+  },
+  {
+    "lat": -6.880171967275942,
+    "lng": 109.05330510236391,
+    "name": "DIANA DRW SKINCARE BREBES"
+  },
+  {
+    "lat": -6.876193967235242,
+    "lng": 109.04240510236373,
+    "name": "YANI FACIAL MUKA UTK WANITA"
+  },
+  {
+    "lat": -7.242740471092544,
+    "lng": 109.00350510237527,
+    "name": "Latiffany Beauty Bumiayu"
   }
 ]
