@@ -5647,5 +5647,988 @@
     "lat": -7.242740471092544,
     "lng": 109.00350510237527,
     "name": "Latiffany Beauty Bumiayu"
+  },
+  {
+    "lat": -7.4098546,
+    "lng": 109.2229162,
+    "name": "Larissa Aesthetic Center Purwokerto"
+  },
+  {
+    "lat": -7.4123654,
+    "lng": 109.2275792,
+    "name": "SuperSkin Clinic"
+  },
+  {
+    "lat": -7.4310593,
+    "lng": 109.2310989,
+    "name": "VAL Beauty & Slimming Purwokerto"
+  },
+  {
+    "lat": -7.4178551,
+    "lng": 109.2269234,
+    "name": "Ella Skin Care Purwokerto : Klinik Kecantikan & Perawatan Kulit, Skincare BPOM"
+  },
+  {
+    "lat": -7.4176436,
+    "lng": 109.2345691,
+    "name": "Reta Beauty Clinic Purwokerto"
+  },
+  {
+    "lat": -7.4178092,
+    "lng": 109.2362678,
+    "name": "Caella Aesthetic & Anti Aging Clinic"
+  },
+  {
+    "lat": -7.4277431,
+    "lng": 109.2215802,
+    "name": "Naavagreen Natural Skin Care Purwokerto"
+  },
+  {
+    "lat": -7.4076989,
+    "lng": 109.2164877,
+    "name": "Etika Aesthetic Clinic"
+  },
+  {
+    "lat": -7.4173916,
+    "lng": 109.2341644,
+    "name": "AZQIARA KLINIK ESTETIK WANITA PURWOKERTO"
+  },
+  {
+    "lat": -7.4174171,
+    "lng": 109.2348754,
+    "name": "Immoderma Skin Clinic Purwokerto"
+  },
+  {
+    "lat": -7.4326482,
+    "lng": 109.2262006,
+    "name": "Klinik Bio (Beauty Inside Out)"
+  },
+  {
+    "lat": -7.4261215,
+    "lng": 109.2171691,
+    "name": "LBC Purwokerto"
+  },
+  {
+    "lat": -7.4281019,
+    "lng": 109.2278404,
+    "name": "Natasha Skin Clinic Center Purwokerto"
+  },
+  {
+    "lat": -7.4166119,
+    "lng": 109.2253626,
+    "name": "Jenna Aesthetic Clinic"
+  },
+  {
+    "lat": -7.4203614,
+    "lng": 109.2504887,
+    "name": "Almeera Skincare Purwokerto"
+  },
+  {
+    "lat": -7.4096465,
+    "lng": 109.2214078,
+    "name": "Dr. Yenny Beauty Centre"
+  },
+  {
+    "lat": -7.4330239,
+    "lng": 109.2260665,
+    "name": "HAQIRA CLINIC PURWOKERTO"
+  },
+  {
+    "lat": -7.4203614,
+    "lng": 109.2504887,
+    "name": "Siskin Aesthetic Clinic"
+  },
+  {
+    "lat": -7.4265778,
+    "lng": 109.2189214,
+    "name": "ZAP Clinic Purwokerto"
+  },
+  {
+    "lat": -7.4173912,
+    "lng": 109.2347322,
+    "name": "Nabila Skin Clinic Purwokerto"
+  },
+  {
+    "lat": -6.7465642,
+    "lng": 110.9654003,
+    "name": "Larissa Aesthetic Center Pati"
+  },
+  {
+    "lat": -6.7522547,
+    "lng": 110.9667118,
+    "name": "SuperSkin Clinic"
+  },
+  {
+    "lat": -6.7543946,
+    "lng": 110.9621886,
+    "name": "Ella Skin Care Pati : Klinik Kecantikan & Perawatan Kulit Terbaik, Halal & Harga Terjangkau"
+  },
+  {
+    "lat": -6.754394,
+    "lng": 110.9747512,
+    "name": "Klinik Kecantikan Evanti"
+  },
+  {
+    "lat": -6.7482799,
+    "lng": 110.9619437,
+    "name": "Corpoderma Skin & Aesthetic Clinic Pati"
+  },
+  {
+    "lat": -6.7450293,
+    "lng": 110.9706685,
+    "name": "Rosmalinda Skin Care Cabang 1"
+  },
+  {
+    "lat": -6.7604336,
+    "lng": 110.9406393,
+    "name": "Sifra Skin Care+Spa"
+  },
+  {
+    "lat": -6.7461121,
+    "lng": 110.971327,
+    "name": "My Tamara Skincare"
+  },
+  {
+    "lat": -6.7568138,
+    "lng": 110.9620189,
+    "name": "Rosmalinda Skin Care Cabang 2"
+  },
+  {
+    "lat": -6.7521765,
+    "lng": 110.9652062,
+    "name": "Kyna Beauty Skincare Pati"
+  },
+  {
+    "lat": -6.7391633,
+    "lng": 111.0217894,
+    "name": "Muntira Skincare Pati"
+  },
+  {
+    "lat": -6.866622,
+    "lng": 110.9769348,
+    "name": "Violight Beauty Pati"
+  },
+  {
+    "lat": -6.7563811,
+    "lng": 110.9625039,
+    "name": "Evelyn Beauty Care"
+  },
+  {
+    "lat": -6.7422528,
+    "lng": 110.9594203,
+    "name": "Klinik Kecantikan Mitra Bangsa"
+  },
+  {
+    "lat": -6.7398299,
+    "lng": 110.9722844,
+    "name": "Alzena Skincare Pati"
+  },
+  {
+    "lat": -6.7801334,
+    "lng": 111.0801028,
+    "name": "Dewyskin Aesthetic"
+  },
+  {
+    "lat": -6.7208791,
+    "lng": 110.9875309,
+    "name": "Nefita Aesthetic"
+  },
+  {
+    "lat": -6.7477015,
+    "lng": 110.9647099,
+    "name": "Madeena Skin Clinic - Pati"
+  },
+  {
+    "lat": -6.8939899,
+    "lng": 112.044159,
+    "name": "Klinik Estetika&Family Spa PBC"
+  },
+  {
+    "lat": -6.8906405,
+    "lng": 112.0329603,
+    "name": "SuperSkin Clinic"
+  },
+  {
+    "lat": -6.8791681,
+    "lng": 112.0005275,
+    "name": "Princess Beautycare Tuban"
+  },
+  {
+    "lat": -6.8939899,
+    "lng": 112.044159,
+    "name": "NAAVAGREEN SKINCARE TUBAN"
+  },
+  {
+    "lat": -6.8939899,
+    "lng": 112.044159,
+    "name": "Rengganis Beauty"
+  },
+  {
+    "lat": -6.8824531,
+    "lng": 112.0157469,
+    "name": "Green House Beauty Aesthetic Salon & Spa"
+  },
+  {
+    "lat": -8.1777991,
+    "lng": 113.6977837,
+    "name": "Larissa Aesthetic Center Jember"
+  },
+  {
+    "lat": -8.1777991,
+    "lng": 113.6977837,
+    "name": "Klinik Kecantikan Fast Derm Aesthetic Clinic"
+  },
+  {
+    "lat": -8.1639171,
+    "lng": 113.6715302,
+    "name": "Natasha Skin Clinic Center Jember"
+  },
+  {
+    "lat": -8.1723307,
+    "lng": 113.6576284,
+    "name": "Klinik dr. KAKE"
+  },
+  {
+    "lat": -8.1772622,
+    "lng": 113.6473442,
+    "name": "Oriskin Jember"
+  },
+  {
+    "lat": -8.1832936,
+    "lng": 113.6556051,
+    "name": "Klinik Kecantikan Clarice Beauty Jember"
+  },
+  {
+    "lat": -8.1816173,
+    "lng": 113.6381002,
+    "name": "Benings Clinic Jember | Klinik Kecantikan dan Perawatan Kulit"
+  },
+  {
+    "lat": -8.1638326,
+    "lng": 113.6715259,
+    "name": "MNDskin Aesthetic & Anti Aging Clinic"
+  },
+  {
+    "lat": -8.1917657,
+    "lng": 113.6294534,
+    "name": "Aesthetic Care dr. Ivan Hendra"
+  },
+  {
+    "lat": -8.1815593,
+    "lng": 113.6494001,
+    "name": "KSC BEAUTY CLINIQUE"
+  },
+  {
+    "lat": -8.1747697,
+    "lng": 113.6695454,
+    "name": "LBC Jember"
+  },
+  {
+    "lat": -8.1756609,
+    "lng": 113.6621639,
+    "name": "Erha Skin"
+  },
+  {
+    "lat": -8.1777991,
+    "lng": 113.6977837,
+    "name": "Makuta Aesthetic and Anti Aging Center"
+  },
+  {
+    "lat": -8.1733775,
+    "lng": 113.6726248,
+    "name": "Alev Beauty Clinic"
+  },
+  {
+    "lat": -8.1778046,
+    "lng": 113.6587626,
+    "name": "Naavagreen Jember"
+  },
+  {
+    "lat": -8.1770088,
+    "lng": 113.6478402,
+    "name": "ZAP Clinic Jember"
+  },
+  {
+    "lat": -8.1777991,
+    "lng": 113.6977837,
+    "name": "Personal Beauty Official"
+  },
+  {
+    "lat": -8.1751638,
+    "lng": 113.6677625,
+    "name": "YND AESTHETIC & ANTI AGING JEMBER"
+  },
+  {
+    "lat": -8.3497339,
+    "lng": 113.5960976,
+    "name": "YND AESTHETIC CLINIC"
+  },
+  {
+    "lat": -8.1787814,
+    "lng": 113.6255956,
+    "name": "Nina Beauty Center"
+  },
+  {
+    "lat": -7.6253358,
+    "lng": 111.5056443,
+    "name": "Larissa Aesthetic Center Madiun"
+  },
+  {
+    "lat": -7.6229891,
+    "lng": 111.5081737,
+    "name": "Norma Aesthetic Clinic Madiun"
+  },
+  {
+    "lat": -7.62004,
+    "lng": 111.5054945,
+    "name": "Natasha Skin Clinic Center Madiun"
+  },
+  {
+    "lat": -7.6350452,
+    "lng": 111.494623,
+    "name": "Klinik Kecantikan Madiun - Finitti Aesthetic Center"
+  },
+  {
+    "lat": -7.6376445,
+    "lng": 111.514704,
+    "name": "Ella Skin Care Madiun : Klinik Kecantikan & Perawatan Kulit, Skincare BPOM"
+  },
+  {
+    "lat": -7.6330305,
+    "lng": 111.5169291,
+    "name": "V - Chen Medicart Clinic"
+  },
+  {
+    "lat": -7.6212039,
+    "lng": 111.5068799,
+    "name": "Klinik DNY Skincare Cabang Madiun"
+  },
+  {
+    "lat": -7.6332004,
+    "lng": 111.5180689,
+    "name": "Reglow Clinic | Klinik Kecantikan Madiun by dr. Shindy Putri"
+  },
+  {
+    "lat": -7.6388107,
+    "lng": 111.5001513,
+    "name": "Klinik Kecantikan Madiun - Esther Aesthetic Clinic"
+  },
+  {
+    "lat": -7.6334177,
+    "lng": 111.4997681,
+    "name": "Erha Skin Care & Apothecary"
+  },
+  {
+    "lat": -7.6273997,
+    "lng": 111.5059012,
+    "name": "ZAP Clinic Madiun"
+  },
+  {
+    "lat": -7.6431458,
+    "lng": 111.5132241,
+    "name": "Eleora Beauty Care Madiun"
+  },
+  {
+    "lat": -7.6318469,
+    "lng": 111.5291338,
+    "name": "Klinik Pratama Nadfieca"
+  },
+  {
+    "lat": -7.6217369,
+    "lng": 111.5166154,
+    "name": "Naavagreen"
+  },
+  {
+    "lat": -7.6460743,
+    "lng": 111.500411,
+    "name": "Bening's Clinic Madiun"
+  },
+  {
+    "lat": -7.6432774,
+    "lng": 111.4614478,
+    "name": "Icon Madiun Beauty Center (icon home’s)"
+  },
+  {
+    "lat": -7.6269678,
+    "lng": 111.4679395,
+    "name": "Keisha Almera Skincare Madiun"
+  },
+  {
+    "lat": -6.9657994,
+    "lng": 110.8509619,
+    "name": "Najmina Beauty Care"
+  },
+  {
+    "lat": -6.9742222,
+    "lng": 110.8531982,
+    "name": "Lady Salon Beautycare"
+  },
+  {
+    "lat": -6.9646018,
+    "lng": 110.8577867,
+    "name": "ESCHA SkinCare Blora"
+  },
+  {
+    "lat": -6.9699284,
+    "lng": 110.8569561,
+    "name": "Manggala Clinic"
+  },
+  {
+    "lat": -6.9663792,
+    "lng": 110.8547566,
+    "name": "Alzena Skincare Blora"
+  },
+  {
+    "lat": -6.9708401,
+    "lng": 110.8631495,
+    "name": "Erskin Skincare Blora"
+  },
+  {
+    "lat": -7.0127878,
+    "lng": 110.7507481,
+    "name": "Jn Beauty House Cabang Ngawen"
+  },
+  {
+    "lat": -7.0503255,
+    "lng": 110.6831884,
+    "name": "JN Beauty House Kunduran"
+  },
+  {
+    "lat": -6.9626699,
+    "lng": 110.8579456,
+    "name": "POLLUX SKIN CARE"
+  },
+  {
+    "lat": -6.9663117,
+    "lng": 110.8506148,
+    "name": "Beauty Queen Salon, Spa indoor out door & Baby Spa"
+  },
+  {
+    "lat": -7.1483877,
+    "lng": 111.859269,
+    "name": "Immoderma skin clinic bojonegoro"
+  },
+  {
+    "lat": -7.1573458,
+    "lng": 111.8725626,
+    "name": "Najmina Beautycare Bojonegoro"
+  },
+  {
+    "lat": -7.1504408,
+    "lng": 111.8664434,
+    "name": "SuperSkin Clinic"
+  },
+  {
+    "lat": -7.1474596,
+    "lng": 111.8727734,
+    "name": "Naavagreen Natural Skin Care Bojonegoro"
+  },
+  {
+    "lat": -7.157304,
+    "lng": 111.8896499,
+    "name": "SVARGA CLINIC"
+  },
+  {
+    "lat": -7.1578698,
+    "lng": 111.8634997,
+    "name": "Ikalva Clinic Bojonegoro"
+  },
+  {
+    "lat": -7.1484913,
+    "lng": 111.8657327,
+    "name": "Skin 101 Clinic Bojonegoro"
+  },
+  {
+    "lat": -7.1485469,
+    "lng": 111.8701981,
+    "name": "TS Beauty Center Klinik"
+  },
+  {
+    "lat": -7.1520861,
+    "lng": 111.8591597,
+    "name": "Violeta Health & Beauty Center"
+  },
+  {
+    "lat": -7.157304,
+    "lng": 111.8896499,
+    "name": "Frangipani SPA & Kecantikan Bojonegoro"
+  },
+  {
+    "lat": -6.9624659,
+    "lng": 111.4192525,
+    "name": "Naavagreen Cepu"
+  },
+  {
+    "lat": -7.0169264,
+    "lng": 112.7448906,
+    "name": "Klink Kecantikan Soraya Beauty Center"
+  },
+  {
+    "lat": -7.1577446,
+    "lng": 112.3636576,
+    "name": "Klinik Kecantikan Elysia estetika"
+  },
+  {
+    "lat": -6.9624659,
+    "lng": 111.4192525,
+    "name": "Naavagreen Bangkalan"
+  },
+  {
+    "lat": -6.9624659,
+    "lng": 111.4192525,
+    "name": "Ghanisa Beauty Center Bangkalan"
+  },
+  {
+    "lat": -7.155444,
+    "lng": 112.3611405,
+    "name": "Natasha Skin Clinic Center (Skin Care) Pamekasan"
+  },
+  {
+    "lat": -7.1638201,
+    "lng": 112.3653401,
+    "name": "Alamanda Clinic Pamekasan"
+  },
+  {
+    "lat": -7.2026397,
+    "lng": 112.1266804,
+    "name": "Dr.yosidian (kecantikan)"
+  },
+  {
+    "lat": -7.1608125,
+    "lng": 112.3834313,
+    "name": "Larissa Aesthetic Center Pamekasan"
+  },
+  {
+    "lat": -7.1885907,
+    "lng": 112.1185906,
+    "name": "Alamanda Clinic Sampang"
+  },
+  {
+    "lat": -7.002111,
+    "lng": 112.7385752,
+    "name": "Klinik Elysia Estetika"
+  },
+  {
+    "lat": -8.1510882,
+    "lng": 113.1760628,
+    "name": "Elmoist Clinic"
+  },
+  {
+    "lat": -8.1510882,
+    "lng": 113.1760628,
+    "name": "MDE Aesthetic Clinic & Poli Klinik"
+  },
+  {
+    "lat": -8.1510882,
+    "lng": 113.1760628,
+    "name": "msglow klinik lumajang"
+  },
+  {
+    "lat": -8.1510882,
+    "lng": 113.1760628,
+    "name": "Teta Aesthetic Clinic"
+  },
+  {
+    "lat": -8.1510882,
+    "lng": 113.1760628,
+    "name": "PB Clinic Lumajang"
+  },
+  {
+    "lat": -8.1510882,
+    "lng": 113.1760628,
+    "name": "Er'ROS Beauty Clinic"
+  },
+  {
+    "lat": -7.7466779,
+    "lng": 113.1773177,
+    "name": "Narcise Beauty Care Dr. Mirza"
+  },
+  {
+    "lat": -7.7538314,
+    "lng": 113.1596467,
+    "name": "Naavagreen Natural Skin Care Probolinggo"
+  },
+  {
+    "lat": -7.747488,
+    "lng": 113.1770109,
+    "name": "Ghanisa Clinic & Skincare Probolinggo"
+  },
+  {
+    "lat": -7.755933,
+    "lng": 113.1771663,
+    "name": "Charyn Beauty Skin"
+  },
+  {
+    "lat": -7.7617293,
+    "lng": 113.2049187,
+    "name": "Rumah Cantik Hamamy"
+  },
+  {
+    "lat": -7.7480159,
+    "lng": 113.1824481,
+    "name": "Teta Aestethic Clinic"
+  },
+   {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "Vid - Ka Aesthetic Clinic"
+  },
+  {
+    "lat": -7.7115467,
+    "lng": 113.9692464,
+    "name": "Aesthetic Center Indonesia salon & spa"
+  },
+  {
+    "lat": -7.6901078,
+    "lng": 113.9596939,
+    "name": "KLINIK RCANTIK LONI"
+  },
+  {
+    "lat": -7.7125816,
+    "lng": 113.95810998,
+    "name": "Rumah Cantik Anda aesthetic"
+  },
+  {
+    "lat": -7.7049517,
+    "lng": 113.9611477,
+    "name": "Anggrek Beauty Care"
+  },
+   {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "Natasha Skin Clinic Center (Skin Care) Banyuwangi"
+  },
+  {
+    "lat": -7.7538314,
+    "lng": 113.1596467,
+    "name": "BETHSIE SKIN CLINIC Banyuwangi"
+  },
+  {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "Naavagreen Banyuwangi"
+  },
+  {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "ERHA Skin Banyuwangi"
+  },
+  {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "DIA Aesthetic Banyuwangi"
+  },
+  {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "AMC Skin Care Banyuwangi"
+  },
+  {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "dr. RIZKA Aesthetic Center"
+  },
+  {
+    "lat": -7.7013447,
+    "lng": 113.99261605,
+    "name": "Nieks Skin Care"
+  },
+  {
+    "lat": -8.4052005,
+    "lng": 113.6031507,
+    "name": "FDC Clinik"
+  },
+  {
+    "lat": -8.3719363,
+    "lng": 113.5855799,
+    "name": "D'VA BEAUTY AND SPA"
+  },
+   {
+    "lat": -5.47859355,
+    "lng": 122.5914915,
+    "name": "Enhade Skin Clinic Baubau(dr.Nelly Herfina Dahlan Sp.KK.,M.Kes)"
+  },
+  {
+    "lat": -5.4604634,
+    "lng": 122.6025964,
+    "name": "PERMATA AESTHETIC"
+  },
+  {
+    "lat": -5.4603234,
+    "lng": 122.5761935,
+    "name": "Bunda ALifah Workshop"
+  },
+  {
+    "lat": -5.4805461,
+    "lng": 122.5546778,
+    "name": "Viedzan Glow Beauty, SPA & Health by Ummu Dzalkhi"
+  },
+  {
+    "lat": -5.47859355,
+    "lng": 122.5914915,
+    "name": "Apotek Asyifa 2 & Asyifa BeautyAesthetic & Asyifa SkinGlow"
+  },
+  
+  {
+    "name": "Alesha Aesthetic Clinic",
+    "lat": -3.8440782,
+    "lng": 126.4424453
+  },
+  {
+    "name": "klinik kecantikan dermally skincare n spa",
+    "lat": -3.3029639,
+    "lng": 127.8355958
+  },
+  {
+    "name": "Klinik Kecantikan Ambon (MEDINA BEAUTY HOUSE)",
+    "lat": -3.54503345,
+    "lng": 126.9145039
+  },
+  {
+    "name": "eR’eL Beauty Clinic",
+    "lat": -3.54503345,
+    "lng": 126.9145039
+  },
+  {
+    "name": "Natasha Skin Clinic Center Ambon",
+    "lat": -3.54503345,
+    "lng": 126.9145039
+  },
+  {
+    "name": "Erha Skin Ambon",
+    "lat": -3.54503345,
+    "lng": 126.9145039
+  },
+  
+  {
+    "name": "Arayu Clinic Palopo",
+    "lat": -3.0001993,
+    "lng": 120.1813927
+  },
+  {
+    "name": "Feryal Zeyu - Aesthetic Clinic",
+    "lat": -3.0038602,
+    "lng": 120.2000145
+  },
+  {
+    "name": "ST. Madyang Skin Clinic",
+    "lat": -3.0069753,
+    "lng": 120.1851749
+  },
+  {
+    "name": "Ressty Aesthetic Clinic Palopo",
+    "lat": -3.0051743,
+    "lng": 120.1759038
+  },
+  
+  {
+    "name": "BENINGS KLINIK BONTANG",
+    "lat": 0.13095835,
+    "lng": 117.47589985
+  },
+  {
+    "name": "B&B Skin Care & Aesthetic",
+    "lat": 0.13095835,
+    "lng": 117.47589985
+  },
+  {
+    "name": "B&B Skin Care & Aesthetic - TJ Limau",
+    "lat": 0.13095835,
+    "lng": 117.47589985
+  },
+  {
+    "name": "Elora Beauty Clinic - Klinik Kecantikan Prabumulih",
+    "lat": -3.4197168,
+    "lng": 104.2339338
+  },
+  {
+    "name": "Magnolia Skin Clinic",
+    "lat": -3.4286899,
+    "lng": 104.2234043
+  },
+  {
+    "name": "Gio's Clinic",
+    "lat": -3.4249797,
+    "lng": 104.2330639
+  },
+  {
+    "name": "klinik dr. indah skincare",
+    "lat": -3.4172198,
+    "lng": 104.2515162
+  },
+  {
+    "name": "Yhoophii Salon Spa Prabumulih",
+    "lat": -3.4187345,
+    "lng": 104.2402109
+  },
+  {
+    "name": "Klinik Kecantikan Pekanbaru - Trans Beauty Aesthetic Clinic",
+    "lat": 0.5344419,
+    "lng": 101.1676392
+  },
+  {
+    "name": "Modena Aesthetic Clinic - Klinik Kecantikan Pekanbaru Riau",
+    "lat": 0.4891955,
+    "lng": 101.1738914
+  },
+  {
+    "name": "Derma express pekan baru",
+    "lat": 0.5352801,
+    "lng": 101.1455967
+  },
+  {
+    "name": "Mische Aesthetic Clinic",
+    "lat": 0.5151113,
+    "lng": 101.1577132
+  },
+  {
+    "name": "Dr's Clinique Pekanbaru",
+    "lat": 0.5287841,
+    "lng": 101.1753778
+  },
+  {
+    "name": "Klinik Isabells Beauty Treatment, Health, Aesthetic & Laser Center",
+    "lat": 0.5100094,
+    "lng": 101.1690104
+  },
+  {
+    "name": "Klinik kecantikan aesthetic ve skincare",
+    "lat": 1.1837937,
+    "lng": 100.983914
+  },
+  {
+    "name": "Flower Beauty Clinic",
+    "lat": 0.5321142,
+    "lng": 101.169354
+  },
+  {
+    "name": "Ashofa Skin Clinic (Klinik Kecantikan Pekanbaru)",
+    "lat": 0.8283523,
+    "lng": 101.3748122
+  },
+  {
+    "name": "AIRA SKIN CLINIC PEKANBARU",
+    "lat": 0.5009013,
+    "lng": 101.1410982
+  },
+  {
+    "name": "Lviors Beauty Clinic Pekanbaru",
+    "lat": 0.5329277,
+    "lng": 101.1395949
+  },
+  {
+    "name": "Gracias Aesthetic Clinic",
+    "lat": 0.5228697,
+    "lng": 101.153675
+  },
+  {
+    "name": "Natasha Skin Clinic Center (Skin Care) - Pekanbaru Sutomo",
+    "lat": 0.530268,
+    "lng": 101.1765821
+  },
+  {
+    "name": "D'Lima Mom & Skin Specialist Clinic",
+    "lat": 0.4970686,
+    "lng": 101.1585272
+  },
+  {
+    "name": "Natasha Skin Clinic Center (Skin Care) Pekanbaru Riau",
+    "lat": 0.4990798,
+    "lng": 101.137395
+  },
+  {
+    "name": "MAP CLINIC",
+    "lat": 0.5137496,
+    "lng": 101.1638052
+  },
+  {
+    "name": "Melody Aesthetic Clinic Pekanbaru",
+    "lat": 0.5240565,
+    "lng": 101.1964461
+  },
+  {
+    "name": "Martharia Aesthetic",
+    "lat": 0.5014255,
+    "lng": 101.4220784
+  },
+  {
+    "name": "Erha Clinic",
+    "lat": 0.5014255,
+    "lng": 101.4220784
+  },
+  {
+    "name": "ZAP Clinic Pekanbaru",
+    "lat": 0.5014255,
+    "lng": 101.4220784
+  },
+  {
+    "name": "Bening's Clinic Pekanbaru",
+    "lat": 0.5178202,
+    "lng": 101.3499284
+  },
+  {
+    "name": "Aisyah Beauty Clinic , Dumai",
+    "lat": 1.669503,
+    "lng": 101.430315
+  },
+  {
+    "name": "Natasha Skin Clinic Center Dumai",
+    "lat": 1.6740668,
+    "lng": 101.4320567
+  },
+  {
+    "name": "Metro Beauty Care (Praktek Umum dr. Faiz Rhomadia)",
+    "lat": 1.6637349,
+    "lng": 101.4285171
+  },
+  {
+    "name": "Tasqi Skincare",
+    "lat": 1.6713969,
+    "lng": 101.4262021
+  },
+  {
+    "name": "Klinik Nuriani DrW Skincare Padangsidimpuan",
+    "lat": 1.3685033,
+    "lng": 99.2451695
+  },
+  {
+    "name": "Glowtiful Aestethic Clinic by dr.Deta",
+    "lat": 1.3698876,
+    "lng": 99.2388508
+  },
+  {
+    "name": "dr. Rina Skincare (House of Beauty)",
+    "lat": 2.9547777,
+    "lng": 99.0388941
+  },
+  {
+    "name": "LED Beauty Siantar",
+    "lat": 2.96615105,
+    "lng": 99.073649
+  },
+  {
+    "name": "Formen by dr. Rina",
+    "lat": 2.9548283,
+    "lng": 99.0386849
+  },
+  {
+    "name": "Clinic Stars 4 Rajamin Purba",
+    "lat": 2.9608859,
+    "lng": 99.032586
+  },
+  {
+    "name": "Dr. Chen Skin Care",
+    "lat": 2.9619359,
+    "lng": 99.0519945
+  },
+  {
+    "name": "De'Lady Beauty Centre",
+    "lat": 2.9556785,
+    "lng": 99.0356805
+  },
+  {
+    "name": "Star Skin Clinic Meranti Land",
+    "lat": 2.9677564,
+    "lng": 99.0845087
   }
 ]
