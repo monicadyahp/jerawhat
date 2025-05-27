@@ -6,10 +6,53 @@ export default class ProfileModel {
   // Data pengguna sekarang akan diambil dari AuthContext.
 
   async uploadAvatar(userId, file, token) {
+    if (!file || !(file instanceof File)) {
+      return {
+        success: false,
+        message: 'File tidak valid. Silakan pilih file gambar.',
+      };
+    }
+
+    // Validate file type (only allow jpg and png)
+    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    if (!allowedTypes.includes(file.type)) {
+      return {
+        success: false,
+        message: 'File harus berupa gambar JPG atau PNG.',
+      };
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      return {
+        success: false,
+        message: 'Ukuran file terlalu besar. Maksimal 5MB.',
+      };
+    }
+
     const formData = new FormData();
     formData.append('avatar', file);
 
     try {
+      // Get current user data first
+      const userResponse = await fetch(`${API_BASE_URL}/users/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!userResponse.ok) {
+        throw new Error('Gagal mendapatkan data user');
+      }
+
+      const userData = await userResponse.json();
+      
+      // Add required fields to formData
+      formData.append('name', userData.data.name);
+      formData.append('email', userData.data.email);
+      formData.append('slug', userData.data.slug);
+
       const response = await fetch(`${API_BASE_URL}/users/${userId}`, {
         method: 'PUT',
         headers: {
@@ -18,9 +61,8 @@ export default class ProfileModel {
         body: formData,
       });
 
-      const result = await response.json();
-
       if (!response.ok) {
+        const result = await response.json();
         console.error('Backend Error Response:', result);
         return {
           success: false,
@@ -28,6 +70,7 @@ export default class ProfileModel {
         };
       }
 
+      const result = await response.json();
       return {
         success: true,
         message: 'Avatar berhasil diunggah!',
