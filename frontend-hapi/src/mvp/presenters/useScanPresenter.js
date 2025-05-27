@@ -1,78 +1,103 @@
-// frontend-hapi > src > mvp > presenters > useScanPresenter.js
+// src/mvp/presenters/useScanPresenter.js
 import { useState, useEffect } from "react";
 import ScanModel from "../models/ScanModel"; // Pastikan path benar
 
 export default function useScanPresenter() {
-  const model = new ScanModel(); // Mungkin perlu useMemo juga jika ada masalah re-render berulang
+  const model = new ScanModel();
 
-  const [selectedImage, setSelectedImage] = useState(null); // Ubah dari selectedFile
+  const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [predictionResult, setPredictionResult] = useState(null); // Ubah dari scanResult
+  const [predictionResult, setPredictionResult] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [statusMsg, setStatusMsg] = useState(""); // Untuk pesan error/status
+  const [statusMsg, setStatusMsg] = useState("");
+  const [modelStatus, setModelStatus] = useState({ status: "idle", error: null });
 
-  // Effect untuk menampilkan preview gambar dan membersihkan URL objek
+  // Monitor status model AI (loading, ready, error)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const status = model.getModelStatus();
+      setModelStatus(status);
+      if (status.status === "ready" || status.status === "error") {
+        clearInterval(interval);
+      }
+    }, 500); // Cek status model setiap 500ms
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Preview gambar saat user upload
   useEffect(() => {
     if (!selectedImage) {
       setImagePreview(null);
       return;
     }
+
     const objectUrl = URL.createObjectURL(selectedImage);
     setImagePreview(objectUrl);
-    
-    // Cleanup function untuk mencabut URL objek saat komponen unmount atau selectedImage berubah
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedImage]); // Bergantung pada selectedImage
 
-  // Untuk scroll-header dan scroll-up (tetap sama)
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [selectedImage]);
+
+  // Scroll efek untuk header dan tombol scroll-up
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+
     const onScroll = () => {
       const header = document.getElementById("header");
       if (header) header.classList.toggle("scroll-header", window.scrollY >= 50);
+
       const up = document.getElementById("scroll-up");
       if (up) up.classList.toggle("show-scroll", window.scrollY >= 460);
     };
+
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-  }, []); // Dependencies kosong agar hanya berjalan sekali
+  }, []);
 
   const onFileChange = (e) => {
-    setSelectedImage(e.target.files[0] || null); // Ubah dari setSelectedFile
-    setPredictionResult(null); // Reset hasil prediksi
-    setStatusMsg(""); // Reset pesan status
+    setSelectedImage(e.target.files[0] || null);
+    setPredictionResult(null);
+    setStatusMsg("");
   };
 
-  const onSubmit = async (e) => { // Ubah dari onSubmit
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedImage) { // Ubah dari selectedFile
+
+    if (!selectedImage) {
       setStatusMsg("Silakan upload foto wajah terlebih dahulu.");
       return;
     }
+
+    if (modelStatus.status !== "ready") {
+      setStatusMsg("Model AI belum siap digunakan. Mohon tunggu beberapa saat...");
+      return;
+    }
+
     setLoading(true);
     setStatusMsg("");
-    setPredictionResult(null); // Reset hasil prediksi
+    setPredictionResult(null);
 
     try {
-      const result = await model.predictAcne(selectedImage); // Panggil predictAcne dari model
+      const result = await model.predictAcne(selectedImage);
 
       if (result.success) {
-        setPredictionResult(result.data); // Set hasil prediksi
-        setStatusMsg(result.message); // Set pesan sukses
+        setPredictionResult(result.data);
+        setStatusMsg(result.message);
       } else {
-        setStatusMsg(result.message || "Terjadi error saat proses prediksi."); // Set pesan error
+        setStatusMsg(result.message || "Terjadi error saat proses prediksi.");
       }
     } catch (err) {
       console.error("Error in handleSubmit:", err);
       setStatusMsg("Terjadi error yang tidak diketahui saat proses prediksi.");
     }
+
     setLoading(false);
   };
 
-  const onReset = () => { // Ubah dari onReset
-    setSelectedImage(null); // Ubah dari setSelectedFile
+  const onReset = () => {
+    setSelectedImage(null);
     setImagePreview(null);
-    setPredictionResult(null); // Reset hasil prediksi
+    setPredictionResult(null);
     setStatusMsg("");
   };
 
@@ -82,13 +107,14 @@ export default function useScanPresenter() {
   };
 
   return {
-    selectedImage, // Ubah dari selectedFile
+    selectedImage,
     imagePreview,
-    predictionResult, // Ubah dari scanResult
+    predictionResult,
     loading,
     statusMsg,
+    modelStatus,
     onFileChange,
-    onSubmit, // Ini adalah fungsi yang dipanggil saat submit form
+    onSubmit,
     onReset,
     scrollToTop,
   };

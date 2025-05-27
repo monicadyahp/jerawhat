@@ -1,30 +1,41 @@
 // frontend-hapi > src > mvp > models > ScanModel.js
 import * as tf from '@tensorflow/tfjs';
-// import Jimp from 'jimp'; // <--- HAPUS BARIS INI
 
 let loadedModel = null;
 
 export default class ScanModel {
   constructor() {
+    this.modelStatus = 'idle'; // 'idle' | 'loading' | 'ready' | 'error'
+    this.loadError = null;
     this.loadAcneModel();
+  }
+
+  getModelStatus() {
+    return {
+      status: this.modelStatus,
+      error: this.loadError,
+    };
   }
 
   async loadAcneModel() {
     if (loadedModel) {
-      console.log('Model ML sudah dimuat.');
+      this.modelStatus = 'ready';
       return loadedModel;
     }
+
+    this.modelStatus = 'loading';
+
     try {
-      const modelUrl = '/models/acne_model/model.json';
-
-      // Tetap gunakan tf.loadGraphModel seperti yang kita coba terakhir
-      loadedModel = await tf.loadGraphModel(modelUrl); 
-
-      console.log('Model ML berhasil dimuat di frontend!');
+      const modelUrl = '/model/model.json'; // Pastikan path ini sesuai
+      loadedModel = await tf.loadGraphModel(modelUrl);
+      this.modelStatus = 'ready';
+      console.log('✅ Model ML berhasil dimuat!');
       return loadedModel;
     } catch (error) {
-      console.error('Gagal memuat model ML di frontend:', error);
-      throw new Error('Gagal memuat model AI: ' + error.message + '. Harap coba refresh halaman atau hubungi administrator.');
+      this.modelStatus = 'error';
+      this.loadError = error.message;
+      console.error('❌ Gagal memuat model ML:', error);
+      throw new Error('Gagal memuat model AI: ' + error.message);
     }
   }
 
@@ -33,77 +44,71 @@ export default class ScanModel {
       if (!loadedModel) {
         await this.loadAcneModel();
         if (!loadedModel) {
-            throw new Error("Model AI gagal dimuat.");
+          throw new Error('Model belum siap.');
         }
       }
 
-      const IMAGE_SIZE = 224; // SESUAIKAN UKURAN INPUT MODEL ANDA
+      const IMAGE_SIZE = 224;
 
-      // --- PRA-PEMROSESAN GAMBAR DENGAN HTML CANVAS API ---
-      // Kita akan membungkus ini dalam Promise karena FileReader dan Image loading adalah asinkron
-      return new Promise(async (resolve, reject) => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
 
-        reader.onload = async (e) => {
+        reader.onload = (e) => {
           const img = new Image();
-          img.crossOrigin = "anonymous"; // Penting jika gambar dari URL eksternal, tapi tidak wajib untuk upload lokal
+          img.crossOrigin = 'anonymous';
 
           img.onload = async () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = IMAGE_SIZE;
-            canvas.height = IMAGE_SIZE;
-            const ctx = canvas.getContext('2d');
+            try {
+              const canvas = document.createElement('canvas');
+              canvas.width = IMAGE_SIZE;
+              canvas.height = IMAGE_SIZE;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, IMAGE_SIZE, IMAGE_SIZE);
 
-            // Gambar ulang di canvas dengan ukuran yang diinginkan
-            ctx.drawImage(img, 0, 0, IMAGE_SIZE, IMAGE_SIZE);
+              const imageData = ctx.getImageData(0, 0, IMAGE_SIZE, IMAGE_SIZE);
 
-            // Dapatkan data piksel dari canvas
-            const imageData = ctx.getImageData(0, 0, IMAGE_SIZE, IMAGE_SIZE);
+              let tensor = tf.browser.fromPixels(imageData, 3)
+                .toFloat()
+                .div(tf.scalar(255))
+                .expandDims(0); // [1, 224, 224, 3]
 
-            // Buat tensor dari ImageData (yang sudah punya data, width, height)
-            // Kita perlu channel 3 untuk RGB (bukan 4 untuk RGBA)
-            let tensor = tf.browser.fromPixels(imageData, 3); // Ambil hanya 3 channel (RGB)
+              const predictions = tf.tidy(() => loadedModel.predict(tensor));
+              const predictionsArray = await predictions.data();
 
-            // Normalisasi piksel ke 0-1
-            tensor = tensor.toFloat().div(tf.scalar(255));
+              const classNames = ['Tidak Ada Jerawat', 'Jerawat Ringan', 'Jerawat Sedang', 'Jerawat Parah'];
 
-            // Tambahkan dimensi batch
-            tensor = tensor.expandDims(0);
+              const predictedClassIndex = predictionsArray.indexOf(Math.max(...predictionsArray));
+              const predictedClass = classNames[predictedClassIndex];
+              const confidence = predictionsArray[predictedClassIndex];
 
-            // Lakukan prediksi
-            const predictions = loadedModel.predict(tensor);
-            const predictionsArray = await predictions.data();
+              tensor.dispose();
 
-            // Pasca-pemrosesan Hasil Prediksi
-            const classNames = ['Tidak Ada Jerawat', 'Jerawat Ringan', 'Jerawat Sedang', 'Jerawat Parah']; // SESUAIKAN DENGAN KELAS OUTPUT MODEL ANDA
-
-            const predictedClassIndex = predictionsArray.indexOf(Math.max(...predictionsArray));
-            const predictedClass = classNames[predictedClassIndex];
-            const confidence = predictionsArray[predictedClassIndex];
-
-            tensor.dispose(); // Buang tensor untuk menghemat memori
-
-            resolve({
-              success: true,
-              message: 'Prediksi berhasil!',
-              data: {
-                predictedClass: predictedClass,
-                confidence: confidence,
-                rawPredictions: Array.from(predictionsArray)
-              }
-            });
+              resolve({
+                success: true,
+                message: 'Prediksi berhasil!',
+                data: {
+                  predictedClass,
+                  confidence,
+                  rawPredictions: Array.from(predictionsArray),
+                },
+              });
+            } catch (err) {
+              reject(new Error('Gagal memproses gambar: ' + err.message));
+            }
           };
-          img.onerror = (err) => reject(new Error('Gagal memuat gambar dari file.'));
-          img.src = e.target.result; // Set sumber gambar dari FileReader (Data URL)
+
+          img.onerror = () => reject(new Error('Gagal memuat gambar.'));
+          img.src = e.target.result;
         };
-        reader.onerror = (err) => reject(new Error('Gagal membaca file gambar.'));
-        reader.readAsDataURL(imageFile); // Baca file sebagai Data URL
-      }); // Akhir Promise
+
+        reader.onerror = () => reject(new Error('Gagal membaca file.'));
+        reader.readAsDataURL(imageFile);
+      });
     } catch (error) {
-      console.error("Error predicting acne (frontend ML):", error);
+      console.error('❌ Error saat prediksi:', error);
       return {
         success: false,
-        message: error.message || 'Terjadi kesalahan saat melakukan prediksi.'
+        message: error.message || 'Terjadi kesalahan saat prediksi.',
       };
     }
   }
