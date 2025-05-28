@@ -9,6 +9,8 @@ export default function ProfileView({
   handleLogout,
   onAvatarChange,
   handleAvatarUpload,
+  scanHistory,
+  historyLoading
 }) {
   if (loading) {
     return (
@@ -46,7 +48,7 @@ export default function ProfileView({
             borderRadius: '.75rem',
             boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
             maxWidth: '500px',
-            margin: '0 auto',
+            margin: '0 auto 2rem auto',
             color: 'hsl(323, 70%, 30%)'
           }}>
             {/* Avatar Section */}
@@ -124,6 +126,70 @@ export default function ProfileView({
             >
               Logout
             </button>
+          </div>
+
+          {/* Scan History Section */}
+          <h3 className="section__title" style={{ marginBottom: '1.5rem' }}>Riwayat Scan</h3>
+          <div className="scan-history" style={{
+            background: '#fbeaea',
+            padding: '2rem',
+            borderRadius: '.75rem',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.1)',
+            maxWidth: '800px',
+            margin: '0 auto',
+            color: 'hsl(323, 70%, 30%)'
+          }}>
+            {historyLoading ? (
+              <p>Memuat riwayat scan...</p>
+            ) : scanHistory.length > 0 ? (
+              <div style={{ 
+                display: 'grid', 
+                gap: '1rem',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))'
+              }}>
+                {scanHistory.map((scan, index) => (
+                  <div key={index} style={{
+                    background: 'white',
+                    padding: '1rem',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                  }}>
+                    {scan.image && (
+                      <img 
+                        src={scan.image} 
+                        alt={`Scan ${index + 1}`}
+                        style={{
+                          width: '100%',
+                          height: '150px',
+                          objectFit: 'cover',
+                          borderRadius: '0.5rem',
+                          marginBottom: '0.5rem'
+                        }}
+                      />
+                    )}
+                    <p style={{ margin: '0.5rem 0' }}>
+                      <strong>Kondisi:</strong> {scan.prediction || 'Tidak ada prediksi'}
+                    </p>
+                    <p style={{ margin: '0.5rem 0' }}>
+                      <strong>Tanggal:</strong> {new Date(scan.createdAt).toLocaleDateString('id-ID', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                    {scan.confidence && (
+                      <p style={{ margin: '0.5rem 0' }}>
+                        <strong>Keyakinan:</strong> {(scan.confidence * 100).toFixed(2)}%
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>Belum ada riwayat scan</p>
+            )}
           </div>
         </div>
       </div>

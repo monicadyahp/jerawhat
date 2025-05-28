@@ -14,6 +14,8 @@ export default function useProfilePresenter() {
   const [loading, setLoading] = useState(true); // Gunakan loading terpisah untuk operasi presenter ini
   const [selectedAvatarFile, setSelectedAvatarFile] = useState(null);
   const [previewAvatarUrl, setPreviewAvatarUrl] = useState(null);
+  const [scanHistory, setScanHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,6 +48,21 @@ export default function useProfilePresenter() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [user, authLoading, navigate]); // Tambahkan user dan authLoading sebagai dependensi
+
+  useEffect(() => {
+    const fetchScanHistory = async () => {
+      if (user && user.token && user.id) {
+        setHistoryLoading(true);
+        const result = await model.getScanHistory(user.id, user.token);
+        if (result.success) {
+          setScanHistory(result.data);
+        }
+        setHistoryLoading(false);
+      }
+    };
+
+    fetchScanHistory();
+  }, [user]);
 
   // Callback untuk memperbarui data user di AuthContext setelah upload avatar
   const refreshUserData = useCallback((updatedAvatarPath) => {
@@ -179,5 +196,7 @@ export default function useProfilePresenter() {
     handleLogout,
     onAvatarChange,
     handleAvatarUpload,
+    scanHistory,
+    historyLoading
   };
 }

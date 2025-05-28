@@ -89,4 +89,33 @@ export default class ProfileModel {
     console.log(`Updating profile for user ${userId} with data:`, newData);
     return { success: true, message: "Profil berhasil diperbarui!" };
   }
+
+  async getScanHistory(userId, token) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/scans/history/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Gagal mengambil riwayat scan');
+      }
+
+      const result = await response.json();
+      return {
+        success: true,
+        data: result.data,
+        message: 'Riwayat scan berhasil diambil'
+      };
+    } catch (error) {
+      console.error('Error fetching scan history:', error);
+      return {
+        success: false,
+        message: error.message || 'Terjadi kesalahan saat mengambil riwayat scan'
+      };
+    }
+  }
 }
