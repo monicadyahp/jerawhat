@@ -1,5 +1,7 @@
 // src/views/ScanView.jsx
 import React from "react";
+import lifestyleRecommendations from "../data/lifestyleRecomendation.json";
+
 export default function ScanView({
   selectedImage,
   imagePreview,
@@ -277,10 +279,95 @@ export default function ScanView({
                     </p>
                     <p style={{ 
                       fontSize: "1.1rem",
-                      color: "#666"
+                      color: "#666",
+                      marginBottom: "2rem"
                     }}>
                       <strong>Keyakinan Model:</strong> {(predictionResult.confidence * 100).toFixed(2)}%
                     </p>
+
+                    {/* Lifestyle Recommendations */}
+                    {predictionResult.predictedClass !== "Tidak Ada Jerawat" && (
+                      <div style={{
+                        background: "white",
+                        padding: "1.5rem",
+                        borderRadius: "12px",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                        marginTop: "2rem",
+                        textAlign: "left"
+                      }}>
+                        <h4 style={{
+                          fontSize: "1.3rem",
+                          color: "#333",
+                          marginBottom: "1.5rem",
+                          textAlign: "center"
+                        }}>
+                          Rekomendasi Gaya Hidup
+                        </h4>
+                        
+                        {/* Get recommendation key based on prediction */}
+                        {(() => {
+                          const recommendationKey = predictionResult.predictedClass === "Jerawat Ringan" ? "jerawat_ringan" :
+                                                  predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
+                                                  predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
+                          
+                          if (!recommendationKey) return null;
+                          
+                          const recommendations = lifestyleRecommendations[recommendationKey];
+                          
+                          return (
+                            <div style={{ display: "grid", gap: "1.5rem" }}>
+                              <div>
+                                <h5 style={{ color: "#721c24", marginBottom: "0.5rem" }}>🍎 Makanan yang Dianjurkan</h5>
+                                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                                  {recommendations.makanan_dianjurkan.map((item, index) => (
+                                    <li key={index} style={{ marginBottom: "0.5rem", paddingLeft: "1.5rem", position: "relative" }}>
+                                      <span style={{ position: "absolute", left: 0 }}>•</span>
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                              
+                              <div>
+                                <h5 style={{ color: "#721c24", marginBottom: "0.5rem" }}>❌ Makanan yang Dilarang</h5>
+                                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                                  {recommendations.makanan_dilarang.map((item, index) => (
+                                    <li key={index} style={{ marginBottom: "0.5rem", paddingLeft: "1.5rem", position: "relative" }}>
+                                      <span style={{ position: "absolute", left: 0 }}>•</span>
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                              
+                              <div>
+                                <h5 style={{ color: "#721c24", marginBottom: "0.5rem" }}>🏃‍♂️ Aktivitas Fisik</h5>
+                                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                                  {recommendations.aktivitas_fisik.map((item, index) => (
+                                    <li key={index} style={{ marginBottom: "0.5rem", paddingLeft: "1.5rem", position: "relative" }}>
+                                      <span style={{ position: "absolute", left: 0 }}>•</span>
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                              
+                              <div>
+                                <h5 style={{ color: "#721c24", marginBottom: "0.5rem" }}>🧘‍♀️ Manajemen Stres</h5>
+                                <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+                                  {recommendations.manajemen_stres.map((item, index) => (
+                                    <li key={index} style={{ marginBottom: "0.5rem", paddingLeft: "1.5rem", position: "relative" }}>
+                                      <span style={{ position: "absolute", left: 0 }}>•</span>
+                                      {item}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
                   </div>
                 ) : (
                   <p style={{ 

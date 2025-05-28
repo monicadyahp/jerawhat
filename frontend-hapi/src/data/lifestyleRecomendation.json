@@ -1,0 +1,77 @@
+{
+    "jerawat_ringan": {
+      "makanan_dianjurkan": [
+        "Sayuran hijau: bayam, brokoli, kale, kangkung",
+        "Buah segar: apel, jeruk, pepaya, semangka",
+        "Sumber protein rendah lemak: ikan tuna, tahu, tempe, telur rebus",
+        "Karbohidrat kompleks: oatmeal, beras merah, ubi, quinoa",
+        "Minuman sehat: air putih 2–2.5 liter/hari, infused water (lemon + mint)"
+      ],
+      "makanan_dilarang": [
+        "Makanan cepat saji: burger, ayam goreng tepung, pizza",
+        "Minuman manis: soda, kopi susu kemasan, teh manis botol",
+        "Produk susu tinggi lemak: susu full cream, keju olahan",
+        "Makanan tinggi gula: kue, donat, permen"
+      ],
+      "aktivitas_fisik": [
+        "Berjalan kaki 6.000–8.000 langkah per hari",
+        "Peregangan ringan 2x sehari (pagi dan sore)",
+        "Senam aerobik ringan 2–3x seminggu"
+      ],
+      "manajemen_stres": [
+        "Meditasi atau pernapasan dalam selama 10 menit setiap hari",
+        "Tidur cukup 7–9 jam per malam (ideal jam 10 malam–6 pagi)",
+        "Batasi penggunaan gawai sebelum tidur (minimal 30 menit sebelumnya)"
+      ]
+    },
+    "kulit_sedang": {
+      "makanan_dianjurkan": [
+        "Sayuran berwarna: wortel, tomat, paprika, labu",
+        "Buah antioksidan tinggi: stroberi, blueberry, kiwi, anggur",
+        "Sumber omega-3: salmon, sarden, chia seed, flaxseed",
+        "Makanan berserat: kacang merah, edamame, jagung manis",
+        "Minuman sehat: teh hijau tanpa gula, air kelapa segar"
+      ],
+      "makanan_dilarang": [
+        "Gorengan dan makanan berminyak: tahu goreng, bakwan, mie instan",
+        "Makanan tinggi indeks glikemik: nasi putih, roti putih",
+        "Susu dan olahannya: keju cheddar, yogurt manis",
+        "Makanan dan minuman tinggi gula: boba drink, milkshake"
+      ],
+      "aktivitas_fisik": [
+        "Jogging 3x per minggu selama 20–30 menit",
+        "Zumba atau workout ringan di rumah 2x/minggu",
+        "Berjalan kaki minimal 7.000 langkah/hari"
+      ],
+      "manajemen_stres": [
+        "Menulis jurnal 1 halaman/hari untuk menyalurkan emosi",
+        "Mendengarkan musik relaksasi saat belajar atau menjelang tidur",
+        "Konsumsi camilan sehat saat stres seperti kacang almond dan pisang"
+      ]
+    },
+    "kulit_parah": {
+      "makanan_dianjurkan": [
+        "Sayur kukus atau rebus: buncis, kembang kol, bayam",
+        "Buah anti-inflamasi: nanas, mangga, cherry, delima",
+        "Sumber selenium dan zinc: tiram, biji labu, telur rebus, kacang almond",
+        "Makanan ala Mediterania: salad zaitun, roti gandum, ikan panggang",
+        "Minuman anti-inflamasi: teh hijau, jus lidah buaya, air lemon hangat"
+      ],
+      "makanan_dilarang": [
+        "Produk olahan susu: susu sapi, es krim, keju tinggi lemak",
+        "Daging merah berlemak: daging sapi berlemak, kambing",
+        "Makanan olahan: sosis, nugget, makanan kaleng",
+        "Minuman berkafein dan beralkohol"
+      ],
+      "aktivitas_fisik": [
+        "Lari pagi atau sore 3–4x per minggu",
+        "Latihan HIIT ringan (15–20 menit) di rumah 2x/minggu",
+        "Yoga atau stretching intensif setiap 2 hari sekali"
+      ],
+      "manajemen_stres": [
+        "Terapi profesional jika mengalami stres berat (CBT, konseling)",
+        "Batasi screen time maksimal 3 jam/hari di luar kegiatan belajar",
+        "Ciptakan jadwal tidur & bangun yang konsisten (tidur jam 10 malam)"
+      ]
+    }
+  }
