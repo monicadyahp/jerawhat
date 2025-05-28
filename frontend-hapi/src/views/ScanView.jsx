@@ -1,6 +1,5 @@
 // src/views/ScanView.jsx
-import React from "react";
-import lifestyleRecommendations from "../data/lifestyleRecomendation.json";
+import React, { useState, useEffect } from "react";
 
 export default function ScanView({
   selectedImage,
@@ -22,6 +21,20 @@ export default function ScanView({
   isCameraActive,
   isCapturing,
 }) {
+  const [lifestyleRecommendations, setLifestyleRecommendations] = useState(null);
+
+  useEffect(() => {
+    // Load the JSON file dynamically
+    import("../data/lifestyleRecomendation.json")
+      .then((data) => {
+        console.log("Loaded recommendations:", data.default);
+        setLifestyleRecommendations(data.default);
+      })
+      .catch((error) => {
+        console.error("Error loading recommendations:", error);
+      });
+  }, []);
+
   const renderModelStatus = () => {
     switch (modelStatus.status) {
       case "loading":
@@ -286,7 +299,7 @@ export default function ScanView({
                     </p>
 
                     {/* Lifestyle Recommendations */}
-                    {predictionResult.predictedClass !== "Tidak Ada Jerawat" && (
+                    {predictionResult.predictedClass !== "Tidak Ada Jerawat" && lifestyleRecommendations && (
                       <div style={{
                         background: "white",
                         padding: "1.5rem",
@@ -310,9 +323,18 @@ export default function ScanView({
                                                   predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
                                                   predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
                           
+                          console.log("Prediction Class:", predictionResult.predictedClass);
+                          console.log("Recommendation Key:", recommendationKey);
+                          
                           if (!recommendationKey) return null;
                           
                           const recommendations = lifestyleRecommendations[recommendationKey];
+                          console.log("Recommendations:", recommendations);
+                          
+                          if (!recommendations) {
+                            console.error("No recommendations found for key:", recommendationKey);
+                            return null;
+                          }
                           
                           return (
                             <div style={{ display: "grid", gap: "1.5rem" }}>
