@@ -16,7 +16,7 @@ export default function useAIChatPresenter() {
   useEffect(() => {
     // Tambahkan pesan pembuka dari asisten hanya jika chat kosong
     if (messages.length === 0) {
-      setMessages([{ role: "assistant", content: "Halo! Ada yang bisa saya bantu hari ini?" }]);
+      setMessages([{ role: "assistant", content: "Halo! Ceritakan keluhan masalah kulit wajahmu!" }]);
     }
   }, []); // Jalankan hanya sekali saat komponen pertama kali di-mount
 
