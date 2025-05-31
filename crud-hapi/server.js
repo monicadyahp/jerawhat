@@ -49,37 +49,51 @@ const init = async () => {
             timeSkewSec: 15
         },
         validate: (artifacts, request, h) => {
-            // ARTIFACTS ADALAH OBJEK YANG KOMPLEKS, PAYLOAD ASLI ADA DI artifacts.decoded.payload
-            const userPayload = artifacts.decoded.payload; // <--- PERBAIKAN KRUSIAL DI SINI!
+            const userPayload = artifacts.decoded.payload;
 
-            console.log('Validating JWT. Original Artifacts:', artifacts); // Log objek artifacts lengkap
-            console.log('Validating JWT. Extracted Payload:', userPayload); // <-- Log payload yang diekstraksi
+            console.log('Validating JWT. Original Artifacts:', artifacts);
+            console.log('Validating JWT. Extracted Payload:', userPayload);
 
-            if (!userPayload || !userPayload.id) { // <-- GANTI DENGAN userPayload
+            if (!userPayload || !userPayload.id) {
                 console.warn('JWT Validation Failed: User payload or User ID is missing.');
                 return { isValid: false };
             }
 
-            console.log('JWT Validation Success for User ID:', userPayload.id); // <-- Gunakan userPayload
+            console.log('JWT Validation Success for User ID:', userPayload.id);
             return {
                 isValid: true,
-                credentials: { id: userPayload.id, name: userPayload.name, email: userPayload.email } // <-- Gunakan userPayload
+                credentials: { id: userPayload.id, name: userPayload.name, email: userPayload.email }
             };
         }
     });
 
+    // Rute untuk melayani file statis dari direktori 'uploads'
     server.route({
         method: 'GET',
         path: '/uploads/{param*}',
         handler: {
             directory: {
-                path: Path.join(__dirname, 'uploads'),
-                listing: true
+                path: Path.join(__dirname, 'uploads'), // Ini akan melayani 'crud-hapi/uploads/*'
+                listing: true // Hati-hati dengan ini di produksi, bisa mengekspos struktur direktori
             }
         }
     });
 
-    server.route(routes);
+    // --- TAMBAHKAN RUTE INI UNTUK FOLDER HISTORY_AI ---
+    server.route({
+        method: 'GET',
+        path: '/uploads/history_ai/{param*}', // Rute untuk mengakses file di folder history_ai
+        handler: {
+            directory: {
+                path: Path.join(__dirname, 'history_ai'), // Direktori tempat file disimpan
+                redirectToSlash: true, // Mengarahkan ke URL dengan slash di akhir jika path adalah direktori
+                index: false, // Tidak melayani file index default (seperti index.html)
+            }
+        }
+    });
+    // ----------------------------------------------------
+
+    server.route(routes); // Daftarkan semua rute dari routes/routes.js
 
     server.ext("onPreResponse", (request, h) => {
         const response = request.response;
@@ -88,8 +102,8 @@ const init = async () => {
             return h.response({ status: "Failed", message: { errors: ["File yang diunggah terlalu besar."] } }).code(413);
         }
         if (response.isBoom) {
-             console.error('Boom Error:', response.output.statusCode, response.message);
-             return h.continue;
+            console.error('Boom Error:', response.output.statusCode, response.message);
+            return h.continue;
         }
         return h.continue;
     });

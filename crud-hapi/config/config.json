@@ -1,26 +1,26 @@
 {
   "development": {
     "username": "root",
-    "password": "",
-    "database": "crud_hapi",
+    "password": "sCrGXUMQ8ZtqSCj0",
+    "database": "mu",
     "host": "127.0.0.1",
-    "port": "3307",
+    "port": "3306",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": "",
-    "database": "database_test",
+    "password": "sCrGXUMQ8ZtqSCj0",
+    "database": "mu",
     "host": "127.0.0.1",
-    "port": "3307",
+    "port": "3306",
     "dialect": "mysql"
   },
   "production": {
     "username": "root",
-    "password": "",
-    "database": "crud_hapi",
+    "password": "sCrGXUMQ8ZtqSCj0",
+    "database": "mu",
     "host": "127.0.0.1",
-    "port": "3307",
+    "port": "3306",
     "dialect": "mysql"
   }
 }

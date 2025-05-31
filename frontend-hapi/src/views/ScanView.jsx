@@ -1,6 +1,4 @@
-// src/views/ScanView.jsx
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect, useRef } from "react";
 export default function ScanView({
   selectedImage,
   imagePreview,
@@ -20,21 +18,9 @@ export default function ScanView({
   videoRef,
   isCameraActive,
   isCapturing,
+  faceDetectionStatus,
+  lifestyleRecommendations,
 }) {
-  const [lifestyleRecommendations, setLifestyleRecommendations] = useState(null);
-
-  useEffect(() => {
-    // Load the JSON file dynamically
-    import("../data/lifestyleRecomendation.json")
-      .then((data) => {
-        console.log("Loaded recommendations:", data.default);
-        setLifestyleRecommendations(data.default);
-      })
-      .catch((error) => {
-        console.error("Error loading recommendations:", error);
-      });
-  }, []);
-
   const renderModelStatus = () => {
     switch (modelStatus.status) {
       case "loading":
@@ -48,6 +34,16 @@ export default function ScanView({
         return <p style={{ color: "gray" }}>ℹ️ Menunggu model dimuat...</p>;
     }
   };
+  const renderFaceDetectionStatus = () => {
+    if (faceDetectionStatus.status === "detecting") {
+      return <p style={{ color: "blue" }}>🔍 Mendeteksi wajah...</p>;
+    } else if (faceDetectionStatus.status === "no_face") {
+      return <p style={{ color: "orange" }}>⚠️ Tidak ada wajah terdeteksi dalam gambar.</p>;
+    } else if (faceDetectionStatus.status === "error") {
+      return <p style={{ color: "red" }}>❌ Error deteksi wajah: {faceDetectionStatus.error}</p>;
+    }
+    return null;
+  };
   return (
     <>
       <section className="section scan-page" id="scan-page">
@@ -56,8 +52,7 @@ export default function ScanView({
           <p className="scan__subtitle reveal-from-bottom" style={{ fontSize: "1.1rem", marginBottom: "2rem" }}>
             Unggah foto wajahmu untuk mendapatkan analisis kulit secara otomatis.
           </p>
-          
-          <div style={{ 
+          <div style={{
             padding: "2rem",
             borderRadius: "16px",
             backgroundColor: "#fbeaea",
@@ -67,10 +62,14 @@ export default function ScanView({
             <div className="model__status reveal-from-bottom" style={{ marginBottom: "1.5rem" }}>
               {renderModelStatus()}
             </div>
-
+            {faceDetectionStatus.status !== "idle" && faceDetectionStatus.status !== "detected" && (
+              <div className="face-detection__status reveal-from-bottom" style={{ marginBottom: "1.5rem" }}>
+                {renderFaceDetectionStatus()}
+              </div>
+            )}
             <div className="scan__input-group reveal-from-bottom" style={{ marginBottom: "2rem" }}>
-              <label htmlFor="cameraSelect" style={{ 
-                fontWeight: "bold", 
+              <label htmlFor="cameraSelect" style={{
+                fontWeight: "bold",
                 marginRight: "1rem",
                 fontSize: "1.1rem"
               }}>
@@ -81,7 +80,7 @@ export default function ScanView({
                 value={selectedCameraId || ""}
                 onChange={(e) => onCameraChange(e.target.value)}
                 disabled={loading || modelStatus.status !== "ready"}
-                style={{ 
+                style={{
                   padding: "0.5rem 1rem",
                   borderRadius: "8px",
                   border: "1px solid #ddd",
@@ -102,7 +101,7 @@ export default function ScanView({
                 className="button"
                 onClick={onStartCamera}
                 disabled={!selectedCameraId || loading || modelStatus.status !== "ready"}
-                style={{ 
+                style={{
                   marginLeft: "1rem",
                   padding: "0.5rem 1.5rem",
                   fontSize: "1rem"
@@ -111,10 +110,9 @@ export default function ScanView({
                 Mulai Kamera
               </button>
             </div>
-
             {isCameraActive && (
-              <div className="scan__camera-preview reveal-from-bottom" style={{ 
-                textAlign: "center", 
+              <div className="scan__camera-preview reveal-from-bottom" style={{
+                textAlign: "center",
                 marginBottom: "2rem"
               }}>
                 <video
@@ -124,8 +122,8 @@ export default function ScanView({
                   muted
                   width="320"
                   height="240"
-                  style={{ 
-                    borderRadius: "12px", 
+                  style={{
+                    borderRadius: "12px",
                     boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     marginBottom: "1rem",
                     backgroundColor: "white"
@@ -137,7 +135,7 @@ export default function ScanView({
                     className="button"
                     onClick={onTakeSnapshot}
                     disabled={loading || modelStatus.status !== "ready" || isCapturing}
-                    style={{ 
+                    style={{
                       padding: "0.75rem 1.5rem",
                       fontSize: "1rem",
                       display: "flex",
@@ -152,7 +150,7 @@ export default function ScanView({
                     className="button button--ghost"
                     onClick={onReset}
                     disabled={loading}
-                    style={{ 
+                    style={{
                       padding: "0.75rem 1.5rem",
                       fontSize: "1rem"
                     }}
@@ -162,10 +160,9 @@ export default function ScanView({
                 </div>
               </div>
             )}
-
             <form className="scan__form" onSubmit={onSubmit}>
-              <div className="scan__input-group reveal-from-bottom" style={{ 
-                textAlign: "center", 
+              <div className="scan__input-group reveal-from-bottom" style={{
+                textAlign: "center",
                 marginBottom: "2rem"
               }}>
                 <label
@@ -198,9 +195,9 @@ export default function ScanView({
                   />
                 </label>
                 {selectedImage && (
-                  <p style={{ 
-                    marginTop: "1rem", 
-                    color: "#555", 
+                  <p style={{
+                    marginTop: "1rem",
+                    color: "#555",
                     fontStyle: "italic",
                     fontSize: "0.9rem"
                   }}>
@@ -208,7 +205,6 @@ export default function ScanView({
                   </p>
                 )}
               </div>
-
               {imagePreview && (
                 <div className="scan__preview reveal-from-bottom" style={{
                   marginBottom: "2rem"
@@ -228,8 +224,7 @@ export default function ScanView({
                   />
                 </div>
               )}
-
-              <div className="scan__actions reveal-from-bottom" style={{ 
+              <div className="scan__actions reveal-from-bottom" style={{
                 marginBottom: "2rem",
                 display: "flex",
                 justifyContent: "center",
@@ -238,20 +233,20 @@ export default function ScanView({
                 <button
                   type="submit"
                   className="button"
-                  disabled={loading || !selectedImage || modelStatus.status !== "ready"}
-                  style={{ 
+                  disabled={loading || !selectedImage || modelStatus.status !== "ready" || faceDetectionStatus.status === "detecting"}
+                  style={{
                     padding: "0.75rem 2rem",
                     fontSize: "1.1rem"
                   }}
                 >
                   {loading ? "Menganalisis..." : "Mulai Scan"}
                 </button>
-                <button 
-                  type="button" 
-                  className="button button--ghost" 
-                  disabled={loading} 
+                <button
+                  type="button"
+                  className="button button--ghost"
                   onClick={onReset}
-                  style={{ 
+                  disabled={loading}
+                  style={{
                     padding: "0.75rem 2rem",
                     fontSize: "1.1rem"
                   }}
@@ -259,9 +254,8 @@ export default function ScanView({
                   Reset
                 </button>
               </div>
-
               {statusMsg && (
-                <p className="scan__status" style={{ 
+                <p className="scan__status" style={{
                   color: statusMsg.includes("berhasil") ? "green" : "crimson",
                   textAlign: "center",
                   fontSize: "1.1rem",
@@ -271,10 +265,9 @@ export default function ScanView({
                 </p>
               )}
             </form>
-
             {predictionResult && (
               <div className="scan__result reveal-from-bottom">
-                <h3 style={{ 
+                <h3 style={{
                   fontSize: "1.5rem",
                   marginBottom: "1.5rem",
                   textAlign: "center",
@@ -284,20 +277,19 @@ export default function ScanView({
                 </h3>
                 {predictionResult.predictedClass ? (
                   <div style={{ textAlign: "center" }}>
-                    <p style={{ 
+                    <p style={{
                       fontSize: "1.2rem",
                       marginBottom: "1rem"
                     }}>
                       <strong>Kondisi Jerawat:</strong> {predictionResult.predictedClass}
                     </p>
-                    <p style={{ 
+                    <p style={{
                       fontSize: "1.1rem",
                       color: "#666",
                       marginBottom: "2rem"
                     }}>
                       <strong>Keyakinan Model:</strong> {(predictionResult.confidence * 100).toFixed(2)}%
                     </p>
-
                     {/* Lifestyle Recommendations */}
                     {predictionResult.predictedClass !== "Tidak Ada Jerawat" && lifestyleRecommendations && (
                       <div style={{
@@ -316,26 +308,19 @@ export default function ScanView({
                         }}>
                           Rekomendasi Gaya Hidup
                         </h4>
-                        
-                        {/* Get recommendation key based on prediction */}
                         {(() => {
                           const recommendationKey = predictionResult.predictedClass === "Jerawat Ringan" ? "jerawat_ringan" :
-                                                  predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
-                                                  predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
-                          
+                            predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
+                              predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
                           console.log("Prediction Class:", predictionResult.predictedClass);
                           console.log("Recommendation Key:", recommendationKey);
-                          
                           if (!recommendationKey) return null;
-                          
                           const recommendations = lifestyleRecommendations[recommendationKey];
                           console.log("Recommendations:", recommendations);
-                          
                           if (!recommendations) {
                             console.error("No recommendations found for key:", recommendationKey);
                             return null;
                           }
-                          
                           return (
                             <div style={{ display: "grid", gap: "1.5rem" }}>
                               <div>
@@ -349,7 +334,6 @@ export default function ScanView({
                                   ))}
                                 </ul>
                               </div>
-                              
                               <div>
                                 <h5 style={{ color: "#721c24", marginBottom: "0.5rem" }}>❌ Makanan yang Dilarang</h5>
                                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -361,7 +345,6 @@ export default function ScanView({
                                   ))}
                                 </ul>
                               </div>
-                              
                               <div>
                                 <h5 style={{ color: "#721c24", marginBottom: "0.5rem" }}>🏃‍♂️ Aktivitas Fisik</h5>
                                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -373,7 +356,6 @@ export default function ScanView({
                                   ))}
                                 </ul>
                               </div>
-                              
                               <div>
                                 <h5 style={{ color: "#721c24", marginBottom: "0.5rem" }}>🧘‍♀️ Manajemen Stres</h5>
                                 <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -392,7 +374,7 @@ export default function ScanView({
                     )}
                   </div>
                 ) : (
-                  <p style={{ 
+                  <p style={{
                     textAlign: "center",
                     fontSize: "1.1rem",
                     color: "#666"

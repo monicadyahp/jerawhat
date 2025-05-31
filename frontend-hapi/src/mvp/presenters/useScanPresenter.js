@@ -1,13 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import ScanModel from "../models/ScanModel";
 export default function useScanPresenter() {
-  const model = new ScanModel();
+  const modelRef = useRef(null);
+  if (!modelRef.current) {
+    modelRef.current = new ScanModel();
+  }
+  const model = modelRef.current;
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
   const [modelStatus, setModelStatus] = useState({ status: "idle", error: null });
+  const [faceDetectionStatus, setFaceDetectionStatus] = useState({ status: "idle", error: null });
   const [cameraDevices, setCameraDevices] = useState([]);
   const [selectedCameraId, setSelectedCameraId] = useState("");
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -15,16 +20,34 @@ export default function useScanPresenter() {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const scanIntervalRef = useRef(null);
+  const [lifestyleRecommendations, setLifestyleRecommendations] = useState(null);
+  useEffect(() => {
+    import("../../data/lifestyleRecomendation.json")
+      .then((data) => {
+        console.log("Loaded recommendations:", data.default);
+        setLifestyleRecommendations(data.default);
+      })
+      .catch((error) => {
+        console.error("Error loading recommendations:", error);
+      });
+  }, []);
   useEffect(() => {
     const interval = setInterval(() => {
-      const status = model.getModelStatus();
-      setModelStatus(status);
-      if (status.status === "ready" || status.status === "error") {
+      const acneModelStatus = model.getAcneModelStatus();
+      setModelStatus(acneModelStatus);
+      const faceModelStatus = model.getFaceModelStatus();
+      setFaceDetectionStatus(prev => ({
+        ...prev,
+        status: faceModelStatus.status === "ready" ? "idle" : faceModelStatus.status,
+        error: faceModelStatus.error
+      }));
+      if ((acneModelStatus.status === "ready" || acneModelStatus.status === "error") &&
+        (faceModelStatus.status === "ready" || faceModelStatus.status === "error")) {
         clearInterval(interval);
       }
     }, 500);
     return () => clearInterval(interval);
-  }, []);
+  }, [model]);
   useEffect(() => {
     if (!selectedImage) {
       setImagePreview(null);
@@ -65,13 +88,12 @@ export default function useScanPresenter() {
     setSelectedCameraId(deviceId);
   };
   const onTakeSnapshot = async () => {
-    if (!videoRef.current || loading || modelStatus.status !== "ready") return;
-    
+    if (!videoRef.current || loading || modelStatus.status !== "ready" || faceDetectionStatus.status !== "idle") return;
     setIsCapturing(true);
     setLoading(true);
     setStatusMsg("");
     setPredictionResult(null);
-    
+    setFaceDetectionStatus({ status: "idle", error: null });
     try {
       const video = videoRef.current;
       const canvas = document.createElement("canvas");
@@ -79,25 +101,17 @@ export default function useScanPresenter() {
       canvas.height = video.videoHeight || 240;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      
-      // Create image preview
       const imageUrl = canvas.toDataURL("image/jpeg");
       setImagePreview(imageUrl);
-      
-      // Convert to blob and create file
       const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg"));
       if (!blob) throw new Error("Gagal mengambil gambar dari kamera.");
-      
       const file = new File([blob], "camera-snapshot.jpg", { type: "image/jpeg" });
       setSelectedImage(file);
-
-      // Stop camera after taking picture
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop());
         streamRef.current = null;
       }
       setIsCameraActive(false);
-      
     } catch (error) {
       console.error("Error taking snapshot:", error);
       setStatusMsg("Gagal mengambil gambar: " + error.message);
@@ -108,33 +122,28 @@ export default function useScanPresenter() {
   };
   const onStartCamera = async () => {
     if (!selectedCameraId) return;
-    
-    // Stop any existing camera stream
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
-    
     if (scanIntervalRef.current) {
       clearInterval(scanIntervalRef.current);
       scanIntervalRef.current = null;
     }
-    
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { deviceId: selectedCameraId },
         audio: false,
       });
-      
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
-      
       setIsCameraActive(true);
       setSelectedImage(null);
       setPredictionResult(null);
       setStatusMsg("");
+      setFaceDetectionStatus({ status: "idle", error: null });
       setImagePreview(null);
     } catch (error) {
       console.error("Gagal mengakses kamera:", error);
@@ -147,19 +156,16 @@ export default function useScanPresenter() {
     setImagePreview(null);
     setPredictionResult(null);
     setStatusMsg("");
+    setFaceDetectionStatus({ status: "idle", error: null });
     setIsCapturing(false);
-    
-    // Stop camera
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
-    
     if (scanIntervalRef.current) {
       clearInterval(scanIntervalRef.current);
       scanIntervalRef.current = null;
     }
-    
     setIsCameraActive(false);
     setLoading(false);
   };
@@ -167,31 +173,101 @@ export default function useScanPresenter() {
     e.preventDefault();
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+  const saveHistoryToBackend = async (dataToSave) => {
+    try {
+      const userDataString = localStorage.getItem("user");
+      if (!userDataString) {
+        throw new Error("Data user tidak ditemukan di penyimpanan lokal. Anda harus login.");
+      }
+      const userData = JSON.parse(userDataString);
+      const token = userData.token;
+      if (!token) {
+        throw new Error("Token autentikasi tidak ditemukan dalam data user. Anda harus login.");
+      }
+      const formData = new FormData();
+      formData.append("photo", dataToSave.photo);
+      formData.append("kondisi_jerawat", dataToSave.kondisi_jerawat);
+      formData.append("keyakinan_model", dataToSave.keyakinan_model);
+      formData.append("rekomendasi_makanan", dataToSave.rekomendasi_makanan);
+      formData.append("makanan_tidak_boleh_dimakan", dataToSave.makanan_tidak_boleh_dimakan);
+      formData.append("rekomendasi_aktivitas_fisik", dataToSave.rekomendasi_aktivitas_fisik);
+      formData.append("rekomendasi_manajemen_stress", dataToSave.rekomendasi_manajemen_stress);
+      const response = await fetch("https://api.afridika.my.id/history", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      const result = await response.json();
+      if (!response.ok) {
+        console.error("Backend error response:", result);
+        throw new Error(result.message.error || (result.message.errors ? result.message.errors.join(", ") : "Gagal menyimpan riwayat."));
+      }
+      console.log("Riwayat berhasil disimpan:", result);
+      setStatusMsg("Riwayat berhasil disimpan!");
+    } catch (error) {
+      console.error("Error saving history to backend:", error);
+      setStatusMsg("Gagal menyimpan riwayat: " + error.message);
+    }
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedImage || loading || modelStatus.status !== "ready") return;
-
+    if (!selectedImage || loading || modelStatus.status !== "ready" || faceDetectionStatus.status === "detecting") return;
     setLoading(true);
     setStatusMsg("");
     setPredictionResult(null);
-
+    setFaceDetectionStatus({ status: "detecting", error: null });
     try {
+      const faceDetectionRes = await model.detectFace(selectedImage);
+      if (!faceDetectionRes.success) {
+        setFaceDetectionStatus({ status: "error", error: faceDetectionRes.message });
+        setStatusMsg(faceDetectionRes.message);
+        setLoading(false);
+        return;
+      }
+      if (faceDetectionRes.data.predictedClass === "non wajah") {
+        setFaceDetectionStatus({ status: "no_face", error: null });
+        setStatusMsg("Tidak ada wajah yang terdeteksi dalam gambar.");
+        setLoading(false);
+        return;
+      }
+      setFaceDetectionStatus({ status: "detected", error: null });
       const result = await model.predictAcne(selectedImage);
       if (result.success) {
         setPredictionResult(result.data);
         setStatusMsg(result.message);
+        if (result.data.predictedClass !== "Tidak Ada Jerawat" && lifestyleRecommendations) {
+          const recommendationKey = result.data.predictedClass === "Jerawat Ringan" ? "jerawat_ringan" :
+            result.data.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
+              result.data.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
+          if (recommendationKey && lifestyleRecommendations[recommendationKey]) {
+            const recommendations = lifestyleRecommendations[recommendationKey];
+            const dataToSave = {
+              photo: selectedImage,
+              kondisi_jerawat: result.data.predictedClass,
+              keyakinan_model: result.data.confidence,
+              rekomendasi_makanan: recommendations.makanan_dianjurkan.join("; "),
+              makanan_tidak_boleh_dimakan: recommendations.makanan_dilarang.join("; "),
+              rekomendasi_aktivitas_fisik: recommendations.aktivitas_fisik.join("; "),
+              rekomendasi_manajemen_stress: recommendations.manajemen_stres.join("; "),
+            };
+            await saveHistoryToBackend(dataToSave);
+          } else {
+            console.warn("Tidak ada rekomendasi yang cocok untuk kelas prediksi:", result.data.predictedClass);
+          }
+        }
       } else {
-        setStatusMsg(result.message || "Terjadi error saat proses prediksi.");
+        setStatusMsg(result.message || "Terjadi error saat proses prediksi jerawat.");
       }
     } catch (error) {
-      console.error("Error during prediction:", error);
-      setStatusMsg("Gagal melakukan prediksi: " + error.message);
+      console.error("Error during full prediction process:", error);
+      setStatusMsg("Gagal melakukan analisis: " + error.message);
     } finally {
       setLoading(false);
     }
   };
   const onFileChange = (e) => {
-    // Stop camera if active
     if (isCameraActive && streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
@@ -204,6 +280,7 @@ export default function useScanPresenter() {
     setSelectedImage(e.target.files[0] || null);
     setPredictionResult(null);
     setStatusMsg("");
+    setFaceDetectionStatus({ status: "idle", error: null });
   };
   return {
     selectedImage,
@@ -223,6 +300,8 @@ export default function useScanPresenter() {
     onTakeSnapshot,
     videoRef,
     isCameraActive,
-    isCapturing
+    isCapturing,
+    faceDetectionStatus,
+    lifestyleRecommendations,
   };
 }

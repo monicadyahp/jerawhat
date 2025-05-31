@@ -1,39 +1,28 @@
-// useProfilePresenter.js
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import ProfileModel from '../models/ProfileModel';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { useAuth } from '../../context/AuthContext'; // Penting: Import useAuth
-
+import { useAuth } from '../../context/AuthContext';
 export default function useProfilePresenter() {
   const model = useMemo(() => new ProfileModel(), []);
-  const { user, loading: authLoading, logout, login } = useAuth(); // Dapatkan user, loading, login, dan logout dari AuthContext
-
-  // State lokal tidak lagi menyimpan user, karena akan diambil dari AuthContext
-  // const [user, setUser] = useState(null); // Hapus baris ini
-  const [loading, setLoading] = useState(true); // Gunakan loading terpisah untuk operasi presenter ini
+  const { user, loading: authLoading, logout, login } = useAuth();
+  const [loading, setLoading] = useState(true);
   const [selectedAvatarFile, setSelectedAvatarFile] = useState(null);
   const [previewAvatarUrl, setPreviewAvatarUrl] = useState(null);
   const [scanHistory, setScanHistory] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
-
   const navigate = useNavigate();
-
   useEffect(() => {
-    // Jika AuthContext masih loading, tunggu
     if (authLoading) {
       setLoading(true);
       return;
     }
-
-    // Jika user tidak ada setelah AuthContext selesai loading, arahkan ke login
     if (!user) {
       if (window.location.pathname !== '/login') {
         navigate('/login');
       }
     }
-    setLoading(false); // Setelah user status diketahui, set loading false
-
+    setLoading(false);
     const handleScroll = () => {
       const header = document.getElementById('header');
       if (header)
@@ -43,38 +32,43 @@ export default function useProfilePresenter() {
     };
     window.addEventListener('scroll', handleScroll);
     window.scrollTo({ top: 0, behavior: 'smooth' });
-
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [user, authLoading, navigate]); // Tambahkan user dan authLoading sebagai dependensi
-
+  }, [user, authLoading, navigate]);
   useEffect(() => {
     const fetchScanHistory = async () => {
-      if (user && user.token && user.id) {
+      if (user && user.token) {
         setHistoryLoading(true);
-        const result = await model.getScanHistory(user.id, user.token);
+        const result = await model.getScanHistory(user.token);
         if (result.success) {
           setScanHistory(result.data);
+        } else {
+          console.error("Failed to fetch scan history:", result.message);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: `Gagal mengambil riwayat scan: ${result.message}`,
+            background: '#fbeaea',
+            confirmButtonColor: 'hsl(330, 91%, 85%)',
+            color: 'hsl(323, 70%, 30%)',
+          });
         }
         setHistoryLoading(false);
+      } else if (!authLoading && !user) {
+        setScanHistory([]);
       }
     };
-
     fetchScanHistory();
-  }, [user]);
-
-  // Callback untuk memperbarui data user di AuthContext setelah upload avatar
+  }, [user, authLoading, model]);
   const refreshUserData = useCallback((updatedAvatarPath) => {
     if (user && updatedAvatarPath) {
       const updatedUser = { ...user, avatar: updatedAvatarPath };
-      login(updatedUser); // Update user di AuthContext
+      login(updatedUser);
       console.log('User data refreshed in AuthContext. New avatar path:', updatedAvatarPath);
-      setPreviewAvatarUrl(null); // Reset preview URL setelah data user di-refresh
+      setPreviewAvatarUrl(null);
     }
   }, [user, login]);
-
-
   const handleLogout = () => {
     Swal.fire({
       title: 'Yakin ingin keluar?',
@@ -89,8 +83,7 @@ export default function useProfilePresenter() {
       color: 'hsl(323, 70%, 30%)',
     }).then((result) => {
       if (result.isConfirmed) {
-        logout(); // Panggil fungsi logout dari AuthContext
-        // window.dispatchEvent(new Event('loginStatusUpdated')); // Ini tidak lagi diperlukan
+        logout();
         Swal.fire({
           icon: 'success',
           title: 'Berhasil Keluar!',
@@ -106,11 +99,9 @@ export default function useProfilePresenter() {
       }
     });
   };
-
   const onAvatarChange = (e) => {
     const file = e.target.files[0];
     setSelectedAvatarFile(file);
-
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -121,7 +112,6 @@ export default function useProfilePresenter() {
       setPreviewAvatarUrl(null);
     }
   };
-
   const handleAvatarUpload = async () => {
     if (!selectedAvatarFile) {
       Swal.fire({
@@ -134,19 +124,17 @@ export default function useProfilePresenter() {
       });
       return;
     }
-
     if (!user || !user.token || !user.id) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Anda tidak memiliki izin untuk mengunggah avatar atau data user tidak lengkap.',
-            background: '#fbeaea',
-            confirmButtonColor: 'hsl(330, 91%, 85%)',
-            color: 'hsl(323, 70%, 30%)',
-        });
-        return;
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Anda tidak memiliki izin untuk mengunggah avatar atau data user tidak lengkap.',
+        background: '#fbeaea',
+        confirmButtonColor: 'hsl(330, 91%, 85%)',
+        color: 'hsl(323, 70%, 30%)',
+      });
+      return;
     }
-
     Swal.fire({
       title: 'Mengunggah...',
       text: 'Mohon tunggu sebentar',
@@ -157,15 +145,10 @@ export default function useProfilePresenter() {
       background: '#fbeaea',
       color: 'hsl(323, 70%, 30%)',
     });
-
     const result = await model.uploadAvatar(user.id, selectedAvatarFile, user.token);
-
     Swal.close();
-
     if (result.success) {
-      // Panggil refreshUserData untuk memperbarui AuthContext
-      refreshUserData(result.avatarPath); // Kirim path avatar yang baru
-
+      refreshUserData(result.avatarPath);
       Swal.fire({
         icon: 'success',
         title: 'Sukses!',
@@ -187,10 +170,9 @@ export default function useProfilePresenter() {
       setPreviewAvatarUrl(null);
     }
   };
-
   return {
-    user, // Sekarang user datang dari AuthContext
-    loading: loading || authLoading, // Gabungkan status loading
+    user,
+    loading: loading || authLoading,
     selectedAvatarFile,
     previewAvatarUrl,
     handleLogout,

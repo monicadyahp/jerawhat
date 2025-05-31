@@ -3,6 +3,7 @@ const UserController = require("../controllers/UserController");
 const ArticleController = require("../controllers/ArticleController");
 const ContactController = require("../controllers/ContactController");
 const LoginController = require("../controllers/LoginController");
+const HistoryController = require("../controllers/HistoryController"); // Import HistoryController
 
 module.exports = [
   // User Routes
@@ -52,6 +53,29 @@ module.exports = [
   { method: "PUT", path: "/contacts/{id}", options: { auth: 'jwt' }, handler: ContactController.update },
   { method: "DELETE", path: "/contacts/{id}", options: { auth: 'jwt' }, handler: ContactController.delete },
 
+  // History AI Routes (Tambahkan ini)
+  {
+    method: "POST",
+    path: "/history",
+    options: {
+      auth: 'jwt', // Dilindungi oleh JWT
+      payload: {
+        output: "stream",
+        parse: true,
+        multipart: true,
+        allow: "multipart/form-data",
+        maxBytes: 1048576 * 10 // Batas ukuran file 10MB, sesuaikan jika perlu
+      },
+    },
+    handler: HistoryController.create,
+  },
+  {
+    method: "GET",
+    path: "/history/me", // Mengambil riwayat user yang sedang login
+    options: { auth: 'jwt' }, // Dilindungi oleh JWT
+    handler: HistoryController.getAllByLoggedInUser,
+  },
+
   // Auth Routes (tidak dilindungi)
   { method: "POST", path: "/login", handler: LoginController.login },
   {
@@ -62,5 +86,4 @@ module.exports = [
     },
     handler: UserController.register,
   },
-
 ];
