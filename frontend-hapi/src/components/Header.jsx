@@ -59,14 +59,32 @@ const Header = () => {
             {/* Menus for LOGGED IN users */}
             {!loading && isLoggedIn && (
               <>
-                 <li className="nav__item">
-                  <NavLink
-                    to="/scan" // Always go to scan if logged in
-                    className={({ isActive }) => 'nav__link' + ((isActive || isScanActive) ? ' active-link' : '')}
-                    onClick={closeMenu}
-                  >
-                    Scan
-                  </NavLink>
+                 <li className="nav__item nav__dropdown">
+                  <span className={
+                    'nav__link' + (isScanActive || location.pathname.startsWith('/scan/history') ? ' active-link' : '')
+                  }>
+                    Scan <i className="bx bx-chevron-down"></i>
+                  </span>
+                  <ul className="nav__dropdown-menu">
+                    <li>
+                      <NavLink
+                        to="/scan"
+                        className={({ isActive }) => 'nav__link' + (isActive ? ' active-link' : '')}
+                        onClick={closeMenu}
+                      >
+                        Mulai Scan
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink
+                        to="/scan/history"
+                        className={({ isActive }) => 'nav__link' + (isActive ? ' active-link' : '')}
+                        onClick={closeMenu}
+                      >
+                        Riwayat Scan
+                      </NavLink>
+                    </li>
+                  </ul>
                 </li>
                 <li className="nav__item">
                   <NavLink to="/quiz" className={({ isActive }) => 'nav__link' + (isActive ? ' active-link' : '')} onClick={closeMenu}>Kuis</NavLink>

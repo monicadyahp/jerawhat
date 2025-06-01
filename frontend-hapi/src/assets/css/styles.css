@@ -1672,3 +1672,60 @@ html {
   Mengubah warnanya biasanya memerlukan CSS lebih spesifik atau override SVG.
   Untuk kasus ini, ikon defaultnya sudah cukup baik.
 */
+
+/* Dropdown menu for navbar */
+.nav__dropdown {
+  position: relative;
+}
+
+.nav__dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--container-color);
+  min-width: 180px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  border-radius: 0 0 1rem 1rem;
+  z-index: 999;
+  padding: 0.5rem 0;
+}
+
+.nav__dropdown:hover .nav__dropdown-menu,
+.nav__dropdown:focus-within .nav__dropdown-menu {
+  display: block;
+}
+
+.nav__dropdown-menu li {
+  width: 100%;
+}
+
+.nav__dropdown-menu .nav__link {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: var(--title-color);
+  background: none;
+  font-weight: var(--font-medium);
+  text-transform: none;
+  border-radius: 0;
+  transition: background 0.2s;
+}
+
+.nav__dropdown-menu .nav__link:hover,
+.nav__dropdown-menu .nav__link.active-link {
+  background: var(--first-color-alt);
+  color: var(--title-color);
+}
+
+@media screen and (max-width: 767px) {
+  .nav__dropdown-menu {
+    position: static;
+    min-width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+  }
+  .nav__dropdown-menu .nav__link {
+    padding: 1rem 2rem;
+  }
+}

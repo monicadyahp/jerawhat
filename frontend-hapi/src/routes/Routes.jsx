@@ -16,6 +16,7 @@ import Login from '../containers/LoginContainer';
 import Register from '../containers/RegisterContainer';
 import Maps from '../containers/MapsContainer';
 import AIChat from '../containers/AIChatContainer';
+import ScanHistoryContainer from '../containers/ScanHistoryContainer';
 
 // halaman baru: Kuis
 import Quiz from '../containers/QuizContainer';
@@ -96,6 +97,8 @@ function AppContentWithAuth() {
       <Route path="/contact-us" element={<ContactUs />} />
 
       <Route path="/ai-chat" element={<AIChat />} />
+
+      <Route path="/scan/history" element={<ScanHistoryContainer />} />
     </Routes>
   );
 }
