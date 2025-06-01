@@ -29,12 +29,12 @@ export default class HomeModel {
       },
       {
         groupImg: 'https://res.cloudinary.com/dbofowabd/image/upload/v1748105264/home3-img_qkykrh.png',
-        detailsTitle: 'Solusi Makanan Sehat',
+        detailsTitle: 'Solusi Rekomendasi Sehat',
         detailsSubtitle: 'Kurangi Cepat Jerawat',
-        dataSubtitle: 'Makanan Sehat Untuk Kulit Bersih',
-        dataTitle: 'Makanan Sehat\nUntuk Kulit Bebas Jerawat!',
+        dataSubtitle: 'Rekomendasi Sehat Untuk Kulit Bersih',
+        dataTitle: 'Rekomendasi Sehat\nUntuk Kulit Bebas Jerawat!',
         dataDescription:
-          'Kami memberikan rekomendasi makanan sehat yang dapat membantu ' +
+          'Kami memberikan rekomendasi makanan dan gaya hidup sehat yang dapat membantu ' +
           'mengurangi jerawat dan menjaga kulit tetap bersih dan cerah.',
         btnText: 'Cek Sekarang',
         btnLink: '/scanlanding'

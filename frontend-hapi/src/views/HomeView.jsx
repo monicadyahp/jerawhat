@@ -140,126 +140,28 @@ export default function HomeView({ slides }) { // Hapus prop isLoggedIn karena k
         <div className="category__container container grid">
           <div className="category__data">
             <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105254/category1-img_w5ybwq.png" alt="" className="category__img" />
-            <h3 className="category__title">Whitehead</h3>
+            <h3 className="category__title">Jerawat Ringan</h3>
             <p className="category__description">
-              Benjolan kecil berwarna putih yang terbentuk ketika pori tersumbat oleh minyak dan sel kulit mati.
-            </p>
-          </div>
-          <div className="category__data">
-            <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105253/category2-img_eeekry.png" alt="" className="category__img" />
-            <h3 className="category__title">Blackhead</h3>
-            <p className="category__description">
-              Pori terbuka yang berwarna gelap karena oksidasi minyak yang terperangkap di dalamnya.
+              Biasanya berupa benjolan kecil tanpa peradangan, seperti komedo putih atau hitam, yang mudah diatasi.
             </p>
           </div>
           <div className="category__data">
             <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105256/category3-img_llr9l6.png" alt="" className="category__img" />
-            <h3 className="category__title">Papule</h3>
+            <h3 className="category__title">Jerawat Sedang</h3>
             <p className="category__description">
-              Benjolan kecil merah yang terangkat yang muncul ketika dinding pori teriritasi.
+              Melibatkan benjolan merah yang meradang atau berisi nanah, seringkali terasa sakit dan memerlukan penanganan lebih lanjut.
             </p>
           </div>
           <div className="category__data">
-            <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105256/category4-img_dzyb8w.png" alt="" className="category__img" />
-            <h3 className="category__title">Pustule</h3>
+            <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105257/category7-img_tyzx8d.png" className="category__img" />
+            <h3 className="category__title">Jerawat Parah</h3>
             <p className="category__description">
-              Jerawat yang meradang dan berisi nanah yang seringkali terbentuk dari papule.
-            </p>
-          </div>
-          <div className="category__data">
-            <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105255/category5-img_nwgzmz.png" alt="" className="category__img" />
-            <h3 className="category__title">Cystic</h3>
-            <p className="category__description">
-              Benjolan besar dan menyakitkan di bawah kulit yang disebabkan oleh peradangan yang parah.
-            </p>
-          </div>
-          <div className="category__data">
-            <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105256/category6-img_eet7au.png" alt="" className="category__img" />
-            <h3 className="category__title">Nodule</h3>
-            <p className="category__description">
-              Benjolan keras dan besar yang terbentuk dalam kulit dan seringkali menyakitkan.
-            </p>
-          </div>
-          <div className="category__data">
-            <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105257/category7-img_tyzx8d.png" alt="" className="category__img" />
-            <h3 className="category__title">Hormonal</h3>
-            <p className="category__description">
-              Jerawat yang dipicu oleh perubahan hormon, biasanya terjadi selama masa pubertas atau siklus menstruasi.
+              Ditandai dengan benjolan besar yang meradang parah di bawah kulit, berpotensi meninggalkan bekas luka, serta memerlukan penanganan medis profesional.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ULASAN PENGGUNA */}
-      <section className="section new" id="new">
-        <h2 className="section__title">Ulasan Pengguna</h2>
-        <div className="new__container container">
-          <div className="swiper new-swiper">
-            <div className="swiper-wrapper">
-              {/* Slide 1 */}
-              <div className="new__content swiper-slide">
-                <div className="new__tag">New</div>
-                <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105252/about-img_upj3tr.png" alt="" className="new__img" />
-                <h3 className="new__title">Clara Hardy</h3>
-                <span className="new__subtitle">Keren!</span>
-                <div className="new__rates">
-                  <span className="new__rate">⭐⭐⭐⭐⭐</span>
-                </div>
-              </div>
-              {/* Slide 2 */}
-              <div className="new__content swiper-slide">
-                <div className="new__tag">New</div>
-                <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105252/about-img_upj3tr.png" alt="" className="new__img" />
-                <h3 className="new__title">William Stan</h3>
-                <span className="new__subtitle">Mantap!</span>
-                <div className="new__rates">
-                  <span className="new__rate">⭐⭐⭐⭐⭐</span>
-                </div>
-              </div>
-              {/* Slide 3 */}
-              <div className="new__content swiper-slide">
-                <div className="new__tag">New</div>
-                <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105252/about-img_upj3tr.png" alt="" className="new__img" />
-                <h3 className="new__title">Nick Andrew</h3>
-                <span className="new__subtitle">Hebat!</span>
-                <div className="new__rates">
-                  <span className="new__rate">⭐⭐⭐⭐⭐</span>
-                </div>
-              </div>
-              {/* Slide 4 */}
-              <div className="new__content swiper-slide">
-                <div className="new__tag">New</div>
-                <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105252/about-img_upj3tr.png" alt="" className="new__img" />
-                <h3 className="new__title">Angela Merici</h3>
-                <span className="new__subtitle">Cocok!</span>
-                <div className="new__rates">
-                  <span className="new__rate">⭐⭐⭐⭐⭐</span>
-                </div>
-              </div>
-              {/* Slide 5 */}
-              <div className="new__content swiper-slide">
-                <div className="new__tag">New</div>
-                <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105252/about-img_upj3tr.png" alt="" className="new__img" />
-                <h3 className="new__title">Natasha Ruth</h3>
-                <span className="new__subtitle">Kreatif!</span>
-                <div className="new__rates">
-                  <span className="new__rate">⭐⭐⭐⭐⭐</span>
-                </div>
-              </div>
-              {/* Slide 6 */}
-              <div className="new__content swiper-slide">
-                <div className="new__tag">New</div>
-                <img src="https://res.cloudinary.com/dbofowabd/image/upload/v1748105252/about-img_upj3tr.png" alt="" className="new__img" />
-                <h3 className="new__title">Valentine Rita</h3>
-                <span className="new__subtitle">Wow!</span>
-                <div className="new__rates">
-                  <span className="new__rate">⭐⭐⭐⭐⭐</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA Scan */}
       <section className="section scan">
@@ -279,21 +181,6 @@ export default function HomeView({ slides }) { // Hapus prop isLoggedIn karena k
         </div>
       </section>
 
-      {/* NEWSLETTER */}
-      <section className="section newsletter">
-        <div className="newsletter__container container">
-          <h2 className="section__title">Mari Berlangganan</h2>
-          <p className="newsletter__description">Dapatkan informasi menarik!</p>
-          <form className="newsletter__form">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="newsletter__input"
-            />
-            <button className="button">Subscribe</button>
-          </form>
-        </div>
-      </section>
     </main>
   );
 }

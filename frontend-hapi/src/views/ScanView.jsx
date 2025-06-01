@@ -184,7 +184,7 @@ export default function ScanView({
                   onMouseEnter={(e) => (e.target.style.backgroundColor = "#ff94b8")}
                   onMouseLeave={(e) => (e.target.style.backgroundColor = "#ffb6c1")}
                 >
-                  📷 Pilih Foto Wajah
+                  📷 Pilih Gambar Wajah dari Galeri
                   <input
                     id="fileUpload"
                     type="file"
