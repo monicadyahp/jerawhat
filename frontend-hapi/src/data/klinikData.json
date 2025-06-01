@@ -175,11 +175,6 @@
     "name": "Atins Aesthetic Clinic"
   },
   {
-    "lat": -0.9510087,
-    "lng": 100.3641336,
-    "name": "Vyrma Aesthetic"
-  },
-  {
     "lat": -0.9251912,
     "lng": 100.3978312,
     "name": "Klinik Kecantikan DRIA by Dr.Vivin Padang"
@@ -213,11 +208,6 @@
     "lat": -0.2947225,
     "lng": 100.4019871,
     "name": "MEDIA AESTHETIC CENTER (MAC) KLINIK KECANTIKAN BUKITTINGGI"
-  },
-  {
-    "lat": -0.943742,
-    "lng": 100.3559925,
-    "name": "Hers Skin & Wellnes (HERS Clinic Padang)"
   },
   {
     "lat": -0.9540845,
@@ -1679,11 +1669,6 @@
     "name": "Edith Clinic"
   },
   {
-    "lat": -1.2715886,
-    "lng": 116.8537513,
-    "name": "Klinik Kecantikan Balikpapan Alula Aesthetic clinic"
-  },
-  {
     "lat": -0.484403,
     "lng": 117.1486955,
     "name": "AIRA SKIN CLINIC SAMARINDA"
@@ -2364,11 +2349,6 @@
     "name": "Elea Skin Clinic - Klinik Spesialis Kulit dan Kecantikan Bali"
   },
   {
-    "lat": -8.7070571,
-    "lng": 115.1779552,
-    "name": "Lumina Aesthetics Clinic"
-  },
-  {
     "lat": -8.7085946,
     "lng": 115.1791154,
     "name": "Miracle Aesthetic Clinic Kuta"
@@ -2502,11 +2482,6 @@
     "lat": -10.1592074,
     "lng": 123.6113754,
     "name": "Natasha Skin Clinic Center Kupang"
-  },
-  {
-    "lat": -10.1652991,
-    "lng": 123.6084844,
-    "name": "Larissa Aesthetic Center Kupang"
   },
   {
     "lat": -10.1606425,
@@ -5014,11 +4989,6 @@
     "name": "KYSAN SKIN CARE"
   },
   {
-    "lat": -1.7319231834436335,
-    "lng": 88.50432062677798,
-    "name": "Hanania Beauty Clinic"
-  },
-  {
     "lat": 0.7756898992135032,
     "lng": 127.36829890277328,
     "name": "Naysia Aesthetic Clinic"
@@ -6807,49 +6777,9 @@
     "name": "Sekar Beauty Care Klinik Kecantikan Ngabang"
   },
   {
-    "lat": 1.4018367196833919,
-    "lng": 113.1011391874776,
-    "name": "Karadenta House of Beauty - Samarinda"
-  },
-  {
-    "lat": 2.096970295276959,
-    "lng": 111.5276079093729,
-    "name": "Klinik Kecantikan GLOSKIN Aesthetic & Skin Care Balikpapan"
-  },
-  {
-    "lat": 2.096970295276959,
-    "lng": 111.5276079093729,
-    "name": "Klinik Kecantikan Balikpapan Alula Aesthetic clinic"
-  },
-  {
-    "lat": 2.162842719697258,
-    "lng": 111.76930712812292,
-    "name": "Wijaya Farma Anti Aging & Aesthetic Clinic"
-  },
-  {
-    "lat": 2.162842719697258,
-    "lng": 111.76930712812292,
-    "name": "EZthetic Clinic by dr.Putri"
-  },
-  {
-    "lat": 3.308521632356128,
-    "lng": 115.79472414051486,
-    "name": "VISI BEAUTY CLINIC"
-  },
-  {
     "lat": 3.325458,
     "lng": 117.58173110000001,
     "name": "Skinique"
-  },
-  {
-    "lat": 3.14586992210286,
-    "lng": 115.78046820997405,
-    "name": "Altara Care Centre"
-  },
-  {
-    "lat": 3.308521632356128,
-    "lng": 115.79472414051486,
-    "name": "R.QUEEN BEAUTY CENTER AND SPA"
   },
   {
     "lat": -1.5717978110961217,
@@ -6997,29 +6927,9 @@
     "name": "Beautify Indonesia"
   },
   {
-    "lat": -0.9251911999999937,
-    "lng": 100.1176798328125,
-    "name": "Klinik Kecantikan \"DRIA by Dr.Vivin\" Padang"
-  },
-  {
-    "lat": -0.951008699999993,
-    "lng": 100.08398223281247,
-    "name": "Vyrma Aesthetic"
-  },
-  {
-    "lat": -0.9437419999999923,
-    "lng": 100.07584113281253,
-    "name": "Hers Skin & Wellnes (HERS Clinic Padang)"
-  },
-  {
     "lat": -0.2947224999999912,
     "lng": 100.12183573281251,
     "name": "MEDIA AESTHETIC CENTER (MAC) KLINIK KECANTIKAN BUKITTINGGI"
-  },
-  {
-    "lat": -0.9407761000000052,
-    "lng": 100.07777103281248,
-    "name": "Derma Q Skin Clinic"
   },
   {
     "lat": -0.3561839783718242,
@@ -7120,25 +7030,5 @@
     "lat": -8.594181200000001,
     "lng": 115.97646811640625,
     "name": "Bening's Clinic Mataram Lombok NTB"
-  },
-  {
-    "lat": -10.165299099999988,
-    "lng": 119.12606252499998,
-    "name": "Larissa Aesthetic Center Kupang"
-  },
-  {
-    "lat": -10.160642499999987,
-    "lng": 119.12784112500003,
-    "name": "VZ Skincare"
-  },
-  {
-    "lat": -10.148920199999992,
-    "lng": 119.16388022499997,
-    "name": "Bening's Clinic Kupang"
-  },
-  {
-    "lat": -10.169427299999997,
-    "lng": 119.123833325,
-    "name": "Callista Beauty House"
   }
 ]
