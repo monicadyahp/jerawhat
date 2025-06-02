@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const getPhotoUrl = (photo) => {
   if (!photo) return '';
   if (photo.startsWith('http')) return photo;
-  const base = import.meta.env.VITE_API_BASE_URL || '';
+  const base = import.meta.env.VITE_API_BASE_URL || 'https://api.afridika.my.id';
   // Pastikan hanya satu slash di antara base dan path
   return base.replace(/\/$/, '') + '/' + photo.replace(/^\/?/, '');
 };
