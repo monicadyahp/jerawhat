@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// frontend-hapi > src > views > ScanHistoryView.jsx
+import React from 'react';
 
 const getPhotoUrl = (photo) => {
   if (!photo) return '';
@@ -8,12 +9,7 @@ const getPhotoUrl = (photo) => {
   return base.replace(/\/$/, '') + '/' + photo.replace(/^\/?/, '');
 };
 
-export default function ScanHistoryView({ scanHistory = [], loading, error }) {
-  const [selectedScan, setSelectedScan] = useState(null);
-
-  const handleOpenModal = (scan) => setSelectedScan(scan);
-  const handleCloseModal = () => setSelectedScan(null);
-
+export default function ScanHistoryView({ scanHistory = [], loading, error, selectedScan, handleOpenModal, handleCloseModal, handleDeleteScan }) {
   return (
     <section className="section scan-history-page" id="scan-history-page">
       <div className="container" style={{ paddingTop: '5rem', paddingBottom: '3rem' }}>
@@ -51,8 +47,8 @@ export default function ScanHistoryView({ scanHistory = [], loading, error }) {
                     flexDirection: 'column',
                     alignItems: 'center',
                     minHeight: '260px',
+                    position: 'relative',
                   }}
-                  onClick={() => handleOpenModal(scan)}
                   title="Lihat detail riwayat scan"
                 >
                   <img
@@ -77,13 +73,38 @@ export default function ScanHistoryView({ scanHistory = [], loading, error }) {
                         day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
                       })}
                     </div>
-                    <button
-                      className="button button--ghost"
-                      style={{ fontSize: '.9rem', padding: '.5rem 1.2rem', marginTop: '.5rem' }}
-                      onClick={e => { e.stopPropagation(); handleOpenModal(scan); }}
-                    >
-                      Lihat Detail
-                    </button>
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '.4rem', marginTop: '.5rem' }}>
+                      <button
+                        className="button button--ghost"
+                        style={{
+                          fontSize: '.8rem',
+                          padding: '.4rem .8rem',
+                          whiteSpace: 'nowrap'
+                        }}
+                        onClick={e => { e.stopPropagation(); handleOpenModal(scan); }}
+                      >
+                        Lihat Detail
+                      </button>
+                      <button
+                        style={{
+                          fontSize: '.8rem',
+                          padding: '.4rem .8rem',
+                          backgroundColor: 'crimson',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '.5rem',
+                          cursor: 'pointer',
+                          transition: 'background-color 0.3s ease',
+                          whiteSpace: 'nowrap'
+                        }}
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleDeleteScan(scan.id);
+                        }}
+                      >
+                        Hapus
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -92,104 +113,130 @@ export default function ScanHistoryView({ scanHistory = [], loading, error }) {
             <p>Belum ada riwayat scan.</p>
           )}
         </div>
-      </div>
-      {/* Modal Detail */}
-      {selectedScan && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            background: 'rgba(0,0,0,0.35)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-          onClick={handleCloseModal}
-        >
+        {selectedScan && (
           <div
             style={{
-              background: 'white',
-              borderRadius: '1rem',
-              maxWidth: '420px',
-              width: '95vw',
-              padding: '2rem 1.5rem',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
-              position: 'relative',
-              color: '#b85294',
-              animation: 'slideInFromBottom 0.3s',
-              maxHeight: '90vh',
-              overflowY: 'auto',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              background: 'rgba(0,0,0,0.35)',
+              // --- PERBAIKAN DI SINI: zIndex diatur lebih rendah dari default SweetAlert (sekitar 1060) ---
+              zIndex: 1050, // Nilai ini akan menempatkan modal detail di bawah pop-up SweetAlert
+              // -------------------------------------------------------------------------------------
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
-            onClick={e => e.stopPropagation()}
+            onClick={handleCloseModal}
           >
-            <button
-              onClick={handleCloseModal}
+            <div
               style={{
-                position: 'absolute',
-                top: '1rem',
-                right: '1rem',
-                background: 'transparent',
-                border: 'none',
-                fontSize: '1.5rem',
+                background: 'white',
+                borderRadius: '1rem',
+                maxWidth: '420px',
+                width: '95vw',
+                padding: '2rem 1.5rem',
+                boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+                position: 'relative',
                 color: '#b85294',
-                cursor: 'pointer',
+                animation: 'slideInFromBottom 0.3s',
+                maxHeight: '90vh',
+                overflowY: 'auto',
               }}
-              aria-label="Tutup"
+              onClick={e => e.stopPropagation()}
             >
-              &times;
-            </button>
-            <img
-              src={getPhotoUrl(selectedScan.photo)}
-              alt="Foto Scan Detail"
-              style={{
-                width: '100%',
-                maxWidth: '220px',
-                height: '160px',
-                objectFit: 'cover',
-                borderRadius: '0.5rem',
-                margin: '0 auto 1rem auto',
-                display: 'block',
-                background: '#fbeaea',
-              }}
-            />
-            <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '.5rem' }}>{selectedScan.kondisi_jerawat || 'Tidak ada prediksi'}</div>
-            <div style={{ fontSize: '.98rem', marginBottom: '.5rem' }}>
-              {new Date(selectedScan.createdAt).toLocaleString('id-ID', {
-                day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
-              })}
+              <button
+                onClick={handleCloseModal}
+                style={{
+                  position: 'absolute',
+                  top: '1rem',
+                  right: '1rem',
+                  background: 'transparent',
+                  border: 'none',
+                  fontSize: '1.5rem',
+                  color: '#b85294',
+                  cursor: 'pointer',
+                }}
+                aria-label="Tutup"
+              >
+                &times;
+              </button>
+              <img
+                src={getPhotoUrl(selectedScan.photo)}
+                alt="Foto Scan Detail"
+                style={{
+                  width: '100%',
+                  maxWidth: '220px',
+                  height: '160px',
+                  objectFit: 'cover',
+                  borderRadius: '0.5rem',
+                  margin: '0 auto 1rem auto',
+                  display: 'block',
+                  background: '#fbeaea',
+                }}
+              />
+              <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '.5rem' }}>{selectedScan.kondisi_jerawat || 'Tidak ada prediksi'}</div>
+              <div style={{ fontSize: '.98rem', marginBottom: '.5rem' }}>
+                {new Date(selectedScan.createdAt).toLocaleString('id-ID', {
+                  day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                })}
+              </div>
+              {selectedScan.keyakinan_model && (
+                <div style={{ marginBottom: '.5rem' }}>
+                  <strong>Keyakinan Model:</strong> {(selectedScan.keyakinan_model * 100).toFixed(2)}%
+                </div>
+              )}
+              {selectedScan.rekomendasi_makanan && (
+                <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
+                  <strong>Rekomendasi Makanan:</strong> {selectedScan.rekomendasi_makanan}
+                </div>
+              )}
+              {selectedScan.makanan_tidak_boleh_dimakan && (
+                <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
+                  <strong>Makanan Dilarang:</strong> {selectedScan.makanan_tidak_boleh_dimakan}
+                </div>
+              )}
+              {selectedScan.rekomendasi_aktivitas_fisik && (
+                <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
+                  <strong>Aktivitas Fisik:</strong> {selectedScan.rekomendasi_aktivitas_fisik}
+                </div>
+              )}
+              {selectedScan.rekomendasi_manajemen_stress && (
+                <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
+                  <strong>Manajemen Stres:</strong> {selectedScan.rekomendasi_manajemen_stress}
+                </div>
+              )}
+
+              {/* Tombol Hapus di Modal Detail */}
+              <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
+                <button
+                  style={{
+                    fontSize: '.9rem',
+                    padding: '.6rem 1.5rem',
+                    backgroundColor: 'crimson',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '.5rem',
+                    cursor: 'pointer',
+                    transition: 'background-color 0.3s ease',
+                    whiteSpace: 'nowrap',
+                    width: '100%',
+                    maxWidth: '200px',
+                  }}
+                  onClick={() => {
+                    handleDeleteScan(selectedScan.id);
+                    // handleCloseModal(); // Hapus ini agar SweetAlert tidak langsung menutup modal
+                  }}
+                >
+                  Hapus Riwayat Ini
+                </button>
+              </div>
             </div>
-            {selectedScan.keyakinan_model && (
-              <div style={{ marginBottom: '.5rem' }}>
-                <strong>Keyakinan Model:</strong> {(selectedScan.keyakinan_model * 100).toFixed(2)}%
-              </div>
-            )}
-            {selectedScan.rekomendasi_makanan && (
-              <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
-                <strong>Rekomendasi Makanan:</strong> {selectedScan.rekomendasi_makanan}
-              </div>
-            )}
-            {selectedScan.makanan_tidak_boleh_dimakan && (
-              <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
-                <strong>Makanan Dilarang:</strong> {selectedScan.makanan_tidak_boleh_dimakan}
-              </div>
-            )}
-            {selectedScan.rekomendasi_aktivitas_fisik && (
-              <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
-                <strong>Aktivitas Fisik:</strong> {selectedScan.rekomendasi_aktivitas_fisik}
-              </div>
-            )}
-            {selectedScan.rekomendasi_manajemen_stress && (
-              <div style={{ marginBottom: '.5rem', fontSize: '.95rem' }}>
-                <strong>Manajemen Stres:</strong> {selectedScan.rekomendasi_manajemen_stress}
-              </div>
-            )}
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </section>
   );
-} 
+}
