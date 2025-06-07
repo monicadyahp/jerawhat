@@ -27,6 +27,13 @@ export default function useScanPresenter() {
 
   const [lifestyleRecommendations, setLifestyleRecommendations] = useState(null);
 
+  // --- MODIFIKASI DIMULAI DI SINI ---
+  // Gunakan URL statis untuk website Anda
+  // GANTI 'https://namadomainwebsiteanda.com' dengan URL website Anda yang sebenarnya
+  const STATIC_APP_URL = 'https://namadomainwebsiteanda.com'; // Contoh: 'https://hapi.id'
+  // --- MODIFIKASI BERAKHIR DI SINI ---
+
+
   useEffect(() => {
     import("../../data/lifestyleRecomendation.json")
       .then((data) => {
@@ -121,6 +128,7 @@ export default function useScanPresenter() {
       };
     } else if (!isCameraActive && videoRef.current) {
       // Pastikan srcObject direset saat kamera tidak aktif
+      // eslint-disable-next-line no-param-reassign
       videoRef.current.srcObject = null;
     }
   }, [isCameraActive, streamRef.current, videoRef.current]);
@@ -344,7 +352,6 @@ export default function useScanPresenter() {
   };
 
   // Fungsi baru untuk membuat gambar hasil scan
-// Fungsi baru untuk membuat gambar hasil scan
   const createSharableImage = useCallback(async () => {
     if (!imagePreview || !predictionResult || !lifestyleRecommendations) {
       setStatusMsg("Tidak ada gambar, hasil prediksi, atau rekomendasi untuk dibagikan.");
@@ -395,21 +402,34 @@ export default function useScanPresenter() {
       const detailTextLineHeight = 30; // Perkiraan tinggi baris teks detail
 
       // Perkiraan lebar blok teks detail (untuk 3 baris teks terpanjang)
-      // Ini bisa lebih akurat jika Anda menghitung lebar setiap teks
-      const estimatedTextWidth = ctx.measureText("Keyakinan Model: 100.00%").width + 20; // Lebar teks paling panjang + padding
+      // Ini bisa dihitung lebih akurat dengan ctx.measureText() jika perlu.
+      // Misal, "Keyakinan Model: 100.00%" adalah teks terpanjang.
+      // Kita perlu setting font dulu untuk measureText bekerja akurat
+      ctx.font = "20px Arial"; // Set font untuk perhitungan lebar teks
+      const maxTextWidth = Math.max(
+          ctx.measureText(`Tanggal Scan: ${new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}`).width,
+          ctx.measureText(`Kondisi Jerawat: ${predictionResult.predictedClass}`).width,
+          ctx.measureText(`Keyakinan Model: ${(predictionResult.confidence * 100).toFixed(2)}%`).width
+      ) + 10; // Tambahkan sedikit padding
 
       // Hitung lebar total konten (gambar + spasi + lebar teks detail)
-      const contentBlockWidth = smallImageSize + margin + estimatedTextWidth;
+      const contentBlockWidth = smallImageSize + margin + maxTextWidth;
 
       // Hitung posisi X untuk menengahkan blok gabungan
       const startXContent = (CANVAS_WIDTH - contentBlockWidth) / 2;
-      const startYContentBlock = 160; // Posisi Y untuk bagian ini (dikurangi)
+
+      // Menggeser blok ke atas
+      // Ini adalah nilai Y paling atas untuk blok gambar dan teks detail.
+      // Sesuaikan nilai ini untuk mengontrol posisi vertikal seluruh blok.
+      const startYContentBlock = 160;
 
       // Gambar wajah kecil di sisi kiri blok gabungan
       // imgXAligned: posisi horizontal awal gambar
       // imgYAligned: posisi vertikal awal gambar, disesuaikan agar pusat gambar sejajar dengan pusat blok teks
       let imgXAligned = startXContent;
-      let imgYAligned = startYContentBlock + ( (3 * detailTextLineHeight * 2) - smallImageSize ) / 2 - 20; // Sesuaikan untuk 3 detail item, masing-masing 2 baris (judul + nilai)
+      // Perhitungan imgYAligned disesuaikan agar posisinya relatif terhadap startYContentBlock
+      // dan berada di tengah vertikal dengan blok teks yang ada di sampingnya.
+      let imgYAligned = startYContentBlock + ( (3 * detailTextLineHeight * 2) - smallImageSize ) / 2 - 20;
 
 
       ctx.save();
@@ -530,7 +550,7 @@ export default function useScanPresenter() {
 
       // --- Bagian Ajakan Promosi (Paling Bawah) ---
       const promoText = "Yuk, cek kondisi kulitmu juga di:";
-      const appUrl = `${window.location.origin}/scan`;
+      const appUrl = `${STATIC_APP_URL}/scan`; // Menggunakan STATIC_APP_URL
       ctx.fillStyle = "#721c24";
       ctx.textAlign = "center";
       ctx.font = "bold 28px Arial";
@@ -548,8 +568,8 @@ export default function useScanPresenter() {
     } finally {
       setLoading(false);
     }
-  }, [imagePreview, predictionResult, lifestyleRecommendations, setStatusMsg, setLoading]);
-  
+  }, [imagePreview, predictionResult, lifestyleRecommendations, setStatusMsg, setLoading, STATIC_APP_URL]); // Tambahkan STATIC_APP_URL sebagai dependensi
+
   return {
     selectedImage,
     imagePreview,
