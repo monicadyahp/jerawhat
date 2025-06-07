@@ -11,6 +11,7 @@ export function useScanHistoryPresenter() {
   const [error, setError] = useState(null);
   const [selectedScan, setSelectedScan] = useState(null);
 
+  // useEffect untuk memuat riwayat scan dan memfilter berdasarkan hidden IDs
   useEffect(() => {
     const fetchHistory = async () => {
       setLoading(true);
@@ -26,22 +27,27 @@ export function useScanHistoryPresenter() {
       if (message) {
         setError(message);
       } else {
-        setScanHistory(data);
+        // --- PERUBAHAN DI SINI: FILTER DARI LOCALSTORAGE ---
+        const hiddenIds = JSON.parse(localStorage.getItem('hiddenScanIds') || '[]');
+        const filteredData = data.filter(scan => !hiddenIds.includes(scan.id));
+        setScanHistory(filteredData);
+        // ----------------------------------------------------
       }
       setLoading(false);
     };
 
     fetchHistory();
-  }, [user]);
+    // Tambahkan 'handleDeleteScan' ke dependency array untuk re-fetch setelah delete.
+    // Atau, jika Anda hanya ingin mengandalkan filter, biarkan tanpa itu
+  }, [user]); // Tetap bergantung pada user untuk re-fetch jika user berubah
 
   const handleOpenModal = (scan) => setSelectedScan(scan);
-  const handleCloseModal = () => setSelectedScan(null); // Fungsi untuk menutup modal
+  const handleCloseModal = () => setSelectedScan(null);
 
   const handleDeleteScan = async (idToDelete) => {
-    // 1. Pop-up Konfirmasi
     const result = await Swal.fire({
       title: 'Apakah yakin akan menghapus riwayat scan?',
-      text: 'Riwayat ini hanya akan disembunyikan dari tampilan Anda, tidak terhapus dari database.',
+      text: 'Riwayat ini akan dihapus dari history scan Anda.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: 'hsl(330, 91%, 85%)',
@@ -55,15 +61,21 @@ export function useScanHistoryPresenter() {
 
     if (result.isConfirmed) {
       try {
-        setScanHistory(prevHistory => prevHistory.filter(scan => scan.id !== idToDelete));
+        // --- PERUBAHAN DI SINI: SIMPAN KE LOCALSTORAGE DAN UPDATE STATE ---
+        const hiddenIds = JSON.parse(localStorage.getItem('hiddenScanIds') || '[]');
+        if (!hiddenIds.includes(idToDelete)) {
+          hiddenIds.push(idToDelete);
+          localStorage.setItem('hiddenScanIds', JSON.stringify(hiddenIds));
+        }
 
-        // Pindahkan handleCloseModal() ke sini, setelah konfirmasi sukses
-        // Ini memastikan modal ditutup hanya setelah item berhasil disembunyikan
-        handleCloseModal(); // <<-- PERUBAHAN DI SINI
+        setScanHistory(prevHistory => prevHistory.filter(scan => scan.id !== idToDelete));
+        // ------------------------------------------------------------------
+
+        handleCloseModal(); // Modal detail akan ditutup setelah penghapusan berhasil
 
         Swal.fire({
           title: 'Berhasil!',
-          text: 'Riwayat scan telah dihapus.',
+          text: 'Riwayat scan telah dihapus.', // Ubah teks untuk lebih jelas
           icon: 'success',
           background: '#fbeaea',
           color: 'hsl(323, 70%, 30%)',
@@ -83,7 +95,6 @@ export function useScanHistoryPresenter() {
         });
       }
     } else if (result.dismiss === Swal.DismissReason.cancel) {
-      // Jika dibatalkan, jangan tutup modal detail
       Swal.fire({
         title: 'Dibatalkan',
         text: 'Penghapusan riwayat scan dibatalkan.',
