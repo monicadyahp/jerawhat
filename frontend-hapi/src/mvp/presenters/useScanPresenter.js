@@ -1,5 +1,5 @@
 // useScanPresenter.js
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import ScanModel from "../models/ScanModel";
 
 export default function useScanPresenter() {
@@ -103,7 +103,6 @@ export default function useScanPresenter() {
     fetchCameras();
   }, []);
 
-  // --- PERUBAHAN UTAMA DI SINI ---
   // Effect untuk menghentikan kamera saat komponen di-unmount atau saat isCameraActive berubah menjadi false (jika dikelola dari luar)
   useEffect(() => {
     // Fungsi cleanup akan dijalankan saat komponen di-unmount
@@ -344,6 +343,213 @@ export default function useScanPresenter() {
     setFaceDetectionStatus({ status: "idle", error: null });
   };
 
+  // Fungsi baru untuk membuat gambar hasil scan
+// Fungsi baru untuk membuat gambar hasil scan
+  const createSharableImage = useCallback(async () => {
+    if (!imagePreview || !predictionResult || !lifestyleRecommendations) {
+      setStatusMsg("Tidak ada gambar, hasil prediksi, atau rekomendasi untuk dibagikan.");
+      return null;
+    }
+
+    setLoading(true); // Mulai loading untuk pembuatan gambar
+    setStatusMsg("Mempersiapkan gambar untuk dibagikan...");
+
+    try {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = imagePreview;
+
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      // Ukuran Canvas Vertikal (9:16 ratio)
+      const CANVAS_WIDTH = 720; // Lebar standar untuk sosial media vertikal
+      const CANVAS_HEIGHT = 1280; // Tinggi (CANVAS_WIDTH * 16 / 9)
+
+      canvas.width = CANVAS_WIDTH;
+      canvas.height = CANVAS_HEIGHT;
+
+      // Warna latar belakang
+      ctx.fillStyle = "#FBEAEA"; // Pastel pink
+      ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+      // --- Bagian Judul (Atas) ---
+      const titleText = "✨ Hasil Scan Wajahku ✨";
+      const taglineText = "Dapatkan analisis jerawat dan rekomendasi gaya hidup!";
+      ctx.fillStyle = "#721c24"; // Warna teks lebih gelap
+      ctx.textAlign = "center";
+      ctx.font = "bold 48px Arial";
+      ctx.fillText(titleText, CANVAS_WIDTH / 2, 70);
+      ctx.font = "24px Arial";
+      ctx.fillText(taglineText, CANVAS_WIDTH / 2, 110);
+
+
+      // --- Bagian Gambar Wajah Kecil dan Detail Hasil (Dibuat berdampingan di tengah) ---
+      const smallImageSize = 150;
+      const margin = 30; // Margin dari tepi
+      const detailTextLineHeight = 30; // Perkiraan tinggi baris teks detail
+
+      // Perkiraan lebar blok teks detail (untuk 3 baris teks terpanjang)
+      // Ini bisa lebih akurat jika Anda menghitung lebar setiap teks
+      const estimatedTextWidth = ctx.measureText("Keyakinan Model: 100.00%").width + 20; // Lebar teks paling panjang + padding
+
+      // Hitung lebar total konten (gambar + spasi + lebar teks detail)
+      const contentBlockWidth = smallImageSize + margin + estimatedTextWidth;
+
+      // Hitung posisi X untuk menengahkan blok gabungan
+      const startXContent = (CANVAS_WIDTH - contentBlockWidth) / 2;
+      const startYContentBlock = 160; // Posisi Y untuk bagian ini (dikurangi)
+
+      // Gambar wajah kecil di sisi kiri blok gabungan
+      // imgXAligned: posisi horizontal awal gambar
+      // imgYAligned: posisi vertikal awal gambar, disesuaikan agar pusat gambar sejajar dengan pusat blok teks
+      let imgXAligned = startXContent;
+      let imgYAligned = startYContentBlock + ( (3 * detailTextLineHeight * 2) - smallImageSize ) / 2 - 20; // Sesuaikan untuk 3 detail item, masing-masing 2 baris (judul + nilai)
+
+
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(imgXAligned + smallImageSize / 2, imgYAligned + smallImageSize / 2, smallImageSize / 2, 0, Math.PI * 2, false);
+      ctx.clip();
+      ctx.drawImage(img, imgXAligned, imgYAligned, smallImageSize, smallImageSize);
+      ctx.restore();
+
+      // Tambahkan border lingkaran pada gambar kecil
+      ctx.strokeStyle = "#721c24";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(imgXAligned + smallImageSize / 2, imgYAligned + smallImageSize / 2, smallImageSize / 2, 0, Math.PI * 2, false);
+      ctx.stroke();
+      ctx.lineWidth = 1;
+
+      // Detail hasil di samping kanan gambar kecil
+      let textXDetail = imgXAligned + smallImageSize + margin;
+      let currentYDetail = startYContentBlock; // Posisi Y awal untuk detail
+
+      ctx.fillStyle = "#333";
+      ctx.textAlign = "left";
+
+      // Tanggal Scan
+      const currentDate = new Date().toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      ctx.font = "bold 22px Arial";
+      ctx.fillText(`Tanggal Scan:`, textXDetail, currentYDetail);
+      ctx.font = "20px Arial";
+      ctx.fillText(`${currentDate}`, textXDetail, currentYDetail + detailTextLineHeight);
+      currentYDetail += detailTextLineHeight * 2; // Spasi antar baris info
+
+      // Kondisi Jerawat
+      ctx.font = "bold 22px Arial";
+      ctx.fillText(`Kondisi Jerawat:`, textXDetail, currentYDetail);
+      ctx.font = "20px Arial";
+      ctx.fillText(`${predictionResult.predictedClass}`, textXDetail, currentYDetail + detailTextLineHeight);
+      currentYDetail += detailTextLineHeight * 2;
+
+      // Keyakinan Model
+      ctx.font = "bold 22px Arial";
+      ctx.fillText(`Keyakinan Model:`, textXDetail, currentYDetail);
+      ctx.font = "20px Arial";
+      ctx.fillText(`${(predictionResult.confidence * 100).toFixed(2)}%`, textXDetail, currentYDetail + detailTextLineHeight);
+      currentYDetail += detailTextLineHeight * 2; // Tambahkan spasi untuk bagian selanjutnya
+
+
+      // --- Bagian Rekomendasi Gaya Hidup ---
+      let currentYRekomendasi = currentYDetail + margin; // Mulai rekomendasi setelah detail hasil
+
+      ctx.fillStyle = "#721c24";
+      ctx.textAlign = "center";
+      ctx.font = "bold 36px Arial";
+      ctx.fillText("Rekomendasi Gaya Hidup", CANVAS_WIDTH / 2, currentYRekomendasi);
+      currentYRekomendasi += 40;
+
+      const recommendationKey = predictionResult.predictedClass === "Jerawat Ringan" ? "jerawat_ringan" :
+                                predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
+                                predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
+      const recommendations = lifestyleRecommendations?.[recommendationKey];
+
+      if (recommendations) {
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#333";
+        const bulletOffset = 25; // Offset untuk bullet point
+        const categorySpacing = 40; // Spasi antar kategori
+        const itemSpacing = 28; // Spasi antar item dalam daftar
+
+        // Makanan Dianjurkan
+        ctx.font = "bold 24px Arial";
+        ctx.fillText("🍎 Makanan Dianjurkan:", margin, currentYRekomendasi);
+        currentYRekomendasi += itemSpacing;
+        ctx.font = "20px Arial";
+        recommendations.makanan_dianjurkan.forEach(item => {
+          ctx.fillText("• " + item, margin + bulletOffset, currentYRekomendasi);
+          currentYRekomendasi += itemSpacing;
+        });
+        currentYRekomendasi += categorySpacing;
+
+        // Makanan Dilarang
+        ctx.font = "bold 24px Arial";
+        ctx.fillText("❌ Makanan Dilarang:", margin, currentYRekomendasi);
+        currentYRekomendasi += itemSpacing;
+        ctx.font = "20px Arial";
+        recommendations.makanan_dilarang.forEach(item => {
+          ctx.fillText("• " + item, margin + bulletOffset, currentYRekomendasi);
+          currentYRekomendasi += itemSpacing;
+        });
+        currentYRekomendasi += categorySpacing;
+
+        // Aktivitas Fisik
+        ctx.font = "bold 24px Arial";
+        ctx.fillText("🏃‍♂️ Aktivitas Fisik:", margin, currentYRekomendasi);
+        currentYRekomendasi += itemSpacing;
+        ctx.font = "20px Arial";
+        recommendations.aktivitas_fisik.forEach(item => {
+          ctx.fillText("• " + item, margin + bulletOffset, currentYRekomendasi);
+          currentYRekomendasi += itemSpacing;
+        });
+        currentYRekomendasi += categorySpacing;
+
+        // Manajemen Stres
+        ctx.font = "bold 24px Arial";
+        ctx.fillText("🧘‍♀️ Manajemen Stres:", margin, currentYRekomendasi);
+        currentYRekomendasi += itemSpacing;
+        ctx.font = "20px Arial";
+        recommendations.manajemen_stres.forEach(item => {
+          ctx.fillText("• " + item, margin + bulletOffset, currentYRekomendasi);
+          currentYRekomendasi += itemSpacing;
+        });
+        currentYRekomendasi += categorySpacing;
+      }
+
+
+      // --- Bagian Ajakan Promosi (Paling Bawah) ---
+      const promoText = "Yuk, cek kondisi kulitmu juga di:";
+      const appUrl = `${window.location.origin}/scan`;
+      ctx.fillStyle = "#721c24";
+      ctx.textAlign = "center";
+      ctx.font = "bold 28px Arial";
+      ctx.fillText(promoText, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 80);
+      ctx.font = "28px Arial";
+      ctx.fillText(appUrl, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 40);
+
+
+      setStatusMsg("Gambar hasil berhasil dibuat!");
+      return canvas.toDataURL('image/png');
+    } catch (error) {
+      console.error("Error creating sharable image:", error);
+      setStatusMsg("Gagal membuat gambar untuk dibagikan: " + error.message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  }, [imagePreview, predictionResult, lifestyleRecommendations, setStatusMsg, setLoading]);
+  
   return {
     selectedImage,
     imagePreview,
@@ -365,5 +571,8 @@ export default function useScanPresenter() {
     isCapturing,
     faceDetectionStatus,
     lifestyleRecommendations,
+    createSharableImage,
+    setStatusMsg,
+    setPredictionResult,
   };
 }

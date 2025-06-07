@@ -1,4 +1,54 @@
 import React, { useState, useEffect, useRef } from "react";
+
+// Import Modal dari mana pun Anda biasanya mengimpornya.
+// Jika Anda belum punya komponen Modal, Anda bisa membuat yang sederhana.
+// Contoh placeholder:
+const SimpleModal = ({ isOpen, onClose, children }) => {
+  if (!isOpen) return null;
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000
+    }}>
+      <div style={{
+        backgroundColor: '#fff',
+        padding: '2rem',
+        borderRadius: '16px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+        maxWidth: '90%',
+        maxHeight: '90%',
+        overflowY: 'auto',
+        position: 'relative'
+      }}>
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            background: 'none',
+            border: 'none',
+            fontSize: '1.5rem',
+            cursor: 'pointer'
+          }}
+        >
+          &times;
+        </button>
+        {children}
+      </div>
+    </div>
+  );
+};
+
+
 export default function ScanView({
   selectedImage,
   imagePreview,
@@ -20,7 +70,13 @@ export default function ScanView({
   isCapturing,
   faceDetectionStatus,
   lifestyleRecommendations,
+  createSharableImage,
+  setStatusMsg, // Pastikan ini di-destructure dari props
+  setPredictionResult // Pastikan ini di-destructure dari props
 }) {
+  const [sharableImageUrl, setSharableImageUrl] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const renderModelStatus = () => {
     switch (modelStatus.status) {
       case "loading":
@@ -44,6 +100,77 @@ export default function ScanView({
     }
     return null;
   };
+
+  const handleShareResultClick = async () => {
+    if (!predictionResult) {
+      setStatusMsg("Silakan lakukan scan terlebih dahulu untuk mendapatkan hasil.");
+      return;
+    }
+    if (!navigator.share) {
+      setStatusMsg("Browser Anda tidak mendukung fitur berbagi langsung. Silakan unduh gambar dan bagikan secara manual.");
+      return;
+    }
+
+    // Buat gambar hasil scan terlebih dahulu
+    const imageUrl = await createSharableImage();
+    if (imageUrl) {
+      setSharableImageUrl(imageUrl);
+      setIsModalOpen(true); // Buka modal setelah gambar dibuat
+    } else {
+      setStatusMsg("Gagal membuat gambar untuk dibagikan. Silakan coba lagi.");
+    }
+  };
+
+  const handleShareFromModal = async () => {
+    if (!sharableImageUrl || !predictionResult) {
+      setStatusMsg("Tidak ada gambar atau hasil prediksi untuk dibagikan.");
+      return;
+    }
+
+    try {
+      const response = await fetch(sharableImageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], `hasil_scan_jerawat_${new Date().getTime()}.png`, { type: blob.type });
+
+      // Teks untuk berbagi
+      // Teks ini akan digunakan jika aplikasi tujuan mendukung teks, atau sebagai fallback
+      const shareText = `Saya baru saja melakukan scan jerawat dan hasilnya: ${predictionResult.predictedClass}! Dapatkan analisis kulitmu di ${window.location.origin}/scan`;
+      const shareTitle = 'Hasil Scan Jerawatku!';
+
+      // Coba berbagi gambar dan teks menggunakan Web Share API
+      // API ini akan menyesuaikan payload berdasarkan kemampuan aplikasi penerima
+      await navigator.share({
+        title: shareTitle,
+        text: shareText,
+        files: [file],
+      });
+      setStatusMsg("Berhasil dibagikan!");
+    } catch (error) {
+      console.error('Error sharing:', error);
+      if (error.name === 'AbortError') {
+        setStatusMsg('Berbagi dibatalkan oleh pengguna.');
+      } else {
+        setStatusMsg('Gagal berbagi: ' + error.message);
+      }
+    } finally {
+      setIsModalOpen(false); // Tutup modal setelah mencoba berbagi
+    }
+  };
+
+  const handleDownloadImage = () => {
+    if (sharableImageUrl) {
+      const link = document.createElement('a');
+      link.href = sharableImageUrl;
+      link.download = `hasil_scan_jerawat_${new Date().getTime()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setStatusMsg("Gambar hasil scan berhasil diunduh!");
+    } else {
+      setStatusMsg("Tidak ada gambar untuk diunduh. Buat gambar terlebih dahulu.");
+    }
+  };
+
   return (
     <>
       <section className="section scan-page" id="scan-page">
@@ -152,7 +279,7 @@ export default function ScanView({
                     disabled={loading}
                     style={{
                       padding: "0.75rem 1.5rem",
-                      fontSize: "1rem"
+                      fontSize: "1.1rem"
                     }}
                   >
                     Reset
@@ -382,6 +509,24 @@ export default function ScanView({
                     Tidak ditemukan masalah pada foto yang diupload.
                   </p>
                 )}
+
+                {/* Tombol tunggal untuk memicu modal hasil scan */}
+                <div style={{ textAlign: "center", marginTop: "2rem" }}>
+                  <button
+                    type="button"
+                    className="button"
+                    onClick={handleShareResultClick}
+                    disabled={loading || !predictionResult || !navigator.share} // Disable jika tidak ada hasil atau Web Share API tidak didukung
+                    style={{
+                      padding: "0.75rem 2rem",
+                      fontSize: "1.1rem",
+                      backgroundColor: "#4CAF50",
+                      color: "white"
+                    }}
+                  >
+                    Bagikan Hasil Scan
+                  </button>
+                </div>
               </div>
             )}
           </div>
@@ -390,6 +535,80 @@ export default function ScanView({
       <a href="#" className="scrollup" id="scroll-up" onClick={scrollToTop}>
         <i className="bx bx-up-arrow-alt scrollup__icon"></i>
       </a>
+
+      {/* Modal untuk menampilkan hasil scan dan tombol berbagi */}
+      <SimpleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <h3 style={{ fontSize: "1.5rem", marginBottom: "1.5rem", textAlign: "center", color: "#333" }}>
+          Hasil Analisis Wajah
+        </h3>
+        {sharableImageUrl && (
+          <div style={{ marginBottom: "1rem" }}>
+            <img
+              src={sharableImageUrl}
+              alt="Hasil Scan"
+              style={{
+                maxWidth: "100%",
+                maxHeight: "300px",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                display: "block",
+                margin: "0 auto",
+                backgroundColor: "white"
+              }}
+            />
+          </div>
+        )}
+        {predictionResult && (
+          <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+            <p style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>
+              <strong>Kondisi Jerawat:</strong> {predictionResult.predictedClass}
+            </p>
+            <p style={{ fontSize: "1.1rem", color: "#666" }}>
+              <strong>Keyakinan Model:</strong> {(predictionResult.confidence * 100).toFixed(2)}%
+            </p>
+          </div>
+        )}
+
+        <div style={{ textAlign: "center" }}>
+          <p style={{ fontSize: "1.1rem", fontWeight: "bold", marginBottom: "1rem" }}>Bagikan Hasil:</p>
+          <button
+            type="button"
+            className="button"
+            onClick={handleShareFromModal}
+            disabled={!sharableImageUrl || !navigator.share}
+            style={{
+              padding: "0.75rem 2rem",
+              fontSize: "1.1rem",
+              backgroundColor: "#2196F3", // Warna biru untuk tombol berbagi
+              color: "white"
+            }}
+          >
+            Bagikan Hasil Scan
+          </button>
+          <button
+            type="button"
+            className="button button--ghost"
+            onClick={handleDownloadImage}
+            style={{
+              padding: "0.75rem 2rem",
+              fontSize: "1.1rem",
+              marginLeft: "1rem"
+            }}
+          >
+            Unduh Hasil Scan
+          </button>
+          {statusMsg && (
+            <p style={{
+              color: statusMsg.includes("berhasil") ? "green" : "crimson",
+              textAlign: "center",
+              fontSize: "0.9rem",
+              marginTop: "1rem"
+            }}>
+              {statusMsg}
+            </p>
+          )}
+        </div>
+      </SimpleModal>
     </>
   );
 }
