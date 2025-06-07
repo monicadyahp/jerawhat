@@ -17,6 +17,16 @@ export default function AboutTeamView({ teamMembers, title, desc, scrollToTop })
                 <span className="team__role">{m.role}</span>
                 <span className="team__id">{m.id}</span>
                 <span className="team__univ">{m.univ}</span>
+                {m.linkedin && ( // Hanya tampilkan tombol jika ada URL LinkedIn
+                  <a
+                    href={m.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer__social-link" // <--- UBAH DI SINI!
+                  >
+                    <i className="bx bxl-linkedin-square"></i> {/* Ikon Boxicons */}
+                  </a>
+                )}
               </div>
             ))}
           </div>

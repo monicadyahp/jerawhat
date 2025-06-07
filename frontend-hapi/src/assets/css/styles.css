@@ -1728,4 +1728,33 @@ html {
   .nav__dropdown-menu .nav__link {
     padding: 1rem 2rem;
   }
+
+/* Contoh styling di file CSS Anda */
+/* GANTI SELURUHNYA blok .linkedin__button yang ada di CSS Anda dengan ini */
+.linkedin__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px; /* Jarak dari teks di atasnya */
+  /* Ukuran dan bentuk disesuaikan dengan footer__social-link */
+  padding: .25rem; /* Sama dengan footer__social-link */
+  border-radius: .25rem; /* Sama dengan footer__social-link */
+  background: var(--container-color); /* Latar belakang sama dengan footer__social-link */
+  color: var(--title-color); /* Warna ikon sama dengan footer__social-link */
+  font-size: 1rem; /* Ukuran ikon dasar */
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* Sedikit bayangan, mungkin lebih ringan */
+}
+
+.linkedin__button:hover {
+  background: var(--body-color); /* Efek hover sama dengan footer__social-link */
+  transform: translateY(-2px); /* Efek sedikit naik saat hover */
+}
+
+/* Pastikan ikon di dalamnya juga mengikuti warna yang benar */
+.linkedin__button .bx {
+  font-size: 1.5rem; /* Sesuaikan ukuran ikon agar terlihat mirip dengan footer */
+  color: var(--title-color) !important; /* Paksa warna ikon menjadi title-color (putih) */
+}
 }

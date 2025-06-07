@@ -1,3 +1,4 @@
+// frontend-hapi > src > mvp > presenters > useProfilePresenter.js
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import ProfileModel from '../models/ProfileModel';
 import { useNavigate } from 'react-router-dom';
@@ -144,6 +145,7 @@ export default function useProfilePresenter() {
       },
       background: '#fbeaea',
       color: 'hsl(323, 70%, 30%)',
+      showConfirmButton: false, // Tambahkan ini
     });
     const result = await model.uploadAvatar(user.id, selectedAvatarFile, user.token);
     Swal.close();
@@ -154,8 +156,10 @@ export default function useProfilePresenter() {
         title: 'Sukses!',
         text: result.message,
         background: '#fbeaea',
-        confirmButtonColor: 'hsl(330, 91%, 85%)',
-        color: 'hsl(323, 70%, 30%)',
+        // confirmButtonColor: 'hsl(330, 91%, 85%)', // Hapus atau nonaktifkan ini
+        // color: 'hsl(323, 70%, 30%)', // Ini masih bisa digunakan untuk warna teks
+        showConfirmButton: false, // Tambahkan ini untuk menghilangkan tombol konfirmasi
+        timer: 2000, // Opsional: tambahkan timer agar pop-up hilang otomatis
       });
       setSelectedAvatarFile(null);
     } else {
@@ -164,8 +168,10 @@ export default function useProfilePresenter() {
         title: 'Gagal!',
         text: result.message,
         background: '#fbeaea',
-        confirmButtonColor: 'hsl(330, 91%, 85%)',
-        color: 'hsl(323, 70%, 30%)',
+        // confirmButtonColor: 'hsl(330, 91%, 85%)', // Hapus atau nonaktifkan ini
+        // color: 'hsl(323, 70%, 30%)', // Ini masih bisa digunakan untuk warna teks
+        showConfirmButton: false, // Tambahkan ini untuk menghilangkan tombol konfirmasi
+        timer: 3000, // Opsional: tambahkan timer agar pop-up hilang otomatis
       });
       setPreviewAvatarUrl(null);
     }
