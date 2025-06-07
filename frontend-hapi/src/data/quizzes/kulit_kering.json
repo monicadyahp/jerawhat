@@ -1,0 +1,97 @@
+{
+  "id": "kulit_kering",
+  "title": "Kuis Kulit Kering",
+  "description": "Pahami ciri-ciri dan perawatan terbaik untuk kulit keringmu.",
+  "questions": [
+    {
+      "question": "Bagaimana ciri utama kulit kering?",
+      "options": [
+        { "text": "A. Kilap di T-zone", "isCorrect": false },
+        { "text": "B. Terasa kencang, kasar, atau bersisik", "isCorrect": true },
+        { "text": "C. Pori-pori besar", "isCorrect": false },
+        { "text": "D. Sering berjerawat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bahan aktif skincare apa yang paling cocok untuk melembapkan kulit kering?",
+      "options": [
+        { "text": "A. Salicylic Acid", "isCorrect": false },
+        { "text": "B. Benzoyl Peroxide", "isCorrect": false },
+        { "text": "C. Hyaluronic Acid dan Ceramide", "isCorrect": true },
+        { "text": "D. Retinol dosis tinggi", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Frekuensi mencuci muka yang direkomendasikan untuk kulit kering adalah...",
+      "options": [
+        { "text": "A. 3-4 kali sehari", "isCorrect": false },
+        { "text": "B. 1-2 kali sehari, dengan pembersih lembut", "isCorrect": true },
+        { "text": "C. Cukup bilas dengan air saja", "isCorrect": false },
+        { "text": "D. Menggunakan scrub setiap hari", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Mengapa air panas tidak disarankan untuk mencuci muka kering?",
+      "options": [
+        { "text": "A. Membuat kulit lebih bersih", "isCorrect": false },
+        { "text": "B. Dapat menghilangkan minyak alami kulit dan memperburuk kekeringan", "isCorrect": true },
+        { "text": "C. Memicu jerawat", "isCorrect": false },
+        { "text": "D. Tidak ada efek samping", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Pelembap untuk kulit kering sebaiknya digunakan saat...",
+      "options": [
+        { "text": "A. Hanya di malam hari", "isCorrect": false },
+        { "text": "B. Setelah mencuci muka, saat kulit masih sedikit lembap", "isCorrect": true },
+        { "text": "C. Kapan saja saat kulit terasa sangat kering", "isCorrect": false },
+        { "text": "D. Hanya saat menggunakan makeup", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Kebiasaan makan apa yang dapat membantu kesehatan kulit kering?",
+      "options": [
+        { "text": "A. Konsumsi makanan pedas", "isCorrect": false },
+        { "text": "B. Konsumsi makanan tinggi gula", "isCorrect": false },
+        { "text": "C. Konsumsi lemak sehat (alpukat, ikan berlemak) dan banyak air", "isCorrect": true },
+        { "text": "D. Minuman bersoda", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa fungsi utama tabir surya bagi kulit kering?",
+      "options": [
+        { "text": "A. Melembapkan kulit secara instan", "isCorrect": false },
+        { "text": "B. Mencegah kulit terbakar dan kerusakan kolagen", "isCorrect": true },
+        { "text": "C. Mengurangi produksi minyak", "isCorrect": false },
+        { "text": "D. Menyembuhkan jerawat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa yang harus diperhatikan saat memilih sabun mandi untuk kulit kering?",
+      "options": [
+        { "text": "A. Sabun dengan busa melimpah", "isCorrect": false },
+        { "text": "B. Sabun yang berlabel \"moisturizing\" atau \"pH seimbang\"", "isCorrect": true },
+        { "text": "C. Sabun dengan wangi kuat", "isCorrect": false },
+        { "text": "D. Sabun antibakteri yang kuat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bagaimana iklim dapat memengaruhi kulit kering?",
+      "options": [
+        { "text": "A. Iklim lembap selalu memperburuk", "isCorrect": false },
+        { "text": "B. Iklim dingin dan kering dapat memperburuk kekeringan kulit", "isCorrect": true },
+        { "text": "C. Iklim panas selalu memperburuk", "isCorrect": false },
+        { "text": "D. Iklim tidak berpengaruh", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa yang dimaksud dengan \"skin barrier\"?",
+      "options": [
+        { "text": "A. Lapisan makeup di wajah", "isCorrect": false },
+        { "text": "B. Lapisan pelindung kulit yang menjaga kelembapan dan melindungi dari iritan", "isCorrect": true },
+        { "text": "C. Masker wajah", "isCorrect": false },
+        { "text": "D. Jaringan otot di bawah kulit", "isCorrect": false }
+      ]
+    }
+  ]
+}

@@ -64,7 +64,6 @@ export default function useQuizPresenter() {
         setTimeLeft(prevTime => prevTime - 1);
       }, 1000);
     } else if (timeLeft === 0 && timerActive && !quizFinished) {
-      // --- PERBAIKAN DI SINI ---
       // Pastikan currentQuiz ada sebelum mencoba mengakses propertiesnya
       if (currentQuiz) {
         const remainingQuestions = currentQuiz.questions.length - userAnswers.length;
@@ -80,7 +79,6 @@ export default function useQuizPresenter() {
           return updatedAnswers;
         });
       }
-      // --- AKHIR PERBAIKAN ---
       setQuizFinished(true);
       setTimerActive(false);
       clearInterval(timerInterval);
@@ -99,11 +97,9 @@ export default function useQuizPresenter() {
   }, [quizFinished]);
 
   const handleNextQuestion = useCallback(() => {
-    // --- PERBAIKAN DI SINI ---
-    // Pastikan currentQuiz ada sebelum mencoba mengakses propertiesnya
     if (!currentQuiz) return; // Keluar jika kuis belum dimuat
 
-    if (currentQuestionIndex < currentQuiz.questions.length) { // Menggunakan currentQuiz.questions.length
+    if (currentQuestionIndex < currentQuiz.questions.length) {
       const currentQuestionData = currentQuiz.questions[currentQuestionIndex];
       const correct = selectedOptionIndex !== null && currentQuestionData.options[selectedOptionIndex].isCorrect;
 
@@ -120,10 +116,7 @@ export default function useQuizPresenter() {
         setScore(prevScore => prevScore + 1);
       }
     }
-    // --- AKHIR PERBAIKAN ---
 
-    // --- PERBAIKAN DI SINI ---
-    // Gunakan currentQuiz.questions.length yang terdefinisi
     if (currentQuestionIndex < currentQuiz.questions.length - 1) {
       setCurrentQuestionIndex(prevIndex => prevIndex + 1);
       setSelectedOptionIndex(null);
@@ -131,7 +124,6 @@ export default function useQuizPresenter() {
       setQuizFinished(true);
       setTimerActive(false);
     }
-    // --- AKHIR PERBAIKAN ---
   }, [currentQuiz, currentQuestionIndex, selectedOptionIndex, userAnswers]);
 
   const handleStartQuiz = useCallback((id) => {
@@ -155,6 +147,23 @@ export default function useQuizPresenter() {
     navigate('/quiz');
   }, [navigate]);
 
+  // --- Fungsi Baru: handleCancelQuiz ---
+  const handleCancelQuiz = useCallback(() => {
+    // Reset semua state yang relevan dengan kuis yang sedang berjalan
+    setCurrentQuiz(null);
+    setCurrentQuestionIndex(0);
+    setSelectedOptionIndex(null);
+    setScore(0);
+    setQuizFinished(false);
+    setTimeLeft(QUIZ_DURATION_SECONDS);
+    setTimerActive(false); // Pastikan timer berhenti
+    setUserAnswers([]);
+    setLoading(false); // Pastikan loading false
+
+    navigate('/quiz'); // Kembali ke halaman daftar kuis
+  }, [navigate]);
+  // --- Akhir Fungsi Baru ---
+
   return {
     quizzesList,
     currentQuiz,
@@ -172,7 +181,7 @@ export default function useQuizPresenter() {
     handleStartQuiz,
     handleRetakeQuiz,
     handleBackToQuizList,
-    // totalQuestions sekarang dihitung dengan aman
+    handleCancelQuiz, // Sertakan fungsi baru di return
     totalQuestions: currentQuiz ? currentQuiz.questions.length : 0,
   };
 }

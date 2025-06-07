@@ -1,0 +1,97 @@
+{
+  "id": "kulit_sensitif",
+  "title": "Kuis Kulit Sensitif",
+  "description": "Pelajari cara merawat kulit sensitif agar tidak mudah iritasi.",
+  "questions": [
+    {
+      "question": "Ciri utama kulit sensitif adalah...",
+      "options": [
+        { "text": "A. Mudah berkilau dan berjerawat", "isCorrect": false },
+        { "text": "B. Mudah memerah, gatal, terasa terbakar, atau alergi", "isCorrect": true },
+        { "text": "C. Terasa kencang dan bersisik", "isCorrect": false },
+        { "text": "D. Pori-pori besar", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bahan apa yang sebaiknya dihindari dalam produk skincare untuk kulit sensitif?",
+      "options": [
+        { "text": "A. Hyaluronic Acid", "isCorrect": false },
+        { "text": "B. Fragrance (pewangi), alkohol, dan paraben", "isCorrect": true },
+        { "text": "C. Glycerin", "isCorrect": false },
+        { "text": "D. Ceramide", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bagaimana cara terbaik membersihkan wajah sensitif?",
+      "options": [
+        { "text": "A. Menggunakan scrub setiap hari", "isCorrect": false },
+        { "text": "B. Menggunakan pembersih yang lembut, bebas sabun, dan air suam-suam kuku", "isCorrect": true },
+        { "text": "C. Mencuci muka 5 kali sehari", "isCorrect": false },
+        { "text": "D. Menggunakan sabun antibakteri kuat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Pentingnya uji patch (patch test) sebelum memakai produk baru pada kulit sensitif adalah...",
+      "options": [
+        { "text": "A. Untuk mengetahui harganya", "isCorrect": false },
+        { "text": "B. Untuk memastikan tidak ada reaksi alergi atau iritasi", "isCorrect": true },
+        { "text": "C. Untuk melihat tekstur produk", "isCorrect": false },
+        { "text": "D. Untuk memastikan warna produk cocok", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa fungsi utama pelembap untuk kulit sensitif?",
+      "options": [
+        { "text": "A. Memicu jerawat", "isCorrect": false },
+        { "text": "B. Memperkuat skin barrier dan mengurangi iritasi", "isCorrect": true },
+        { "text": "C. Mencerahkan kulit secara instan", "isCorrect": false },
+        { "text": "D. Sebagai pengganti SPF", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Makanan apa yang sebaiknya dihindari jika memiliki kulit sensitif?",
+      "options": [
+        { "text": "A. Buah-buahan segar", "isCorrect": false },
+        { "text": "B. Makanan pedas dan alergen umum (jika sensitif terhadapnya)", "isCorrect": true },
+        { "text": "C. Sayuran hijau", "isCorrect": false },
+        { "text": "D. Ikan berlemak", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bagaimana cara memilih tabir surya yang tepat untuk kulit sensitif?",
+      "options": [
+        { "text": "A. Pilih SPF tinggi saja", "isCorrect": false },
+        { "text": "B. Pilih tabir surya fisik (mineral) dengan zinc oxide/titanium dioxide", "isCorrect": true },
+        { "text": "C. Pilih yang beraroma kuat", "isCorrect": false },
+        { "text": "D. Pilih yang mengandung alkohol", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa efek buruk menggosok wajah terlalu keras pada kulit sensitif?",
+      "options": [
+        { "text": "A. Membuat kulit lebih bersih", "isCorrect": false },
+        { "text": "B. Menyebabkan kemerahan, iritasi, dan kerusakan skin barrier", "isCorrect": true },
+        { "text": "C. Mencerahkan kulit", "isCorrect": false },
+        { "text": "D. Mengecilkan pori-pori", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Jenis air apa yang lebih baik digunakan untuk mencuci wajah sensitif?",
+      "options": [
+        { "text": "A. Air panas", "isCorrect": false },
+        { "text": "B. Air dingin", "isCorrect": false },
+        { "text": "C. Air suam-suam kuku", "isCorrect": true },
+        { "text": "D. Air es", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa tanda kulit sensitif sedang mengalami reaksi?",
+      "options": [
+        { "text": "A. Kulit terasa lebih lembap", "isCorrect": false },
+        { "text": "B. Muncul kemerahan, gatal, sensasi perih atau terbakar", "isCorrect": true },
+        { "text": "C. Kulit menjadi lebih kencang", "isCorrect": false },
+        { "text": "D. Pori-pori mengecil", "isCorrect": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": "kulit_berminyak",
+  "title": "Kuis Kulit Berminyak",
+  "description": "Kenali kulit berminyak dan cara mengatasinya dengan tepat.",
+  "questions": [
+    {
+      "question": "Ciri utama kulit berminyak adalah...",
+      "options": [
+        { "text": "A. Kulit terasa kencang dan bersisik", "isCorrect": false },
+        { "text": "B. Kulit terlihat berkilau, pori-pori besar, dan rentan komedo/jerawat", "isCorrect": true },
+        { "text": "C. Kulit mudah merah dan gatal", "isCorrect": false },
+        { "text": "D. Kulit jarang ada masalah", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bahan aktif skincare apa yang cocok untuk mengontrol minyak?",
+      "options": [
+        { "text": "A. Hyaluronic Acid", "isCorrect": false },
+        { "text": "B. Niacinamide dan Clay/Charcoal", "isCorrect": true },
+        { "text": "C. Petroleum Jelly", "isCorrect": false },
+        { "text": "D. Minyak kelapa", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Frekuensi mencuci muka untuk kulit berminyak adalah...",
+      "options": [
+        { "text": "A. Lebih dari 3 kali sehari", "isCorrect": false },
+        { "text": "B. 2 kali sehari dengan pembersih gel/busa yang gentle", "isCorrect": true },
+        { "text": "C. Cukup sekali sehari", "isCorrect": false },
+        { "text": "D. Tidak perlu dicuci, cukup dibilas air", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Mengapa kulit berminyak tetap butuh pelembap?",
+      "options": [
+        { "text": "A. Agar lebih berminyak", "isCorrect": false },
+        { "text": "B. Untuk menjaga hidrasi, mencegah dehidrasi yang memicu produksi minyak lebih lanjut", "isCorrect": true },
+        { "text": "C. Hanya untuk kulit kering", "isCorrect": false },
+        { "text": "D. Tidak ada fungsinya untuk kulit berminyak", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Tekstur pelembap seperti apa yang cocok untuk kulit berminyak?",
+      "options": [
+        { "text": "A. Krim tebal", "isCorrect": false },
+        { "text": "B. Gel atau lotion ringan, non-komedogenik", "isCorrect": true },
+        { "text": "C. Salep", "isCorrect": false },
+        { "text": "D. Minyak wajah", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apakah blotting paper baik untuk kulit berminyak?",
+      "options": [
+        { "text": "A. Tidak, karena menyumbat pori", "isCorrect": false },
+        { "text": "B. Ya, untuk menyerap minyak berlebih tanpa menggeser makeup", "isCorrect": true },
+        { "text": "C. Hanya di malam hari", "isCorrect": false },
+        { "text": "D. Tidak perlu, karena akan memicu jerawat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa fungsi primer makeup untuk kulit berminyak?",
+      "options": [
+        { "text": "A. Menambah kilau", "isCorrect": false },
+        { "text": "B. Mengontrol minyak dan membuat makeup lebih tahan lama", "isCorrect": true },
+        { "text": "C. Menambah coverage", "isCorrect": false },
+        { "text": "D. Tidak ada fungsi spesifik", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Mengapa diet tinggi gula seringkali memicu masalah kulit berminyak?",
+      "options": [
+        { "text": "A. Memperbaiki tekstur kulit", "isCorrect": false },
+        { "text": "B. Meningkatkan produksi hormon yang merangsang kelenjar minyak", "isCorrect": true },
+        { "text": "C. Menurunkan kadar gula darah", "isCorrect": false },
+        { "text": "D. Tidak ada hubungannya", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Jenis masker wajah apa yang bagus untuk kulit berminyak?",
+      "options": [
+        { "text": "A. Hydrating sheet mask", "isCorrect": false },
+        { "text": "B. Clay mask atau mud mask", "isCorrect": true },
+        { "text": "C. Peel-off mask dengan alkohol", "isCorrect": false },
+        { "text": "D. Sleeping mask yang kaya minyak", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa manfaat eksfoliasi rutin (1-2x seminggu) bagi kulit berminyak?",
+      "options": [
+        { "text": "A. Membuat kulit lebih kering", "isCorrect": false },
+        { "text": "B. Mengangkat sel kulit mati dan mencegah penyumbatan pori", "isCorrect": true },
+        { "text": "C. Meningkatkan produksi minyak", "isCorrect": false },
+        { "text": "D. Tidak ada manfaatnya", "isCorrect": false }
+      ]
+    }
+  ]
+}

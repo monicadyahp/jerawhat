@@ -1,0 +1,97 @@
+{
+  "id": "komedo",
+  "title": "Kuis Membasmi Komedo",
+  "description": "Apakah kamu tahu cara efektif membasmi komedo?",
+  "questions": [
+    {
+      "question": "Apa itu komedo hitam (blackhead)?",
+      "options": [
+        { "text": "A. Benjolan putih tertutup", "isCorrect": false },
+        { "text": "B. Pori yang terbuka dan tersumbat, menjadi hitam karena oksidasi", "isCorrect": true },
+        { "text": "C. Jerawat meradang", "isCorrect": false },
+        { "text": "D. Infeksi bakteri di kulit", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa itu komedo putih (whitehead)?",
+      "options": [
+        { "text": "A. Pori yang terbuka dan tersumbat", "isCorrect": false },
+        { "text": "B. Jerawat dengan nanah", "isCorrect": false },
+        { "text": "C. Pori yang tersumbat dan tertutup lapisan kulit tipis", "isCorrect": true },
+        { "text": "D. Rambut yang tumbuh ke dalam", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bahan aktif skincare apa yang efektif untuk mengatasi komedo?",
+      "options": [
+        { "text": "A. Hyaluronic Acid", "isCorrect": false },
+        { "text": "B. Salicylic Acid (BHA)", "isCorrect": true },
+        { "text": "C. Vitamin C", "isCorrect": false },
+        { "text": "D. Ceramide", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Mengapa memencet komedo sendiri tidak disarankan?",
+      "options": [
+        { "text": "A. Membuat kulit lebih bersih", "isCorrect": false },
+        { "text": "B. Dapat menyebabkan peradangan, infeksi, dan bekas luka", "isCorrect": true },
+        { "text": "C. Mempercepat penyembuhan", "isCorrect": false },
+        { "text": "D. Tidak ada efek samping", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Selain skincare, kebiasaan apa yang dapat membantu mengurangi komedo?",
+      "options": [
+        { "text": "A. Tidur dengan makeup", "isCorrect": false },
+        { "text": "B. Membersihkan wajah setelah beraktivitas dan rutin eksfoliasi", "isCorrect": true },
+        { "text": "C. Menggunakan handuk yang sama berulang kali", "isCorrect": false },
+        { "text": "D. Menggosok wajah terlalu keras", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa fungsi utama eksfoliasi dalam mengatasi komedo?",
+      "options": [
+        { "text": "A. Melembapkan kulit", "isCorrect": false },
+        { "text": "B. Mengangkat sel kulit mati yang menyumbat pori", "isCorrect": true },
+        { "text": "C. Memberikan kilau instan pada kulit", "isCorrect": false },
+        { "text": "D. Melindungi dari sinar UV", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bagaimana cara terbaik membersihkan sisa makeup untuk mencegah komedo?",
+      "options": [
+        { "text": "A. Cukup bilas dengan air", "isCorrect": false },
+        { "text": "B. Menggunakan cleansing oil/balm diikuti facial wash", "isCorrect": true },
+        { "text": "C. Hanya menggunakan tisu basah", "isCorrect": false },
+        { "text": "D. Biarkan semalaman agar menyerap", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Tipe kulit apa yang paling sering mengalami komedo?",
+      "options": [
+        { "text": "A. Kulit kering", "isCorrect": false },
+        { "text": "B. Kulit normal", "isCorrect": false },
+        { "text": "C. Kulit berminyak dan kombinasi", "isCorrect": true },
+        { "text": "D. Kulit sensitif", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Masker wajah jenis apa yang dapat membantu membersihkan komedo?",
+      "options": [
+        { "text": "A. Hydrating mask", "isCorrect": false },
+        { "text": "B. Clay mask atau charcoal mask", "isCorrect": true },
+        { "text": "C. Sheet mask", "isCorrect": false },
+        { "text": "D. Sleeping mask", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa yang dimaksud dengan produk non-komedogenik?",
+      "options": [
+        { "text": "A. Produk yang mengandung pewangi", "isCorrect": false },
+        { "text": "B. Produk yang tidak akan menyumbat pori-pori", "isCorrect": true },
+        { "text": "C. Produk yang membuat kulit kering", "isCorrect": false },
+        { "text": "D. Produk yang hanya untuk kulit berjerawat", "isCorrect": false }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "id": "sunscreen",
+  "title": "Kuis Pentingnya Sunscreen",
+  "description": "Seberapa tahu kamu tentang perlindungan kulit dari matahari?",
+  "questions": [
+    {
+      "question": "Apa fungsi utama sunscreen (tabir surya)?",
+      "options": [
+        { "text": "A. Mencerahkan kulit", "isCorrect": false },
+        { "text": "B. Melindungi kulit dari radiasi UV matahari", "isCorrect": true },
+        { "text": "C. Melembapkan kulit", "isCorrect": false },
+        { "text": "D. Mengobati jerawat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa perbedaan SPF dan PA pada sunscreen?",
+      "options": [
+        { "text": "A. SPF untuk UVA, PA untuk UVB", "isCorrect": false },
+        { "text": "B. SPF untuk UVB, PA untuk UVA", "isCorrect": true },
+        { "text": "C. SPF untuk jerawat, PA untuk flek hitam", "isCorrect": false },
+        { "text": "D. Keduanya sama saja", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Berapa SPF minimal yang direkomendasikan untuk penggunaan sehari-hari?",
+      "options": [
+        { "text": "A. SPF 15", "isCorrect": false },
+        { "text": "B. SPF 30", "isCorrect": true },
+        { "text": "C. SPF 5", "isCorrect": false },
+        { "text": "D. SPF 100", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Kapan sebaiknya sunscreen diaplikasikan?",
+      "options": [
+        { "text": "A. Hanya saat di pantai", "isCorrect": false },
+        { "text": "B. Setiap hari, bahkan saat mendung atau di dalam ruangan dekat jendela", "isCorrect": true },
+        { "text": "C. Hanya saat kulit terasa panas", "isCorrect": false },
+        { "text": "D. Hanya saat berolahraga", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apakah anak-anak perlu menggunakan sunscreen?",
+      "options": [
+        { "text": "A. Tidak, kulit anak-anak kuat", "isCorrect": false },
+        { "text": "B. Ya, kulit anak-anak lebih sensitif terhadap kerusakan UV", "isCorrect": true },
+        { "text": "C. Hanya jika mereka bermain di luar sangat lama", "isCorrect": false },
+        { "text": "D. Tidak perlu, karena kulit mereka akan melindungi diri sendiri", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bagaimana cara re-apply sunscreen yang benar?",
+      "options": [
+        { "text": "A. Hanya sekali sehari sudah cukup", "isCorrect": false },
+        { "text": "B. Setiap 2-3 jam, atau lebih sering jika berkeringat/berenang", "isCorrect": true },
+        { "text": "C. Hanya jika wajah terasa kering", "isCorrect": false },
+        { "text": "D. Setiap 5 jam sekali", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa efek jangka panjang paparan UV tanpa perlindungan?",
+      "options": [
+        { "text": "A. Kulit lebih cerah", "isCorrect": false },
+        { "text": "B. Penuaan dini, flek hitam, dan risiko kanker kulit", "isCorrect": true },
+        { "text": "C. Kulit jadi lebih kuat", "isCorrect": false },
+        { "text": "D. Tidak ada efek buruk", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apakah sunscreen yang waterproof perlu re-apply?",
+      "options": [
+        { "text": "A. Tidak, cukup sekali", "isCorrect": false },
+        { "text": "B. Ya, waterproof hanya berarti tahan air lebih lama, tetap perlu re-apply", "isCorrect": true },
+        { "text": "C. Hanya jika berenang", "isCorrect": false },
+        { "text": "D. Hanya jika kulit terasa kering", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa itu chemical sunscreen?",
+      "options": [
+        { "text": "A. Sunscreen yang meninggalkan whitecast", "isCorrect": false },
+        { "text": "B. Sunscreen yang menyerap sinar UV dan mengubahnya jadi panas", "isCorrect": true },
+        { "text": "C. Sunscreen yang membentuk lapisan fisik di kulit", "isCorrect": false },
+        { "text": "D. Sunscreen yang hanya cocok untuk kulit sensitif", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa itu physical/mineral sunscreen?",
+      "options": [
+        { "text": "A. Sunscreen yang menyerap sinar UV", "isCorrect": false },
+        { "text": "B. Sunscreen yang memantulkan sinar UV dengan zinc oxide/titanium dioxide", "isCorrect": true },
+        { "text": "C. Sunscreen yang tidak cocok untuk kulit sensitif", "isCorrect": false },
+        { "text": "D. Sunscreen yang membuat kulit berminyak", "isCorrect": false }
+      ]
+    }
+  ]
+}

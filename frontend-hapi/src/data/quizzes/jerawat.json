@@ -1,0 +1,97 @@
+{
+  "id": "jerawat",
+  "title": "Kuis Seputar Jerawat",
+  "description": "Uji pengetahuanmu tentang jerawat dan cara menanganinya!",
+  "questions": [
+    {
+      "question": "Apa penyebab utama timbulnya jerawat?",
+      "options": [
+        { "text": "A. Konsumsi air putih yang banyak", "isCorrect": false },
+        { "text": "B. Produksi minyak berlebih (sebum) dan penyumbatan pori", "isCorrect": true },
+        { "text": "C. Sering mencuci muka", "isCorrect": false },
+        { "text": "D. Tidur cukup 8 jam sehari", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Jerawat jenis apa yang umumnya berupa benjolan kecil berwarna putih?",
+      "options": [
+        { "text": "A. Blackhead", "isCorrect": false },
+        { "text": "B. Papule", "isCorrect": false },
+        { "text": "C. Whitehead", "isCorrect": true },
+        { "text": "D. Cystic acne", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Berapa kali sebaiknya mencuci muka dalam sehari untuk kulit berjerawat?",
+      "options": [
+        { "text": "A. Sekali", "isCorrect": false },
+        { "text": "B. Dua kali", "isCorrect": true },
+        { "text": "C. Empat kali", "isCorrect": false },
+        { "text": "D. Setiap jam", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Produk perawatan kulit berjerawat yang tidak dianjurkan adalah...",
+      "options": [
+        { "text": "A. Salicylic Acid", "isCorrect": false },
+        { "text": "B. Benzoyl Peroxide", "isCorrect": false },
+        { "text": "C. Alkohol dan pewangi keras", "isCorrect": true },
+        { "text": "D. Retinoid", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Makanan apa yang sering dikaitkan dengan pemicu jerawat pada beberapa orang?",
+      "options": [
+        { "text": "A. Buah-buahan", "isCorrect": false },
+        { "text": "B. Sayuran hijau", "isCorrect": false },
+        { "text": "C. Makanan tinggi gula dan produk susu", "isCorrect": true },
+        { "text": "D. Ikan dan kacang-kacangan", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa yang harus dihindari saat memiliki jerawat meradang?",
+      "options": [
+        { "text": "A. Membersihkan wajah", "isCorrect": false },
+        { "text": "B. Menggunakan pelembap", "isCorrect": false },
+        { "text": "C. Memencet jerawat", "isCorrect": true },
+        { "text": "D. Menggunakan tabir surya", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Jenis kulit yang paling rentan terhadap jerawat adalah...",
+      "options": [
+        { "text": "A. Kulit kering", "isCorrect": false },
+        { "text": "B. Kulit normal", "isCorrect": false },
+        { "text": "C. Kulit berminyak", "isCorrect": true },
+        { "text": "D. Kulit sensitif", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa fungsi utama pelembap bagi kulit berjerawat?",
+      "options": [
+        { "text": "A. Membuat kulit semakin berminyak", "isCorrect": false },
+        { "text": "B. Menjaga hidrasi kulit dan mencegah iritasi", "isCorrect": true },
+        { "text": "C. Menutup pori-pori", "isCorrect": false },
+        { "text": "D. Sebagai pengganti tabir surya", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bagaimana peran stres terhadap jerawat?",
+      "options": [
+        { "text": "A. Stres selalu menyebabkan jerawat", "isCorrect": false },
+        { "text": "B. Stres dapat memperburuk kondisi jerawat yang sudah ada", "isCorrect": true },
+        { "text": "C. Stres tidak berpengaruh sama sekali", "isCorrect": false },
+        { "text": "D. Stres justru menghilangkan jerawat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa istilah medis untuk jerawat?",
+      "options": [
+        { "text": "A. Dermatitis", "isCorrect": false },
+        { "text": "B. Psoriasis", "isCorrect": false },
+        { "text": "C. Acne vulgaris", "isCorrect": true },
+        { "text": "D. Rosacea", "isCorrect": false }
+      ]
+    }
+  ]
+}

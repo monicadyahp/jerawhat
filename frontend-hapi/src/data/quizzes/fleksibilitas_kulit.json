@@ -1,0 +1,97 @@
+{
+  "id": "fleksibilitas_kulit",
+  "title": "Kuis Fleksibilitas Kulit",
+  "description": "Seberapa elastis kulitmu dan bagaimana cara mempertahankannya?",
+  "questions": [
+    {
+      "question": "Apa yang dimaksud dengan elastisitas kulit?",
+      "options": [
+        { "text": "A. Kemampuan kulit untuk menyerap air", "isCorrect": false },
+        { "text": "B. Kemampuan kulit untuk meregang dan kembali ke bentuk semula", "isCorrect": true },
+        { "text": "C. Tingkat kelembapan kulit", "isCorrect": false },
+        { "text": "D. Kekuatan kulit menahan jerawat", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Protein apa yang berperan penting dalam elastisitas kulit?",
+      "options": [
+        { "text": "A. Keratin", "isCorrect": false },
+        { "text": "B. Kolagen dan Elastin", "isCorrect": true },
+        { "text": "C. Asam Hyaluronic", "isCorrect": false },
+        { "text": "D. Melanin", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Faktor eksternal apa yang paling cepat mengurangi elastisitas kulit?",
+      "options": [
+        { "text": "A. Tidur cukup", "isCorrect": false },
+        { "text": "B. Paparan sinar matahari (UV) dan polusi", "isCorrect": true },
+        { "text": "C. Menggunakan pelembap", "isCorrect": false },
+        { "text": "D. Diet seimbang", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Selain usia, kebiasaan hidup apa yang dapat mempercepat hilangnya elastisitas kulit?",
+      "options": [
+        { "text": "A. Minum air putih yang cukup", "isCorrect": false },
+        { "text": "B. Merokok dan konsumsi gula berlebihan", "isCorrect": true },
+        { "text": "C. Olahraga teratur", "isCorrect": false },
+        { "text": "D. Tidur 8 jam sehari", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bahan aktif skincare apa yang dikenal dapat membantu meningkatkan produksi kolagen?",
+      "options": [
+        { "text": "A. Salicylic Acid", "isCorrect": false },
+        { "text": "B. Retinoid (Vitamin A) dan Vitamin C", "isCorrect": true },
+        { "text": "C. Benzoyl Peroxide", "isCorrect": false },
+        { "text": "D. Tea Tree Oil", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Bagaimana hidrasi yang cukup mempengaruhi elastisitas kulit?",
+      "options": [
+        { "text": "A. Tidak berpengaruh", "isCorrect": false },
+        { "text": "B. Menjaga kulit tetap kenyal dan mendukung fungsi kolagen/elastin", "isCorrect": true },
+        { "text": "C. Membuat kulit lebih berminyak", "isCorrect": false },
+        { "text": "D. Hanya berpengaruh pada warna kulit", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Area wajah mana yang seringkali menjadi tanda pertama hilangnya elastisitas?",
+      "options": [
+        { "text": "A. Dagu", "isCorrect": false },
+        { "text": "B. Sekitar mata dan mulut", "isCorrect": true },
+        { "text": "C. Dahi", "isCorrect": false },
+        { "text": "D. Hidung", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Pentingnya pijat wajah secara teratur untuk elastisitas kulit adalah...",
+      "options": [
+        { "text": "A. Tidak ada efeknya", "isCorrect": false },
+        { "text": "B. Melancarkan sirkulasi darah dan merangsang produksi kolagen", "isCorrect": true },
+        { "text": "C. Hanya untuk relaksasi otot", "isCorrect": false },
+        { "text": "D. Menyebabkan kerutan baru", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Makanan kaya antioksidan seperti buah beri dan sayuran hijau berperan dalam menjaga elastisitas karena...",
+      "options": [
+        { "text": "A. Mengandung banyak gula", "isCorrect": false },
+        { "text": "B. Melindungi kulit dari kerusakan radikal bebas", "isCorrect": true },
+        { "text": "C. Mempercepat penyerapan vitamin", "isCorrect": false },
+        { "text": "D. Hanya berfungsi untuk pencernaan", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa yang dimaksud dengan \"sagging skin\"?",
+      "options": [
+        { "text": "A. Kulit yang terlalu kencang", "isCorrect": false },
+        { "text": "B. Kulit yang kehilangan kekenyalan dan tampak kendur", "isCorrect": true },
+        { "text": "C. Kulit yang sangat lembap", "isCorrect": false },
+        { "text": "D. Kulit yang mudah berjerawat", "isCorrect": false }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 // frontend-hapi > src > views > QuizView.jsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 export default function QuizView({
   quizzesList,
@@ -19,6 +20,7 @@ export default function QuizView({
   handleStartQuiz,
   handleRetakeQuiz,
   handleBackToQuizList,
+  handleCancelQuiz, // Terima fungsi baru dari presenter
   totalQuestions,
 }) {
   const { quizId } = useParams();
@@ -28,6 +30,65 @@ export default function QuizView({
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
+
+  const handleStartQuizConfirm = (quiz) => {
+    Swal.fire({
+      title: `Mulai Kuis ${quiz.title}?`,
+      text: quiz.description,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: 'hsl(330, 91%, 85%)',
+      cancelButtonColor: 'hsl(330, 4%, 55%)',
+      confirmButtonText: 'Ya, Mulai Kuis!',
+      cancelButtonText: 'Tidak, Batalkan',
+      reverseButtons: true,
+      customClass: {
+        confirmButton: 'swal-button-confirm',
+        cancelButton: 'swal-button-cancel'
+      },
+      didRender: () => {
+        const confirmBtn = document.querySelector('.swal-button-confirm');
+        const cancelBtn = document.querySelector('.swal-button-cancel');
+        if (confirmBtn) confirmBtn.style.color = 'hsl(323, 70%, 30%)';
+        if (cancelBtn) cancelBtn.style.color = 'white';
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        handleStartQuiz(quiz.id);
+      }
+    });
+  };
+
+  // --- Fungsi Baru untuk Konfirmasi Pembatalan Kuis ---
+  const handleCancelQuizConfirm = () => {
+    Swal.fire({
+      title: 'Batalkan Kuis?',
+      text: 'Apakah Anda yakin ingin membatalkan kuis ini? Progres Anda tidak akan disimpan.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: 'hsl(323, 70%, 30%)', // Warna untuk tombol 'Ya, Batalkan'
+      cancelButtonColor: 'hsl(330, 4%, 55%)',    // Warna untuk tombol 'Tidak'
+      confirmButtonText: 'Ya, Batalkan Kuis',
+      cancelButtonText: 'Tidak',
+      reverseButtons: true,
+      customClass: {
+        confirmButton: 'swal-cancel-confirm', // Class khusus untuk tombol batal
+        cancelButton: 'swal-cancel-deny'
+      },
+      didRender: () => {
+        const confirmBtn = document.querySelector('.swal-cancel-confirm');
+        const cancelBtn = document.querySelector('.swal-cancel-deny');
+        if (confirmBtn) confirmBtn.style.color = 'white'; // Teks tombol batal menjadi putih
+        if (cancelBtn) cancelBtn.style.color = 'white';
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Jika pengguna mengklik 'Ya, Batalkan', panggil fungsi handleCancelQuiz dari presenter
+        handleCancelQuiz();
+      }
+    });
+  };
+  // --- Akhir Fungsi Baru ---
 
   const renderQuizList = () => (
     <div className="quiz-list-container">
@@ -50,7 +111,7 @@ export default function QuizView({
             cursor: 'pointer',
             transition: 'transform 0.3s ease-in-out',
             color: 'hsl(323, 70%, 30%)'
-          }} onClick={() => handleStartQuiz(quiz.id)}>
+          }} onClick={() => handleStartQuizConfirm(quiz)}>
             <h3 style={{ marginBottom: '0.5rem' }}>{quiz.title}</h3>
             <p style={{ fontSize: '.9rem', color: 'hsl(330, 4%, 55%)' }}>{quiz.description}</p>
             <p style={{ marginTop: '1rem', fontWeight: 'bold' }}>{quiz.questionCount} Soal</p>
@@ -62,7 +123,9 @@ export default function QuizView({
               padding: '0.75rem 1.5rem',
               borderRadius: '0.5rem',
               cursor: 'pointer'
-            }}>Mulai Kuis</button>
+            }} onClick={(e) => { e.stopPropagation(); handleStartQuizConfirm(quiz); }}>
+              Mulai Kuis
+            </button>
           </div>
         ))}
       </div>
@@ -91,7 +154,7 @@ export default function QuizView({
         <h2 style={{ marginBottom: '1rem', textAlign: 'center' }}>{currentQuiz.title}</h2>
         {timerActive && !quizFinished && (
             <div style={{ textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem', color: timeLeft <= 10 ? 'crimson' : 'hsl(323, 70%, 30%)' }}>
-                Waktu Tersisa: {formatTime(timeLeft)}
+              Waktu Tersisa: {formatTime(timeLeft)}
             </div>
         )}
         <p style={{ textAlign: 'center', marginBottom: '2rem', color: 'hsl(330, 4%, 55%)' }}>
@@ -108,11 +171,7 @@ export default function QuizView({
                 key={index}
                 className={`option-button ${selectedOptionIndex === index ? 'selected' : ''} ${quizFinished && option.isCorrect ? 'correct' : ''} ${quizFinished && selectedOptionIndex === index && !option.isCorrect ? 'incorrect' : ''}`}
                 onClick={() => handleOptionSelect(index)}
-                // --- PERBAIKAN DI SINI ---
-                // Tombol pilihan jawaban hanya akan disabled jika loading atau waktu habis.
-                // Kondisi `quizFinished` untuk mem-disable harus dipisah untuk feedback styling.
-                disabled={loading || timeLeft === 0}
-                // --- AKHIR PERBAIKAN ---
+                disabled={loading || timeLeft === 0 || quizFinished} // Tambah disabled jika kuis selesai
                 style={{
                   background: selectedOptionIndex === index ? '#fbeaea' : 'white',
                   border: `2px solid ${selectedOptionIndex === index ? 'hsl(330, 91%, 85%)' : 'hsl(330, 4%, 55%)'}`,
@@ -126,7 +185,7 @@ export default function QuizView({
                   ...(quizFinished && option.isCorrect && { borderColor: 'green', backgroundColor: '#e6ffe6' }),
                   ...(quizFinished && selectedOptionIndex === index && !option.isCorrect && { borderColor: 'red', backgroundColor: '#ffe6e6' }),
                   // Jika kuis sudah selesai, non-aktifkan semua interaksi
-                  ...(quizFinished && { pointerEvents: 'none', opacity: 0.7 }) // Tambahkan ini untuk visual disabled setelah kuis selesai
+                  ...(quizFinished && { pointerEvents: 'none', opacity: 0.7 })
                 }}
               >
                 {option.text}
@@ -135,25 +194,43 @@ export default function QuizView({
           </div>
         </div>
 
+        {/* --- Tombol "Soal Selanjutnya" dan "Batalkan Kuis" --- */}
         {!quizFinished && (
-          <button
-            onClick={handleNextQuestion}
-            className="button"
-            disabled={selectedOptionIndex === null || loading || timeLeft === 0}
-            style={{
-              display: 'block',
-              margin: '0 auto',
-              background: 'hsl(330, 91%, 85%)',
-              color: 'hsl(323, 70%, 30%)',
-              padding: '0.75rem 2rem',
-              borderRadius: '0.5rem',
-              border: 'none',
-              cursor: 'pointer'
-            }}
-          >
-            {currentQuestionIndex < totalQuestions - 1 ? 'Soal Selanjutnya' : 'Selesai Kuis'}
-          </button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
+            <button
+              onClick={handleCancelQuizConfirm} // Panggil fungsi konfirmasi pembatalan
+              className="button button--ghost"
+              style={{
+                borderColor: 'hsl(323, 70%, 30%)', // Warna border
+                color: 'hsl(323, 70%, 30%)',       // Warna teks
+                padding: '0.75rem 1.5rem',
+                borderRadius: '0.5rem',
+                background: 'transparent',
+                cursor: 'pointer',
+                marginRight: '1rem' // Tambah sedikit jarak
+              }}
+            >
+              Batalkan Kuis
+            </button>
+            <button
+              onClick={handleNextQuestion}
+              className="button"
+              disabled={selectedOptionIndex === null || loading || timeLeft === 0}
+              style={{
+                background: 'hsl(330, 91%, 85%)',
+                color: 'hsl(323, 70%, 30%)',
+                padding: '0.75rem 2rem',
+                borderRadius: '0.5rem',
+                border: 'none',
+                cursor: 'pointer',
+                flexGrow: 1 // Agar tombol ini mengisi sisa ruang
+              }}
+            >
+              {currentQuestionIndex < totalQuestions - 1 ? 'Soal Selanjutnya' : 'Selesai Kuis'}
+            </button>
+          </div>
         )}
+        {/* --- Akhir Tombol --- */}
         
         {quizFinished && renderQuizResult()}
       </div>
@@ -204,7 +281,9 @@ export default function QuizView({
         <h4 style={{ marginBottom: '1.5rem', textAlign: 'center', fontSize: '1.1rem' }}>Tinjauan Jawaban Anda:</h4>
         {userAnswers.length > 0 ? (
           userAnswers.map((answer, index) => {
-            const questionData = currentQuiz.questions[answer.questionIndex];
+            const questionData = currentQuiz && currentQuiz.questions ? currentQuiz.questions[answer.questionIndex] : null;
+            if (!questionData) return null;
+
             const userAnswerText = answer.selectedOptionIndex !== null
               ? questionData.options[answer.selectedOptionIndex].text
               : "Tidak dijawab";
@@ -216,7 +295,7 @@ export default function QuizView({
                 <p style={{ color: answer.isCorrect ? 'green' : 'crimson', fontSize: '0.95rem' }}>
                   Jawaban Anda: {userAnswerText} {answer.isCorrect ? '✅' : '❌'}
                 </p>
-                {!answer.isCorrect && ( // Tampilkan jawaban benar jika user salah atau tidak dijawab
+                {!answer.isCorrect && (
                     <p style={{ color: 'green', fontSize: '0.95rem' }}>
                       Jawaban Benar: {correctAnswerText}
                     </p>

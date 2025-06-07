@@ -1,0 +1,97 @@
+{
+  "id": "makanan_kulit_sehat",
+  "title": "Kuis Makanan & Kulit Sehat",
+  "description": "Pelajari bagaimana makanan mempengaruhi kesehatan dan kecantikan kulitmu.",
+  "questions": [
+    {
+      "question": "Nutrisi apa yang paling penting untuk menjaga kelembapan kulit dari dalam?",
+      "options": [
+        { "text": "A. Protein", "isCorrect": false },
+        { "text": "B. Asam Lemak Omega-3 dan air yang cukup", "isCorrect": true },
+        { "text": "C. Karbohidrat", "isCorrect": false },
+        { "text": "D. Gula", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Vitamin apa yang dikenal sebagai \"vitamin kulit\" karena perannya dalam regenerasi sel dan perlindungan antioksidan?",
+      "options": [
+        { "text": "A. Vitamin B", "isCorrect": false },
+        { "text": "B. Vitamin C dan E", "isCorrect": true },
+        { "text": "C. Vitamin K", "isCorrect": false },
+        { "text": "D. Vitamin D", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Makanan tinggi gula dan olahan seringkali dikaitkan dengan masalah kulit seperti jerawat karena...",
+      "options": [
+        { "text": "A. Menyediakan energi instan", "isCorrect": false },
+        { "text": "B. Memicu peradangan dan meningkatkan produksi sebum", "isCorrect": true },
+        { "text": "C. Membuat kulit lebih cerah", "isCorrect": false },
+        { "text": "D. Mengandung serat tinggi", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Sumber protein tanpa lemak (lean protein) penting untuk kulit karena berfungsi dalam...",
+      "options": [
+        { "text": "A. Memberikan energi untuk aktivitas", "isCorrect": false },
+        { "text": "B. Produksi kolagen dan perbaikan jaringan kulit", "isCorrect": true },
+        { "text": "C. Mengontrol kadar gula darah", "isCorrect": false },
+        { "text": "D. Meningkatkan nafsu makan", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Buah-buahan berwarna cerah seperti jeruk dan stroberi baik untuk kulit karena kaya akan...",
+      "options": [
+        { "text": "A. Lemak", "isCorrect": false },
+        { "text": "B. Antioksidan (terutama Vitamin C)", "isCorrect": true },
+        { "text": "C. Pati", "isCorrect": false },
+        { "text": "D. Garam", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Sayuran hijau gelap seperti bayam dan kale mengandung vitamin dan mineral yang mendukung kesehatan kulit, salah satunya adalah...",
+      "options": [
+        { "text": "A. Vitamin D", "isCorrect": false },
+        { "text": "B. Vitamin K dan A", "isCorrect": true },
+        { "text": "C. Vitamin B12", "isCorrect": false },
+        { "text": "D. Kalsium", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apakah produk susu selalu menyebabkan masalah kulit pada semua orang?",
+      "options": [
+        { "text": "A. Ya, selalu", "isCorrect": false },
+        { "text": "B. Tidak, hanya pada individu tertentu yang sensitif", "isCorrect": true },
+        { "text": "C. Hanya pada remaja", "isCorrect": false },
+        { "text": "D. Tidak pernah", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Zat gizi mikro (trace mineral) seperti Zinc penting untuk kulit karena...",
+      "options": [
+        { "text": "A. Memberi warna pada kulit", "isCorrect": false },
+        { "text": "B. Mendukung penyembuhan luka dan mengurangi peradangan jerawat", "isCorrect": true },
+        { "text": "C. Membuat kulit lebih berkilau", "isCorrect": false },
+        { "text": "D. Hanya berfungsi untuk rambut", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Teh hijau dikenal memiliki manfaat anti-inflamasi dan antioksidan untuk kulit. Senyawa aktif di dalamnya adalah...",
+      "options": [
+        { "text": "A. Kafein", "isCorrect": false },
+        { "text": "B. Katekin (EGCG)", "isCorrect": true },
+        { "text": "C. Tannin", "isCorrect": false },
+        { "text": "D. L-Theanine", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Pentingnya air putih bagi kesehatan kulit adalah...",
+      "options": [
+        { "text": "A. Hanya untuk membasuh wajah", "isCorrect": false },
+        { "text": "B. Menjaga hidrasi kulit, elastisitas, dan membantu detoksifikasi", "isCorrect": true },
+        { "text": "C. Membuat kulit kering", "isCorrect": false },
+        { "text": "D. Tidak ada pengaruhnya pada kulit", "isCorrect": false }
+      ]
+    }
+  ]
+}

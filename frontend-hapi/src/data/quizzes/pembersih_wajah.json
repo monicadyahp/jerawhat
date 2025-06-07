@@ -1,0 +1,97 @@
+{
+  "id": "pembersih_wajah",
+  "title": "Kuis Pembersih Wajah",
+  "description": "Seberapa jauh kamu memahami pentingnya pembersih wajah?",
+  "questions": [
+    {
+      "question": "Berapa kali idealnya wajah dibersihkan dalam sehari?",
+      "options": [
+        { "text": "A. Sekali", "isCorrect": false },
+        { "text": "B. Dua kali (pagi dan malam)", "isCorrect": true },
+        { "text": "C. Setiap kali merasa kotor", "isCorrect": false },
+        { "text": "D. Tidak perlu dicuci setiap hari", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa fungsi utama pembersih wajah?",
+      "options": [
+        { "text": "A. Melembapkan kulit", "isCorrect": false },
+        { "text": "B. Mengangkat kotoran, minyak, makeup, dan sel kulit mati", "isCorrect": true },
+        { "text": "C. Mengencangkan kulit", "isCorrect": false },
+        { "text": "D. Melindungi dari sinar UV", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apakah mencuci muka hanya dengan air sudah cukup?",
+      "options": [
+        { "text": "A. Ya, selalu cukup", "isCorrect": false },
+        { "text": "B. Tidak, air saja tidak cukup mengangkat minyak dan kotoran secara maksimal", "isCorrect": true },
+        { "text": "C. Cukup untuk kulit berminyak", "isCorrect": false },
+        { "text": "D. Cukup jika tidak pakai makeup", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa yang dimaksud dengan \"double cleansing\"?",
+      "options": [
+        { "text": "A. Mencuci muka dua kali dengan sabun yang sama", "isCorrect": false },
+        { "text": "B. Menggunakan pembersih berbasis minyak, lalu pembersih berbasis air", "isCorrect": true },
+        { "text": "C. Mencuci muka dengan dua jenis air berbeda", "isCorrect": false },
+        { "text": "D. Mencuci muka dan rambut sekaligus", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Jenis pembersih wajah apa yang cocok untuk kulit berminyak?",
+      "options": [
+        { "text": "A. Cleansing balm", "isCorrect": false },
+        { "text": "B. Gel atau foam cleanser yang ringan", "isCorrect": true },
+        { "text": "C. Cleansing oil", "isCorrect": false },
+        { "text": "D. Cleansing milk yang kaya pelembap", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Mengapa pembersih wajah berbusa melimpah belum tentu yang terbaik?",
+      "options": [
+        { "text": "A. Busa banyak berarti bersih total", "isCorrect": false },
+        { "text": "B. Busa berlebihan bisa menandakan kandungan deterjen keras yang mengeringkan kulit", "isCorrect": true },
+        { "text": "C. Busa membuat kulit terasa lebih segar", "isCorrect": false },
+        { "text": "D. Busa tidak berpengaruh pada kulit", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apakah pembersih wajah bisa mengatasi jerawat secara langsung?",
+      "options": [
+        { "text": "A. Ya, itu satu-satunya cara", "isCorrect": false },
+        { "text": "B. Tidak, pembersih wajah membantu menjaga kebersihan dan mencegah, bukan mengobati", "isCorrect": true },
+        { "text": "C. Hanya pembersih mahal", "isCorrect": false },
+        { "text": "D. Tergantung mereknya", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Suhu air terbaik untuk mencuci wajah adalah...",
+      "options": [
+        { "text": "A. Air panas", "isCorrect": false },
+        { "text": "B. Air dingin", "isCorrect": false },
+        { "text": "C. Air suam-suam kuku", "isCorrect": true },
+        { "text": "D. Air es", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Setelah mencuci wajah, apa yang sebaiknya dilakukan?",
+      "options": [
+        { "text": "A. Biarkan kering sendiri", "isCorrect": false },
+        { "text": "B. Keringkan dengan menepuk-nepuk lembut menggunakan handuk bersih", "isCorrect": true },
+        { "text": "C. Gosok keras dengan handuk", "isCorrect": false },
+        { "text": "D. Langsung pakai makeup", "isCorrect": false }
+      ]
+    },
+    {
+      "question": "Apa bahaya tidur tanpa membersihkan wajah?",
+      "options": [
+        { "text": "A. Tidak ada bahaya", "isCorrect": false },
+        { "text": "B. Menyumbat pori, memicu jerawat, dan penuaan dini", "isCorrect": true },
+        { "text": "C. Membuat kulit lebih sehat", "isCorrect": false },
+        { "text": "D. Membuat kulit lebih cerah", "isCorrect": false }
+      ]
+    }
+  ]
+}
