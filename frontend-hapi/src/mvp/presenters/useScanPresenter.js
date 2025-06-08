@@ -1,4 +1,4 @@
-// useScanPresenter.js
+// frontend-hapi > src > mvp > presenters > useScanPresenter.js
 import { useState, useEffect, useRef, useCallback } from "react";
 import ScanModel from "../models/ScanModel";
 
@@ -14,7 +14,7 @@ export default function useScanPresenter() {
   const [predictionResult, setPredictionResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [statusMsg, setStatusMsg] = useState("");
-  const [modelStatus, setModelStatus] = useState({ status: "idle", error: null });
+  const [modelLoadStatus, setModelLoadStatus] = useState("idle");
   const [faceDetectionStatus, setFaceDetectionStatus] = useState({ status: "idle", error: null });
   const [cameraDevices, setCameraDevices] = useState([]);
   const [selectedCameraId, setSelectedCameraId] = useState("");
@@ -27,15 +27,10 @@ export default function useScanPresenter() {
 
   const [lifestyleRecommendations, setLifestyleRecommendations] = useState(null);
 
-  // --- MODIFIKASI DIMULAI DI SINI ---
-  // Gunakan URL statis untuk website Anda
-  // GANTI 'https://namadomainwebsiteanda.com' dengan URL website Anda yang sebenarnya
-  const STATIC_APP_URL = 'https://namadomainwebsiteanda.com'; // Contoh: 'https://hapi.id'
-  // --- MODIFIKASI BERAKHIR DI SINI ---
-
+  const STATIC_APP_URL = 'https://namadomainwebsiteanda.com';
 
   useEffect(() => {
-    import("../../data/lifestyleRecomendation.json")
+    import("../../data/lifestyleRecomendation.json") // Periksa kembali jalur ini jika ada masalah
       .then((data) => {
         console.log("Loaded recommendations:", data.default);
         setLifestyleRecommendations(data.default);
@@ -45,28 +40,32 @@ export default function useScanPresenter() {
       });
   }, []);
 
-  // Effect untuk mengelola status model
   useEffect(() => {
     const interval = setInterval(() => {
-      const acneModelStatus = model.getAcneModelStatus();
-      setModelStatus(acneModelStatus);
-      const faceModelStatus = model.getFaceModelStatus();
+      const acneModelCurrentStatus = model.getAcneModelStatus().status;
+      const faceModelCurrentStatus = model.getFaceModelStatus().status;
+
+      if (acneModelCurrentStatus === "loading" || faceModelCurrentStatus === "loading") {
+        setModelLoadStatus("loading");
+      } else if (acneModelCurrentStatus === "error" || faceModelCurrentStatus === "error") {
+        setModelLoadStatus("error");
+      } else if (acneModelCurrentStatus === "ready" && faceModelCurrentStatus === "ready") {
+        setModelLoadStatus("ready");
+        clearInterval(interval);
+      } else {
+        setModelLoadStatus("idle");
+      }
+
       setFaceDetectionStatus((prev) => ({
         ...prev,
-        status: faceModelStatus.status === "ready" ? "idle" : faceModelStatus.status,
-        error: faceModelStatus.error,
+        status: faceModelCurrentStatus === "ready" ? "idle" : faceModelCurrentStatus,
+        error: model.getFaceModelStatus().error,
       }));
-      if (
-        (acneModelStatus.status === "ready" || acneModelStatus.status === "error") &&
-        (faceModelStatus.status === "ready" || faceModelStatus.status === "error")
-      ) {
-        clearInterval(interval);
-      }
+
     }, 500);
     return () => clearInterval(interval);
   }, [model]);
 
-  // Effect untuk membersihkan object URL gambar
   useEffect(() => {
     if (!selectedImage) {
       setImagePreview(null);
@@ -77,7 +76,6 @@ export default function useScanPresenter() {
     return () => URL.revokeObjectURL(objectUrl);
   }, [selectedImage]);
 
-  // Effect untuk scroll dan header
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
     const onScroll = () => {
@@ -90,12 +88,9 @@ export default function useScanPresenter() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Effect untuk mengambil daftar kamera
   useEffect(() => {
     async function fetchCameras() {
       try {
-        // Meminta izin kamera agar daftar perangkat muncul
-        // Ini perlu dilakukan untuk mengisi setCameraDevices
         await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
         const devices = await navigator.mediaDevices.enumerateDevices();
         const videoDevices = devices.filter((device) => device.kind === "videoinput");
@@ -110,16 +105,12 @@ export default function useScanPresenter() {
     fetchCameras();
   }, []);
 
-  // Effect untuk menghentikan kamera saat komponen di-unmount atau saat isCameraActive berubah menjadi false (jika dikelola dari luar)
   useEffect(() => {
-    // Fungsi cleanup akan dijalankan saat komponen di-unmount
-    // atau sebelum useEffect dijalankan lagi jika dependensi berubah.
     return () => {
-      stopCamera(); // Panggil fungsi stopCamera saat komponen di-unmount
+      stopCamera();
     };
-  }, []); // Dependensi kosong agar hanya dijalankan sekali saat mount dan cleanup saat unmount
+  }, []);
 
-  // Effect untuk mengelola stream kamera ke videoRef.current
   useEffect(() => {
     if (isCameraActive && streamRef.current && videoRef.current) {
       videoRef.current.srcObject = streamRef.current;
@@ -127,8 +118,6 @@ export default function useScanPresenter() {
         videoRef.current.play().catch((e) => console.error("Error playing video:", e));
       };
     } else if (!isCameraActive && videoRef.current) {
-      // Pastikan srcObject direset saat kamera tidak aktif
-      // eslint-disable-next-line no-param-reassign
       videoRef.current.srcObject = null;
     }
   }, [isCameraActive, streamRef.current, videoRef.current]);
@@ -137,7 +126,7 @@ export default function useScanPresenter() {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
-      setIsCameraActive(false); // Pastikan status kamera diatur ke false
+      setIsCameraActive(false);
       console.log("Kamera berhasil dihentikan.");
     }
     if (scanIntervalRef.current) {
@@ -148,11 +137,11 @@ export default function useScanPresenter() {
 
   const onCameraChange = (deviceId) => {
     setSelectedCameraId(deviceId);
-    stopCamera(); // Hentikan kamera saat kamera diubah
+    stopCamera();
   };
 
   const onTakeSnapshot = async () => {
-    if (!videoRef.current || loading || modelStatus.status !== "ready" || faceDetectionStatus.status !== "idle") return;
+    if (!videoRef.current || loading || modelLoadStatus !== "ready" || faceDetectionStatus.status !== "idle") return;
     setIsCapturing(true);
     setLoading(true);
     setStatusMsg("");
@@ -173,8 +162,6 @@ export default function useScanPresenter() {
       const file = new File([blob], "camera-snapshot.jpg", { type: "image/jpeg" });
       setSelectedImage(file);
 
-      // Tidak langsung menghentikan kamera di sini jika ingin tetap aktif setelah snapshot,
-      // tapi instruksi Anda adalah menghentikannya. Jadi, tetap panggil stopCamera.
       stopCamera();
     } catch (error) {
       console.error("Error taking snapshot:", error);
@@ -191,15 +178,15 @@ export default function useScanPresenter() {
       return;
     }
 
-    stopCamera(); // Pastikan kamera sebelumnya berhenti sebelum memulai yang baru
+    stopCamera();
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { deviceId: selectedCameraId },
         audio: false,
       });
-      streamRef.current = stream; // Simpan stream di ref
-      setIsCameraActive(true); // Aktifkan status kamera
+      streamRef.current = stream;
+      setIsCameraActive(true);
 
       setSelectedImage(null);
       setPredictionResult(null);
@@ -222,7 +209,7 @@ export default function useScanPresenter() {
     setStatusMsg("");
     setFaceDetectionStatus({ status: "idle", error: null });
     setIsCapturing(false);
-    stopCamera(); // Hentikan kamera saat reset
+    stopCamera();
     setLoading(false);
   };
 
@@ -237,39 +224,51 @@ export default function useScanPresenter() {
       if (!userDataString) {
         throw new Error("Data user tidak ditemukan di penyimpanan lokal. Anda harus login.");
       }
-      const userData = JSON.parse(userDataString);
+      let userData;
+      try {
+        userData = JSON.parse(userDataString);
+      } catch (e) {
+        throw new Error("Data user di penyimpanan lokal rusak. Silakan login ulang.");
+      }
+
       const token = userData.token;
       if (!token) {
         throw new Error("Token autentikasi tidak ditemukan dalam data user. Anda harus login.");
       }
 
+      // ⚠️ PERBAIKAN: Definisikan formData di sini
       const formData = new FormData();
-      formData.append("photo", dataToSave.photo);
-      formData.append("kondisi_jerawat", dataToSave.kondisi_jerawat);
-      formData.append("keyakinan_model", dataToSave.keyakinan_model);
-      formData.append("rekomendasi_makanan", dataToSave.rekomendasi_makanan);
-      formData.append("makanan_tidak_boleh_dimakan", dataToSave.makanan_tidak_boleh_dimakan);
-      formData.append("rekomendasi_aktivitas_fisik", dataToSave.rekomendasi_aktivitas_fisik);
-      formData.append("rekomendasi_manajemen_stress", dataToSave.rekomendasi_manajemen_stress);
+      formData.append('photo', dataToSave.photo); // Tambahkan file gambar
+      formData.append('kondisi_jerawat', dataToSave.kondisi_jerawat);
+      formData.append('keyakinan_model', dataToSave.keyakinan_model);
+      formData.append('rekomendasi_makanan', dataToSave.rekomendasi_makanan);
+      formData.append('makanan_tidak_boleh_dimakan', dataToSave.makanan_tidak_boleh_dimakan);
+      formData.append('rekomendasi_aktivitas_fisik', dataToSave.rekomendasi_aktivitas_fisik);
+      formData.append('rekomendasi_manajemen_stress', dataToSave.rekomendasi_manajemen_stress);
+
 
       const response = await fetch("https://api.afridika.my.id/history", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
+          // Penting: Jangan set 'Content-Type': 'application/json' jika menggunakan FormData
+          // Browser akan otomatis mengaturnya sebagai 'multipart/form-data' dengan boundary yang benar
+          // saat Anda mengirim objek FormData
         },
-        body: formData,
+        body: formData, // Gunakan formData yang sudah didefinisikan
       });
       const result = await response.json();
 
       if (!response.ok) {
         console.error("Backend error response:", result);
-        throw new Error(
-          result.message.error || (result.message.errors ? result.message.errors.join(", ") : "Gagal menyimpan riwayat.")
-        );
+        let errorMessage = result.message || "Gagal menyimpan riwayat.";
+        if (response.status === 401) {
+          errorMessage = result.message || "Sesi login Anda telah berakhir. Silakan login ulang.";
+        }
+        throw new Error(errorMessage);
       }
 
       console.log("Riwayat berhasil disimpan:", result);
-      setStatusMsg("Riwayat berhasil disimpan!");
     } catch (error) {
       console.error("Error saving history to backend:", error);
       setStatusMsg("Gagal menyimpan riwayat: " + error.message);
@@ -278,10 +277,10 @@ export default function useScanPresenter() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedImage || loading || modelStatus.status !== "ready" || faceDetectionStatus.status === "detecting") return;
+    if (!selectedImage || loading || modelLoadStatus !== "ready" || faceDetectionStatus.status === "detecting") return;
 
     setLoading(true);
-    setStatusMsg("");
+    setStatusMsg("Menganalisis gambar...");
     setPredictionResult(null);
     setFaceDetectionStatus({ status: "detecting", error: null });
 
@@ -304,22 +303,22 @@ export default function useScanPresenter() {
       const result = await model.predictAcne(selectedImage);
       if (result.success) {
         setPredictionResult(result.data);
-        setStatusMsg(result.message);
+        setStatusMsg("Prediksi jerawat berhasil!");
 
         if (result.data.predictedClass !== "Tidak Ada Jerawat" && lifestyleRecommendations) {
           const recommendationKey =
             result.data.predictedClass === "Jerawat Ringan"
               ? "jerawat_ringan"
               : result.data.predictedClass === "Jerawat Sedang"
-              ? "kulit_sedang"
-              : result.data.predictedClass === "Jerawat Parah"
-              ? "kulit_parah"
-              : null;
+                ? "kulit_sedang"
+                : result.data.predictedClass === "Jerawat Parah"
+                  ? "kulit_parah"
+                  : null;
 
           if (recommendationKey && lifestyleRecommendations[recommendationKey]) {
             const recommendations = lifestyleRecommendations[recommendationKey];
             const dataToSave = {
-              photo: selectedImage,
+              photo: selectedImage, // File gambar yang akan diupload
               kondisi_jerawat: result.data.predictedClass,
               keyakinan_model: result.data.confidence,
               rekomendasi_makanan: recommendations.makanan_dianjurkan.join("; "),
@@ -327,7 +326,11 @@ export default function useScanPresenter() {
               rekomendasi_aktivitas_fisik: recommendations.aktivitas_fisik.join("; "),
               rekomendasi_manajemen_stress: recommendations.manajemen_stres.join("; "),
             };
-            await saveHistoryToBackend(dataToSave);
+            try {
+              await saveHistoryToBackend(dataToSave);
+            } catch (historyError) {
+              console.error("Error saving history after prediction:", historyError);
+            }
           } else {
             console.warn("Tidak ada rekomendasi yang cocok untuk kelas prediksi:", result.data.predictedClass);
           }
@@ -344,21 +347,20 @@ export default function useScanPresenter() {
   };
 
   const onFileChange = (e) => {
-    stopCamera(); // Hentikan kamera saat file diupload
+    stopCamera();
     setSelectedImage(e.target.files[0] || null);
     setPredictionResult(null);
     setStatusMsg("");
     setFaceDetectionStatus({ status: "idle", error: null });
   };
 
-  // Fungsi baru untuk membuat gambar hasil scan
   const createSharableImage = useCallback(async () => {
     if (!imagePreview || !predictionResult || !lifestyleRecommendations) {
       setStatusMsg("Tidak ada gambar, hasil prediksi, atau rekomendasi untuk dibagikan.");
       return null;
     }
 
-    setLoading(true); // Mulai loading untuk pembuatan gambar
+    setLoading(true);
     setStatusMsg("Mempersiapkan gambar untuk dibagikan...");
 
     try {
@@ -374,62 +376,40 @@ export default function useScanPresenter() {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      // Ukuran Canvas Vertikal (9:16 ratio)
-      const CANVAS_WIDTH = 720; // Lebar standar untuk sosial media vertikal
-      const CANVAS_HEIGHT = 1280; // Tinggi (CANVAS_WIDTH * 16 / 9)
+      const CANVAS_WIDTH = 720;
+      const CANVAS_HEIGHT = 1280;
 
       canvas.width = CANVAS_WIDTH;
       canvas.height = CANVAS_HEIGHT;
 
-      // Warna latar belakang
-      ctx.fillStyle = "#FBEAEA"; // Pastel pink
+      ctx.fillStyle = "#FBEAEA";
       ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 
-      // --- Bagian Judul (Atas) ---
       const titleText = "✨ Hasil Scan Wajahku ✨";
       const taglineText = "Dapatkan analisis jerawat dan rekomendasi gaya hidup!";
-      ctx.fillStyle = "#721c24"; // Warna teks lebih gelap
+      ctx.fillStyle = "#721c24";
       ctx.textAlign = "center";
       ctx.font = "bold 48px Arial";
       ctx.fillText(titleText, CANVAS_WIDTH / 2, 70);
       ctx.font = "24px Arial";
       ctx.fillText(taglineText, CANVAS_WIDTH / 2, 110);
 
-
-      // --- Bagian Gambar Wajah Kecil dan Detail Hasil (Dibuat berdampingan di tengah) ---
       const smallImageSize = 150;
-      const margin = 30; // Margin dari tepi
-      const detailTextLineHeight = 30; // Perkiraan tinggi baris teks detail
+      const margin = 30;
+      const detailTextLineHeight = 30;
 
-      // Perkiraan lebar blok teks detail (untuk 3 baris teks terpanjang)
-      // Ini bisa dihitung lebih akurat dengan ctx.measureText() jika perlu.
-      // Misal, "Keyakinan Model: 100.00%" adalah teks terpanjang.
-      // Kita perlu setting font dulu untuk measureText bekerja akurat
-      ctx.font = "20px Arial"; // Set font untuk perhitungan lebar teks
+      ctx.font = "20px Arial";
       const maxTextWidth = Math.max(
-          ctx.measureText(`Tanggal Scan: ${new Date().toLocaleDateString('id-ID', {day: 'numeric', month: 'long', year: 'numeric'})}`).width,
-          ctx.measureText(`Kondisi Jerawat: ${predictionResult.predictedClass}`).width,
-          ctx.measureText(`Keyakinan Model: ${(predictionResult.confidence * 100).toFixed(2)}%`).width
-      ) + 10; // Tambahkan sedikit padding
+        ctx.measureText(`Tanggal Scan: ${new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}`).width,
+        ctx.measureText(`Kondisi Jerawat: ${predictionResult.predictedClass}`).width,
+        ctx.measureText(`Keyakinan Model: ${(predictionResult.confidence * 100).toFixed(2)}%`).width
+      ) + 10;
 
-      // Hitung lebar total konten (gambar + spasi + lebar teks detail)
       const contentBlockWidth = smallImageSize + margin + maxTextWidth;
-
-      // Hitung posisi X untuk menengahkan blok gabungan
       const startXContent = (CANVAS_WIDTH - contentBlockWidth) / 2;
-
-      // Menggeser blok ke atas
-      // Ini adalah nilai Y paling atas untuk blok gambar dan teks detail.
-      // Sesuaikan nilai ini untuk mengontrol posisi vertikal seluruh blok.
       const startYContentBlock = 160;
-
-      // Gambar wajah kecil di sisi kiri blok gabungan
-      // imgXAligned: posisi horizontal awal gambar
-      // imgYAligned: posisi vertikal awal gambar, disesuaikan agar pusat gambar sejajar dengan pusat blok teks
       let imgXAligned = startXContent;
-      // Perhitungan imgYAligned disesuaikan agar posisinya relatif terhadap startYContentBlock
-      // dan berada di tengah vertikal dengan blok teks yang ada di sampingnya.
-      let imgYAligned = startYContentBlock + ( (3 * detailTextLineHeight * 2) - smallImageSize ) / 2 - 20;
+      let imgYAligned = startYContentBlock + ((3 * detailTextLineHeight * 2) - smallImageSize) / 2 - 20;
 
 
       ctx.save();
@@ -439,7 +419,6 @@ export default function useScanPresenter() {
       ctx.drawImage(img, imgXAligned, imgYAligned, smallImageSize, smallImageSize);
       ctx.restore();
 
-      // Tambahkan border lingkaran pada gambar kecil
       ctx.strokeStyle = "#721c24";
       ctx.lineWidth = 4;
       ctx.beginPath();
@@ -447,14 +426,12 @@ export default function useScanPresenter() {
       ctx.stroke();
       ctx.lineWidth = 1;
 
-      // Detail hasil di samping kanan gambar kecil
       let textXDetail = imgXAligned + smallImageSize + margin;
-      let currentYDetail = startYContentBlock; // Posisi Y awal untuk detail
+      let currentYDetail = startYContentBlock;
 
       ctx.fillStyle = "#333";
       ctx.textAlign = "left";
 
-      // Tanggal Scan
       const currentDate = new Date().toLocaleDateString('id-ID', {
         day: 'numeric',
         month: 'long',
@@ -464,25 +441,22 @@ export default function useScanPresenter() {
       ctx.fillText(`Tanggal Scan:`, textXDetail, currentYDetail);
       ctx.font = "20px Arial";
       ctx.fillText(`${currentDate}`, textXDetail, currentYDetail + detailTextLineHeight);
-      currentYDetail += detailTextLineHeight * 2; // Spasi antar baris info
+      currentYDetail += detailTextLineHeight * 2;
 
-      // Kondisi Jerawat
       ctx.font = "bold 22px Arial";
       ctx.fillText(`Kondisi Jerawat:`, textXDetail, currentYDetail);
       ctx.font = "20px Arial";
       ctx.fillText(`${predictionResult.predictedClass}`, textXDetail, currentYDetail + detailTextLineHeight);
       currentYDetail += detailTextLineHeight * 2;
 
-      // Keyakinan Model
       ctx.font = "bold 22px Arial";
       ctx.fillText(`Keyakinan Model:`, textXDetail, currentYDetail);
       ctx.font = "20px Arial";
       ctx.fillText(`${(predictionResult.confidence * 100).toFixed(2)}%`, textXDetail, currentYDetail + detailTextLineHeight);
-      currentYDetail += detailTextLineHeight * 2; // Tambahkan spasi untuk bagian selanjutnya
+      currentYDetail += detailTextLineHeight * 2;
 
 
-      // --- Bagian Rekomendasi Gaya Hidup ---
-      let currentYRekomendasi = currentYDetail + margin; // Mulai rekomendasi setelah detail hasil
+      let currentYRekomendasi = currentYDetail + margin;
 
       ctx.fillStyle = "#721c24";
       ctx.textAlign = "center";
@@ -491,18 +465,17 @@ export default function useScanPresenter() {
       currentYRekomendasi += 40;
 
       const recommendationKey = predictionResult.predictedClass === "Jerawat Ringan" ? "jerawat_ringan" :
-                                predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
-                                predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
+        predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
+          predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
       const recommendations = lifestyleRecommendations?.[recommendationKey];
 
       if (recommendations) {
         ctx.textAlign = "left";
         ctx.fillStyle = "#333";
-        const bulletOffset = 25; // Offset untuk bullet point
-        const categorySpacing = 40; // Spasi antar kategori
-        const itemSpacing = 28; // Spasi antar item dalam daftar
+        const bulletOffset = 25;
+        const categorySpacing = 40;
+        const itemSpacing = 28;
 
-        // Makanan Dianjurkan
         ctx.font = "bold 24px Arial";
         ctx.fillText("🍎 Makanan Dianjurkan:", margin, currentYRekomendasi);
         currentYRekomendasi += itemSpacing;
@@ -513,7 +486,6 @@ export default function useScanPresenter() {
         });
         currentYRekomendasi += categorySpacing;
 
-        // Makanan Dilarang
         ctx.font = "bold 24px Arial";
         ctx.fillText("❌ Makanan Dilarang:", margin, currentYRekomendasi);
         currentYRekomendasi += itemSpacing;
@@ -524,7 +496,6 @@ export default function useScanPresenter() {
         });
         currentYRekomendasi += categorySpacing;
 
-        // Aktivitas Fisik
         ctx.font = "bold 24px Arial";
         ctx.fillText("🏃‍♂️ Aktivitas Fisik:", margin, currentYRekomendasi);
         currentYRekomendasi += itemSpacing;
@@ -535,7 +506,6 @@ export default function useScanPresenter() {
         });
         currentYRekomendasi += categorySpacing;
 
-        // Manajemen Stres
         ctx.font = "bold 24px Arial";
         ctx.fillText("🧘‍♀️ Manajemen Stres:", margin, currentYRekomendasi);
         currentYRekomendasi += itemSpacing;
@@ -547,10 +517,8 @@ export default function useScanPresenter() {
         currentYRekomendasi += categorySpacing;
       }
 
-
-      // --- Bagian Ajakan Promosi (Paling Bawah) ---
       const promoText = "Yuk, cek kondisi kulitmu juga di:";
-      const appUrl = `${STATIC_APP_URL}/scan`; // Menggunakan STATIC_APP_URL
+      const appUrl = `${STATIC_APP_URL}/scan`;
       ctx.fillStyle = "#721c24";
       ctx.textAlign = "center";
       ctx.font = "bold 28px Arial";
@@ -559,7 +527,6 @@ export default function useScanPresenter() {
       ctx.fillText(appUrl, CANVAS_WIDTH / 2, CANVAS_HEIGHT - 40);
 
 
-      setStatusMsg("Gambar hasil berhasil dibuat!");
       return canvas.toDataURL('image/png');
     } catch (error) {
       console.error("Error creating sharable image:", error);
@@ -568,7 +535,7 @@ export default function useScanPresenter() {
     } finally {
       setLoading(false);
     }
-  }, [imagePreview, predictionResult, lifestyleRecommendations, setStatusMsg, setLoading, STATIC_APP_URL]); // Tambahkan STATIC_APP_URL sebagai dependensi
+  }, [imagePreview, predictionResult, lifestyleRecommendations, setStatusMsg, setLoading, STATIC_APP_URL]);
 
   return {
     selectedImage,
@@ -576,7 +543,7 @@ export default function useScanPresenter() {
     predictionResult,
     loading,
     statusMsg,
-    modelStatus,
+    modelLoadStatus,
     onFileChange,
     onSubmit,
     onReset,
