@@ -7,7 +7,7 @@ export default class RegisterModel {
       return {
         success: false,
         status: "gagal",
-        message: { errors: "Semua field harus diisi!" },
+        message: "Semua field harus diisi!", // Pesan lebih langsung
       };
     }
 
@@ -15,16 +15,26 @@ export default class RegisterModel {
       return {
         success: false,
         status: "gagal",
-        message: { errors: "Password dan konfirmasi tidak sama!" },
+        message: "Password dan konfirmasi tidak sama!", // Pesan lebih langsung
       };
     }
+
+    // --- TAMBAHAN: Validasi panjang password ---
+    if (password.length < 8) {
+      return {
+        success: false,
+        status: "gagal",
+        message: "Password minimal harus 8 karakter!",
+      };
+    }
+    // --- AKHIR TAMBAHAN ---
 
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("email", email);
       formData.append("password", password);
-      formData.append("confirmPassword", confirmPassword); // Ini tidak perlu dikirim ke backend jika backend tidak memvalidasinya
+      // formData.append("confirmPassword", confirmPassword); // Ini tidak perlu dikirim ke backend jika backend tidak memvalidasinya
                                                             // atau jika validasi confirmPassword hanya di frontend.
 
       // Ubah URL fetch dari hardcoded 'http://localhost:3000' menjadi API_BASE_URL
@@ -36,10 +46,15 @@ export default class RegisterModel {
       const result = await response.json();
       
       if (!response.ok) {
+        // Pastikan Anda mengambil pesan error dengan benar dari respons backend
+        // Jika backend mengirim 'message.error', gunakan itu. Jika hanya 'message', gunakan itu.
+        // Contoh: return { success: false, status: "gagal", message: result.message?.error || result.message || "Registrasi gagal." };
         return {
           success: false,
           status: "gagal",
-          message: result.message.error,
+          // Perbarui ini untuk mengambil pesan error dari backend
+          // Jika backend mengembalikan { message: { error: "..." } } atau { message: "..." }
+          message: result.message?.error || result.message || "Terjadi kesalahan pada server.",
         };
       }
 
@@ -48,7 +63,7 @@ export default class RegisterModel {
       return {
         success: false,
         status: "gagal",
-        message: { errors: err.message },
+        message: "Terjadi kesalahan jaringan atau server tidak merespons.", // Pesan error jaringan yang lebih ramah
       };
     }
   }

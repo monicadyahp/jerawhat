@@ -5,8 +5,13 @@ import App from './App.jsx';
 import 'swiper/css';
 import './assets/css/styles.css'; // CSS utama kamu
 
-// Jika kamu pakai JS eksternal seperti ScrollReveal dan Swiper, inisialisasi di dalam App.jsx atau di sini
-// Tapi karena kita sudah masukkan di useEffect di App.jsx, jadi cukup di sini saja
+// Tidak perlu lagi import Workbox dari 'workbox-window' di sini
+// Karena vite-plugin-pwa akan menginjeksikan kode registrasi Service Worker secara otomatis
+// sesuai dengan konfigurasi 'injectRegister: 'auto'' di vite.config.js
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App />);
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);

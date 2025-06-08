@@ -6,14 +6,15 @@ import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 import { useAuth } from '../../context/AuthContext'; // <--- Tambahkan ini untuk mengimpor useAuth
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'; // Pastikan ini benar
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'; // Ini tidak perlu di sini jika model sudah menanganinya
 
 export default function useLoginPresenter() {
-  const model = useMemo(() => new LoginModel(API_BASE_URL), []); // <--- Pastikan LoginModel menerima API_BASE_URL jika diperlukan
+  const model = useMemo(() => new LoginModel(), []); // Tidak perlu meneruskan API_BASE_URL jika sudah diatur di model
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(null); // Jika Anda ingin menampilkan error di UI form, bukan hanya SweetAlert
 
   const navigate = useNavigate();
   const { login } = useAuth(); // <--- Dapatkan fungsi 'login' dari AuthContext
@@ -38,30 +39,22 @@ export default function useLoginPresenter() {
   const onSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // setError(null); // Reset error saat submit baru
 
-    // Hapus setTimeout jika tidak ada keperluan UI yang jelas untuk penundaan ini.
+    // Sarannya: Hapus setTimeout jika tidak ada keperluan UI yang jelas untuk penundaan ini.
     // Penundaan 800ms bisa membuat pengalaman pengguna terasa lambat.
-    // Jika tujuannya untuk animasi, pertimbangkan cara lain.
     // Untuk tujuan autentikasi, lebih baik langsung panggil model.login().
-    // Contoh ini akan mempertahankan setTimeout, tetapi sarannya adalah untuk menghapusnya.
     setTimeout(async () => {
       const result = await model.login(email, password); // Memanggil metode login dari LoginModel
 
       setLoading(false);
 
       if (result.success) {
-        // Data yang akan disimpan di localStorage dan AuthContext
         const userDataToStore = {
           ...result.user,
           token: result.token.trim()
         };
-
-        // Panggil fungsi 'login' dari AuthContext
-        // Ini akan menyimpan 'user' ke state global AuthContext
-        // DAN juga menyimpan ke localStorage (seperti yang didefinisikan di AuthContext.jsx)
-        login(userDataToStore); // <--- INI PENTING! Ganti localStorage.setItem yang lama
-
-        // window.dispatchEvent(new Event('loginStatusUpdated')); // Ini mungkin tidak lagi diperlukan jika Anda mengandalkan useAuth
+        login(userDataToStore); // Panggil fungsi 'login' dari AuthContext
 
         Swal.fire({
           icon: 'success',
@@ -73,13 +66,14 @@ export default function useLoginPresenter() {
           showConfirmButton: false,
           timer: 1500
         }).then(() => {
-          navigate("/profile"); // <--- Arahkan ke halaman profil ("/profile") setelah login berhasil        
+          navigate("/profile"); // Arahkan ke halaman profil setelah login berhasil
         });
       } else {
+        // setError(result.message); // Atur error jika ingin ditampilkan di form
         Swal.fire({
           icon: 'error',
           title: 'Login Gagal!',
-          text: result.message,
+          text: result.message, // Pesan error yang sudah spesifik dari LoginModel
           background: '#fbeaea',
           confirmButtonColor: 'hsl(330, 91%, 85%)',
           color: 'hsl(323, 70%, 30%)',
@@ -98,6 +92,7 @@ export default function useLoginPresenter() {
     email,
     password,
     loading,
+    // error, // Kembalikan error jika ingin ditampilkan di LoginView
     onEmailChange,
     onPasswordChange,
     onSubmit,

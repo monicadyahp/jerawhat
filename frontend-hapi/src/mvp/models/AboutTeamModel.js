@@ -25,7 +25,7 @@ export default class AboutTeamModel {
         name: 'Muhammad Ikhsan Rizki Pratama',
         role: 'Front End & Back End',
         univ: 'Universitas Bina Insan',
-        linkedin: null // Biarkan null atau string kosong jika belum ada URL
+        linkedin: 'https://www.linkedin.com/in/ikhsan-rizki-0b4642351/' 
       },
       {
         id: 'MC589D5X2488',

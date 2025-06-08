@@ -10,7 +10,6 @@ export default function useRegisterPresenter() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPass] = useState("");
-  // const [status, setStatus] = useState(""); // Hapus state status ini
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -35,7 +34,6 @@ export default function useRegisterPresenter() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    // setStatus(""); // Hapus ini juga
     setLoading(true);
 
     setTimeout(async () => {
@@ -65,12 +63,13 @@ export default function useRegisterPresenter() {
           navigate("/login"); // Redirect ke halaman login setelah registrasi sukses
         });
       } else {
-        // Tampilkan pesan error dari result.message.errors atau result.message
-        const errorMessage = result.message?.errors || result.message;
+        // Tampilkan pesan error dari result.message
+        // result.message sekarang akan langsung berisi string pesan yang spesifik
+        const errorMessage = result.message; 
         Swal.fire({
           icon: 'error',
           title: 'Registrasi Gagal!',
-          text: errorMessage,
+          text: errorMessage, // Pesan error yang lebih spesifik
           background: '#fbeaea', // Warna pink pastel
           confirmButtonColor: 'hsl(330, 91%, 85%)', // --first-color
           color: 'hsl(323, 70%, 30%)', // --title-color
@@ -90,7 +89,6 @@ export default function useRegisterPresenter() {
     email,
     password,
     confirmPassword,
-    // status, // Hapus status dari return
     loading,
     onNameChange,
     onEmailChange,

@@ -1,0 +1,53 @@
+{
+  "name": "JeraWHAT?!",
+  "short_name": "JeraWHAT?!",
+  "description": "Aplikasi deteksi jerawat dan rekomendasi perawatan kulit",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBEAEA",
+  "theme_color": "#B85294",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mulai Scan",
+      "short_name": "Scan",
+      "description": "Lakukan scan wajah untuk deteksi jerawat",
+      "url": "/scan",
+      "icons": [{ "src": "/shortcut-scan.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Riwayat Scan",
+      "short_name": "Riwayat",
+      "description": "Lihat riwayat scan jerawat Anda",
+      "url": "/scan/history",
+      "icons": [{ "src": "/shortcut-history.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop-1.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide"
+    },
+    {
+      "src": "/screenshot-mobile-1.png",
+      "sizes": "360x720",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ]
+}
