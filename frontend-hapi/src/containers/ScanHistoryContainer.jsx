@@ -13,7 +13,9 @@ export default function ScanHistoryContainer() {
     selectedScan,
     handleOpenModal,
     handleCloseModal,
-    handleDeleteScan, // Pastikan ini diambil dari presenter
+    handleDeleteScan,
+    createSharableImageForHistory, // Import fungsi ini
+    getPhotoUrl, // Import fungsi ini
   } = useScanHistoryPresenter();
 
   return (
@@ -26,7 +28,9 @@ export default function ScanHistoryContainer() {
         selectedScan={selectedScan}
         handleOpenModal={handleOpenModal}
         handleCloseModal={handleCloseModal}
-        handleDeleteScan={handleDeleteScan} // Dan diteruskan ke View
+        handleDeleteScan={handleDeleteScan}
+        createSharableImageForHistory={createSharableImageForHistory} // Teruskan ke View
+        getPhotoUrl={getPhotoUrl} // Teruskan ke View
       />
       <Footer />
     </>

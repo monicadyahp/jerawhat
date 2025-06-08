@@ -1,15 +1,181 @@
 // frontend-hapi > src > views > ScanHistoryView.jsx
-import React from 'react';
+import React, { useState } from "react";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
-const getPhotoUrl = (photo) => {
-  if (!photo) return '';
-  if (photo.startsWith('http')) return photo;
-  const base = import.meta.env.VITE_API_BASE_URL || 'https://api.afridika.my.id';
-  // Pastikan hanya satu slash di antara base dan path
-  return base.replace(/\/$/, '') + '/' + photo.replace(/^\/?/, '');
+const SimpleModal = ({ isOpen, onClose, children, zIndex = 1050 }) => {
+  if (!isOpen) return null;
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: zIndex
+    }}>
+      <div style={{
+        backgroundColor: '#fff',
+        padding: '2rem',
+        borderRadius: '16px',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+        maxWidth: '90%',
+        maxHeight: '90%',
+        overflowY: 'auto',
+        position: 'relative'
+      }}>
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            background: 'none',
+            border: 'none',
+            fontSize: '1.5rem',
+            cursor: 'pointer'
+          }}
+        >
+          &times;
+        </button>
+        {children}
+      </div>
+    </div>
+  );
 };
 
-export default function ScanHistoryView({ scanHistory = [], loading, error, selectedScan, handleOpenModal, handleCloseModal, handleDeleteScan }) {
+
+export default function ScanHistoryView({ scanHistory = [], loading, error, selectedScan, handleOpenModal, handleCloseModal, handleDeleteScan, createSharableImageForHistory, getPhotoUrl }) {
+  const [sharableImageUrl, setSharableImageUrl] = useState(null);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  // State baru untuk menyimpan data scan yang akan dibagikan secara lokal
+  const [scanDataToShareInModal, setScanDataToShareInModal] = useState(null);
+
+
+  const handleShareResultClick = async (scan) => {
+    if (!navigator.share) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Fitur Tidak Tersedia',
+        text: 'Browser Anda tidak mendukung fitur berbagi langsung. Silakan unduh gambar dan bagikan secara manual.',
+      });
+      return;
+    }
+
+    if (!scan) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Informasi Tidak Lengkap',
+        text: 'Data scan tidak tersedia untuk membuat gambar yang dapat dibagikan.',
+      });
+      return;
+    }
+
+    // PENTING: Set state lokal dengan data scan yang akan dibagikan SEBELUM membuat gambar dan menutup modal detail.
+    // Ini memastikan data tersebut tetap ada dan konsisten di modal pratinjau.
+    setScanDataToShareInModal(scan);
+
+    handleCloseModal(); // Tutup modal detail riwayat scan (ini akan mengeset selectedScan di presenter menjadi null)
+
+    const imageUrl = await createSharableImageForHistory(scan); // Gunakan 'scan' yang diteruskan langsung
+    if (imageUrl) {
+      setSharableImageUrl(imageUrl);
+      setIsShareModalOpen(true); // Buka modal pratinjau berbagi
+    } else {
+      // Jika pembuatan gambar gagal, reset juga state lokal
+      setScanDataToShareInModal(null);
+      setSharableImageUrl(null);
+    }
+  };
+
+  const handleShareFromModal = async () => {
+    // Perbaikan: Gunakan scanDataToShareInModal dan sharableImageUrl yang diatur di handleShareResultClick
+    if (!sharableImageUrl || !scanDataToShareInModal) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Info',
+        text: 'Tidak ada gambar atau detail prediksi yang disiapkan untuk dibagikan. Silakan coba lagi.',
+      });
+      // DEBUGGING HINT: Ini adalah tempat terbaik untuk console.log jika masih bermasalah
+      console.log("Debug: sharableImageUrl:", sharableImageUrl);
+      console.log("Debug: scanDataToShareInModal:", scanDataToShareInModal);
+      return;
+    }
+
+    try {
+      const response = await fetch(sharableImageUrl);
+      const blob = await response.blob();
+      const file = new File([blob], `hasil_scan_jerawat_${new Date().getTime()}.png`, { type: blob.type });
+
+      // Pastikan data ini ada dan valid untuk dibagikan
+      const predictedClass = scanDataToShareInModal.kondisi_jerawat || "Tidak diketahui";
+      const shareText = `Saya baru saja melakukan scan jerawat dan hasilnya: ${predictedClass}! Dapatkan analisis kulitmu di ${window.location.origin}/scan`;
+      const shareTitle = 'Hasil Scan Jerawatku!';
+
+      await navigator.share({
+        title: shareTitle,
+        text: shareText,
+        files: [file],
+      });
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Berhasil dibagikan!',
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error('Error sharing:', error);
+      if (error.name === 'AbortError') {
+        Swal.fire({
+          icon: 'info',
+          title: 'Dibatalkan',
+          text: 'Berbagi dibatalkan oleh pengguna.',
+        });
+      } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Berbagi',
+          text: 'Terjadi kesalahan saat berbagi: ' + error.message,
+        });
+      }
+    } finally {
+      setIsShareModalOpen(false);
+      // Reset state lokal setelah modal ditutup atau berbagi selesai
+      setSharableImageUrl(null);
+      setScanDataToShareInModal(null);
+    }
+  };
+
+  const handleDownloadImage = () => {
+    if (sharableImageUrl) {
+      const link = document.createElement('a');
+      link.href = sharableImageUrl;
+      link.download = `hasil_scan_jerawat_${new Date().getTime()}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      Swal.fire({
+        icon: 'success',
+        title: 'Berhasil!',
+        text: 'Gambar hasil scan berhasil diunduh!',
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    } else {
+      Swal.fire({
+        icon: 'info',
+        title: 'Info',
+        text: 'Tidak ada gambar untuk diunduh. Buat gambar terlebih dahulu.',
+      });
+    }
+  };
+
   return (
     <section className="section scan-history-page" id="scan-history-page">
       <div className="container" style={{ paddingTop: '5rem', paddingBottom: '3rem' }}>
@@ -122,9 +288,7 @@ export default function ScanHistoryView({ scanHistory = [], loading, error, sele
               width: '100vw',
               height: '100vh',
               background: 'rgba(0,0,0,0.35)',
-              // --- PERBAIKAN DI SINI: zIndex diatur lebih rendah dari default SweetAlert (sekitar 1060) ---
-              zIndex: 1050, // Nilai ini akan menempatkan modal detail di bawah pop-up SweetAlert
-              // -------------------------------------------------------------------------------------
+              zIndex: 1050,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -209,6 +373,25 @@ export default function ScanHistoryView({ scanHistory = [], loading, error, sele
                 </div>
               )}
 
+              {/* Tombol Bagikan di Modal Detail */}
+              <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+                <button
+                  type="button"
+                  className="button"
+                  onClick={() => handleShareResultClick(selectedScan)}
+                  disabled={!selectedScan || !navigator.share}
+                  style={{
+                    padding: "0.75rem 2rem",
+                    fontSize: "1.1rem",
+                    backgroundColor: 'var(--first-color)',
+                    color: 'var(--title-color)',
+                    marginBottom: '1rem',
+                  }}
+                >
+                  Bagikan Hasil Scan
+                </button>
+              </div>
+
               {/* Tombol Hapus di Modal Detail */}
               <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
                 <button
@@ -227,7 +410,6 @@ export default function ScanHistoryView({ scanHistory = [], loading, error, sele
                   }}
                   onClick={() => {
                     handleDeleteScan(selectedScan.id);
-                    // handleCloseModal(); // Hapus ini agar SweetAlert tidak langsung menutup modal
                   }}
                 >
                   Hapus Riwayat Ini
@@ -236,6 +418,70 @@ export default function ScanHistoryView({ scanHistory = [], loading, error, sele
             </div>
           </div>
         )}
+
+        {/* Modal untuk menampilkan gambar yang dapat dibagikan dan tombol berbagi/unduh */}
+        <SimpleModal isOpen={isShareModalOpen} onClose={() => setIsShareModalOpen(false)} zIndex={1051}>
+          <h3 style={{ fontSize: "1.5rem", marginBottom: "1.5rem", textAlign: "center", color: "#333" }}>
+            Pratinjau Gambar untuk Dibagikan
+          </h3>
+          {sharableImageUrl && (
+            <div style={{ marginBottom: "1rem" }}>
+              <img
+                src={sharableImageUrl}
+                alt="Hasil Scan"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "300px",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  display: "block",
+                  margin: "0 auto",
+                  backgroundColor: "white"
+                }}
+              />
+            </div>
+          )}
+          {scanDataToShareInModal && ( // Pastikan menggunakan state lokal di sini!
+            <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+              <p style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>
+                <strong>Kondisi Jerawat:</strong> {scanDataToShareInModal.kondisi_jerawat}
+              </p>
+              <p style={{ fontSize: "1.1rem", color: "#666" }}>
+                <strong>Keyakinan Model:</strong> {(scanDataToShareInModal.keyakinan_model * 100).toFixed(2)}%
+              </p>
+            </div>
+          )}
+
+          <div style={{ textAlign: "center" }}>
+            <p style={{ fontSize: "1.1rem", fontWeight: "bold", marginBottom: "1rem" }}>Bagikan Hasil:</p>
+            <button
+              type="button"
+              className="button"
+              onClick={handleShareFromModal}
+              disabled={!sharableImageUrl || !navigator.share}
+              style={{
+                padding: "0.75rem 2rem",
+                fontSize: "1.1rem",
+                backgroundColor: 'var(--first-color)',
+                color: 'var(--title-color)'
+              }}
+            >
+              Bagikan Hasil Scan
+            </button>
+            <button
+              type="button"
+              className="button button--ghost"
+              onClick={handleDownloadImage}
+              style={{
+                padding: "0.75rem 2rem",
+                fontSize: "1.1rem",
+                marginLeft: "1rem",
+              }}
+            >
+              Unduh Hasil Scan
+            </button>
+          </div>
+        </SimpleModal>
       </div>
     </section>
   );
