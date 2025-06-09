@@ -94,6 +94,7 @@ export default class ScanModel {
           throw new Error('Model deteksi wajah belum siap.');
         }
       }
+      // console.log('🔍 Memulai deteksi wajah...');
       const IMAGE_SIZE_FACE = 150;
       const tensor = await this.preprocessImage(imageFile, IMAGE_SIZE_FACE);
       const predictions = tf.tidy(() => loadedFaceModel.predict(tensor));
@@ -104,6 +105,9 @@ export default class ScanModel {
       const confidence = predictionsArray[predictedClassIndex];
       tensor.dispose();
       predictions.dispose();
+      // console.log(predictedClassIndex);
+      // console.log(predictedClass);
+      // console.log(confidence);
       return {
         success: true,
         message: predictedClass === "wajah" ? "Wajah terdeteksi!" : "Tidak ada wajah terdeteksi.",
@@ -129,6 +133,7 @@ export default class ScanModel {
           throw new Error('Model deteksi jerawat belum siap.');
         }
       }
+      // console.log('🔍 Memulai prediksi jerawat...');
       const IMAGE_SIZE_ACNE = 224;
       const tensor = await this.preprocessImage(imageFile, IMAGE_SIZE_ACNE);
       const predictions = tf.tidy(() => loadedAcneModel.predict(tensor));
@@ -138,6 +143,9 @@ export default class ScanModel {
       const predictedClassIndex = predictionsArray.indexOf(Math.max(...predictionsArray));
       const predictedClass = classNames[predictedClassIndex];
       const confidence = predictionsArray[predictedClassIndex];
+      // console.log(predictedClassIndex);
+      // console.log(predictedClass);
+      // console.log(confidence);
       tensor.dispose();
       predictions.dispose();
       return {

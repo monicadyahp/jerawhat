@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import Swal from 'sweetalert2'; // Import SweetAlert
-import 'sweetalert2/dist/sweetalert2.min.css'; // Import CSS SweetAlert
-
-// Contoh placeholder Modal (tetap sama)
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 const SimpleModal = ({ isOpen, onClose, children }) => {
   if (!isOpen) return null;
   return (
@@ -47,15 +45,13 @@ const SimpleModal = ({ isOpen, onClose, children }) => {
     </div>
   );
 };
-
-
 export default function ScanView({
   selectedImage,
   imagePreview,
   predictionResult,
   loading,
   statusMsg,
-  modelLoadStatus, // Gunakan state baru ini
+  modelLoadStatus,
   onFileChange,
   onSubmit,
   onReset,
@@ -76,24 +72,17 @@ export default function ScanView({
 }) {
   const [sharableImageUrl, setSharableImageUrl] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // Ref untuk melacak apakah SweetAlert loading sedang aktif
   const loadingSwalActive = useRef(false);
-
-  // Effect untuk menampilkan SweetAlert berdasarkan status umum (bukan loading model)
   useEffect(() => {
-    // Tutup SweetAlert loading jika tidak ada loading atau statusMsg kosong
     if (!loading && !statusMsg && loadingSwalActive.current) {
-        Swal.close();
-        loadingSwalActive.current = false;
+      Swal.close();
+      loadingSwalActive.current = false;
     }
-
     if (statusMsg) {
       if (statusMsg.includes("Prediksi jerawat berhasil!")) {
-        // Pastikan loading Swal ditutup sebelum menampilkan sukses
         if (loadingSwalActive.current) {
-            Swal.close();
-            loadingSwalActive.current = false;
+          Swal.close();
+          loadingSwalActive.current = false;
         }
         Swal.fire({
           icon: 'success',
@@ -102,36 +91,33 @@ export default function ScanView({
           timer: 2000,
           showConfirmButton: false,
         }).then(() => {
-          setStatusMsg(""); // Bersihkan status setelah ditampilkan
+          setStatusMsg("");
         });
-      } else if (statusMsg.includes("Gagal") || statusMsg.includes("Tidak ada wajah terdeteksi")) {
-        // Pastikan loading Swal ditutup sebelum menampilkan error
+      } else if (statusMsg.includes("Gagal") || statusMsg.includes("Tidak ada wajah yang terdeteksi")) {
         if (loadingSwalActive.current) {
-            Swal.close();
-            loadingSwalActive.current = false;
+          Swal.close();
+          loadingSwalActive.current = false;
         }
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
           text: statusMsg,
         }).then(() => {
-          setStatusMsg(""); // Bersihkan status setelah ditampilkan
+          setStatusMsg("");
         });
-      } else if (statusMsg.includes("Menganalisis gambar...")) { // Hanya untuk pesan analisis
+      } else if (statusMsg.includes("Menganalisis gambar...")) {
         Swal.fire({
           title: 'Menganalisis...',
           html: 'Mohon tunggu, kami sedang memproses gambar Anda.',
           allowOutsideClick: false,
           didOpen: () => {
             Swal.showLoading();
-            loadingSwalActive.current = true; // Set flag
+            loadingSwalActive.current = true;
           },
         });
       }
     }
-  }, [statusMsg, loading, setStatusMsg]); // statusMsg, loading, dan setStatusMsg sebagai dependencies
-
-  // Effect untuk menampilkan SweetAlert khusus status loading model
+  }, [statusMsg, loading, setStatusMsg]);
   useEffect(() => {
     if (modelLoadStatus === "loading") {
       Swal.fire({
@@ -140,11 +126,11 @@ export default function ScanView({
         allowOutsideClick: false,
         didOpen: () => {
           Swal.showLoading();
-          loadingSwalActive.current = true; // Set flag
+          loadingSwalActive.current = true;
         },
       });
     } else if (modelLoadStatus === "ready") {
-      if (loadingSwalActive.current) { // Hanya tutup jika SweetAlert loading model sedang aktif
+      if (loadingSwalActive.current) {
         Swal.close();
         loadingSwalActive.current = false;
       }
@@ -154,8 +140,8 @@ export default function ScanView({
         text: 'Model AI deteksi wajah dan jerawat berhasil dimuat.',
         timer: 1500,
         showConfirmButton: false,
-        toast: true, // Tampilkan sebagai toast
-        position: 'top-end', // Posisikan di pojok kanan atas
+        toast: true,
+        position: 'top-end',
       });
     } else if (modelLoadStatus === "error") {
       if (loadingSwalActive.current) {
@@ -168,30 +154,12 @@ export default function ScanView({
         text: 'Terjadi kesalahan saat memuat model AI. Silakan coba refresh halaman.',
       });
     } else if (modelLoadStatus === "idle") {
-        // Jika model idle, pastikan SweetAlert loading model ditutup
-        if (loadingSwalActive.current) {
-            Swal.close();
-            loadingSwalActive.current = false;
-        }
+      if (loadingSwalActive.current) {
+        Swal.close();
+        loadingSwalActive.current = false;
+      }
     }
-  }, [modelLoadStatus]); // modelLoadStatus sebagai dependency
-
-  // Hapus `renderModelStatus` dan `renderFaceDetectionStatus` jika hanya ingin pakai SweetAlert
-  const renderModelStatus = () => {
-    // Teks ini hanya akan muncul sebagai fallback atau jika Anda masih ingin tampilan teks selain SweetAlert
-    switch (modelLoadStatus) {
-      case "loading":
-        return <p style={{ color: "orange" }}>⏳ Model sedang dimuat...</p>;
-      case "ready":
-        return <p style={{ color: "green" }}>✅ Model siap digunakan</p>;
-      case "error":
-        return <p style={{ color: "red" }}>❌ Gagal memuat model: {modelLoadStatus.error}</p>;
-      case "idle":
-      default:
-        return <p style={{ color: "gray" }}>ℹ️ Menunggu model dimuat...</p>;
-    }
-  };
-
+  }, [modelLoadStatus]);
   const renderFaceDetectionStatus = () => {
     if (faceDetectionStatus.status === "detecting") {
       return <p style={{ color: "blue" }}>🔍 Mendeteksi wajah...</p>;
@@ -202,8 +170,6 @@ export default function ScanView({
     }
     return null;
   };
-
-
   const handleShareResultClick = async () => {
     if (!predictionResult) {
       Swal.fire({
@@ -221,7 +187,6 @@ export default function ScanView({
       });
       return;
     }
-
     const imageUrl = await createSharableImage();
     if (imageUrl) {
       setSharableImageUrl(imageUrl);
@@ -234,7 +199,6 @@ export default function ScanView({
       });
     }
   };
-
   const handleShareFromModal = async () => {
     if (!sharableImageUrl || !predictionResult) {
       Swal.fire({
@@ -244,15 +208,12 @@ export default function ScanView({
       });
       return;
     }
-
     try {
       const response = await fetch(sharableImageUrl);
       const blob = await response.blob();
       const file = new File([blob], `hasil_scan_jerawat_${new Date().getTime()}.png`, { type: blob.type });
-
       const shareText = `Saya baru saja melakukan scan jerawat dan hasilnya: ${predictionResult.predictedClass}! Dapatkan analisis kulitmu di ${window.location.origin}/scan`;
       const shareTitle = 'Hasil Scan Jerawatku!';
-
       await navigator.share({
         title: shareTitle,
         text: shareText,
@@ -284,7 +245,6 @@ export default function ScanView({
       setIsModalOpen(false);
     }
   };
-
   const handleDownloadImage = () => {
     if (sharableImageUrl) {
       const link = document.createElement('a');
@@ -308,7 +268,6 @@ export default function ScanView({
       });
     }
   };
-
   return (
     <>
       <section className="section scan-page" id="scan-page">
@@ -324,10 +283,6 @@ export default function ScanView({
             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
             marginBottom: "2rem"
           }}>
-            {/* Tampilan status model bisa dihapus jika hanya ingin mengandalkan SweetAlert */}
-            {/* <div className="model__status reveal-from-bottom" style={{ marginBottom: "1.5rem" }}>
-              {renderModelStatus()}
-            </div> */}
             {faceDetectionStatus.status !== "idle" && faceDetectionStatus.status !== "detected" && (
               <div className="face-detection__status reveal-from-bottom" style={{ marginBottom: "1.5rem" }}>
                 {renderFaceDetectionStatus()}
@@ -546,7 +501,6 @@ export default function ScanView({
                     }}>
                       <strong>Keyakinan Model:</strong> {(predictionResult.confidence * 100).toFixed(2)}%
                     </p>
-                    {/* Lifestyle Recommendations */}
                     {predictionResult.predictedClass !== "Tidak Ada Jerawat" && lifestyleRecommendations && (
                       <div style={{
                         background: "white",
@@ -568,15 +522,9 @@ export default function ScanView({
                           const recommendationKey = predictionResult.predictedClass === "Jerawat Ringan" ? "jerawat_ringan" :
                             predictionResult.predictedClass === "Jerawat Sedang" ? "kulit_sedang" :
                               predictionResult.predictedClass === "Jerawat Parah" ? "kulit_parah" : null;
-                          console.log("Prediction Class:", predictionResult.predictedClass);
-                          console.log("Recommendation Key:", recommendationKey);
                           if (!recommendationKey) return null;
                           const recommendations = lifestyleRecommendations[recommendationKey];
-                          console.log("Recommendations:", recommendations);
-                          if (!recommendations) {
-                            console.error("No recommendations found for key:", recommendationKey);
-                            return null;
-                          }
+                          if (!recommendations) return null;
                           return (
                             <div style={{ display: "grid", gap: "1.5rem" }}>
                               <div>
@@ -638,8 +586,6 @@ export default function ScanView({
                     Tidak ditemukan masalah pada foto yang diupload.
                   </p>
                 )}
-
-                {/* Tombol tunggal untuk memicu modal hasil scan */}
                 <div style={{ textAlign: "center", marginTop: "2rem" }}>
                   <button
                     type="button"
@@ -664,8 +610,6 @@ export default function ScanView({
       <a href="#" className="scrollup" id="scroll-up" onClick={scrollToTop}>
         <i className="bx bx-up-arrow-alt scrollup__icon"></i>
       </a>
-
-      {/* Modal untuk menampilkan hasil scan dan tombol berbagi */}
       <SimpleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
         <h3 style={{ fontSize: "1.5rem", marginBottom: "1.5rem", textAlign: "center", color: "#333" }}>
           Hasil Analisis Wajah
@@ -697,7 +641,6 @@ export default function ScanView({
             </p>
           </div>
         )}
-
         <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: "1.1rem", fontWeight: "bold", marginBottom: "1rem" }}>Bagikan Hasil:</p>
           <button
