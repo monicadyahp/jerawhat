@@ -1,21 +1,24 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
-
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
-
   return {
     plugins: [
       react(),
       VitePWA({
         registerType: 'autoUpdate',
-        strategies: isProduction ? 'injectManifest' : 'generateSW', // GenerateSW for dev, injectManifest for prod
+        strategies: isProduction ? 'injectManifest' : 'generateSW',
         srcDir: 'src',
-        filename: isProduction ? 'sw.js' : 'dev-sw.js', // dev-sw.js for dev, sw.js for prod
+        filename: isProduction ? 'sw.js' : 'dev-sw.js',
         outDir: 'dist',
+        injectManifest: isProduction
+          ? {
+              maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+            }
+          : undefined,
         manifest: {
-          id: "/", // Menghilangkan warning "id is not specified"
+          id: "/",
           name: "JeraWHAT?!",
           short_name: "JeraWHAT?!",
           description: "Aplikasi deteksi jerawat dan rekomendasi perawatan kulit",
@@ -28,13 +31,13 @@ export default defineConfig(({ mode }) => {
               src: "/icon-192x192.png",
               sizes: "192x192",
               type: "image/png",
-              purpose: "any" // Mengatasi warning purpose "any maskable"
+              purpose: "any"
             },
             {
               src: "/icon-512x512.png",
               sizes: "512x512",
               type: "image/png",
-              purpose: "any" // Mengatasi warning purpose "any maskable"
+              purpose: "any"
             }
           ],
           shortcuts: [
@@ -69,12 +72,10 @@ export default defineConfig(({ mode }) => {
           ]
         },
         workbox: {
-          // globPatterns harus mencakup semua aset yang ingin di-precache oleh generateSW (development)
-          // dan juga aset untuk injectManifest (production) yang akan diproses oleh self.__WB_MANIFEST
           globPatterns: [
-            '**/*.{js,css,html,png,jpg,jpeg,gif,svg,json,woff,woff2,ttf,eot,otf,bin}', // Tambahkan .bin untuk TFJS models
-            'model/**', // Termasuk semua file di dalam folder model TFJS
-            'model_wajah/**', // Termasuk semua file di dalam folder model_wajah TFJS
+            '**/*.{js,css,html,png,jpg,jpeg,gif,svg,json,woff,woff2,ttf,eot,otf,bin}',
+            'model/**',
+            'model_wajah/**',
           ],
           runtimeCaching: [
             {
@@ -106,7 +107,7 @@ export default defineConfig(({ mode }) => {
               },
             },
             {
-              urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/.*/i, // Untuk Boxicons atau CDN lain
+              urlPattern: /^https:\/\/cdn\.jsdelivr\.net\/.*/i,
               handler: 'CacheFirst',
               options: {
                 cacheName: 'cdn-assets-cache',
@@ -164,8 +165,8 @@ export default defineConfig(({ mode }) => {
           ],
         },
         devOptions: {
-          enabled: true, // Tetap aktifkan di development untuk debugging
-          type: 'module', // Memastikan Service Worker di development sebagai modul
+          enabled: true,
+          type: 'module',
         },
       }),
     ],

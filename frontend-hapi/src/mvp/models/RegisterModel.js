@@ -34,6 +34,7 @@ export default class RegisterModel {
       formData.append("name", name);
       formData.append("email", email);
       formData.append("password", password);
+      formData.append("confirmPassword", confirmPassword);
       // formData.append("confirmPassword", confirmPassword); // Ini tidak perlu dikirim ke backend jika backend tidak memvalidasinya
                                                             // atau jika validasi confirmPassword hanya di frontend.
 
