@@ -105,24 +105,8 @@ export default function useScanPresenter() {
     fetchCameras();
   }, []);
 
-  useEffect(() => {
-    return () => {
-      stopCamera();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isCameraActive && streamRef.current && videoRef.current) {
-      videoRef.current.srcObject = streamRef.current;
-      videoRef.current.onloadedmetadata = () => {
-        videoRef.current.play().catch((e) => console.error("Error playing video:", e));
-      };
-    } else if (!isCameraActive && videoRef.current) {
-      videoRef.current.srcObject = null;
-    }
-  }, [isCameraActive, streamRef.current, videoRef.current]);
-
-  const stopCamera = () => {
+  // Pastikan `stopCamera` didefinisikan sebagai useCallback untuk stabilitas.
+  const stopCamera = useCallback(() => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
@@ -133,7 +117,33 @@ export default function useScanPresenter() {
       clearInterval(scanIntervalRef.current);
       scanIntervalRef.current = null;
     }
-  };
+    // Tambahkan baris ini untuk mereset srcObject video saat kamera berhenti
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+  }, []); // Dependensi kosong karena fungsi ini hanya bergantung pada refs
+
+  useEffect(() => {
+    // Cleanup kamera saat komponen di-unmount
+    return () => {
+      stopCamera();
+    };
+  }, [stopCamera]); // Tambahkan stopCamera sebagai dependensi
+
+  useEffect(() => {
+    if (isCameraActive && streamRef.current && videoRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      // Periksa videoRef.current sebelum mengakses properti onloadedmetadata dan play()
+      const videoElement = videoRef.current;
+      if (videoElement) {
+        videoElement.onloadedmetadata = () => {
+          videoElement.play().catch((e) => console.error("Error playing video:", e));
+        };
+      }
+    } else if (!isCameraActive && videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
+  }, [isCameraActive, streamRef.current]); // videoRef.current dihapus dari dependencies karena sudah useRef
 
   const onCameraChange = (deviceId) => {
     setSelectedCameraId(deviceId);
@@ -178,7 +188,7 @@ export default function useScanPresenter() {
       return;
     }
 
-    stopCamera();
+    stopCamera(); // Hentikan kamera yang aktif sebelumnya
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
